@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { decks, Card, Deck } from './data/cards';
 import { Moon, Sun, MoonStar, Shuffle, Star, ChevronLeft, ChevronRight, RotateCcw, Lightbulb, MessageCircle, Home, BookOpen, GraduationCap, Brain, List, Timer, CheckCircle, XCircle, Settings } from 'lucide-react';
 
-type AppMode = 'home' | 'menu' | 'standard' | 'memorize' | 'self' | 'choice' | 'order' | 'time' | 'result';
+type AppMode = 'home' | 'menu' | 'standard' | 'memorize' | 'self' | 'order' | 'time' | 'result';
 
 export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -127,14 +127,6 @@ export default function App() {
   const currentCard = activeCards[currentIndex];
 
   // --- Quiz Logic ---
-  const generateChoices = (correctCard: Card, allCards: Card[]) => {
-    const distractors = allCards.filter(c => c.id !== correctCard.id).sort(() => Math.random() - 0.5).slice(0, 3);
-    const newChoices = [correctCard, ...distractors].sort(() => Math.random() - 0.5);
-    setChoices(newChoices);
-    setSelectedChoice(null);
-    setIsCorrect(null);
-  };
-
   const generateWordPool = (card: Card) => {
     // Split by spaces, keep punctuation attached for simplicity
     const words = card.back.split(' ').map((word, index) => ({ id: index, word }));
@@ -156,9 +148,6 @@ export default function App() {
     setShowHint(false);
     setIsCorrect(null);
 
-    if (mode === 'choice') {
-      generateChoices(cardsToUse[0], currentDeck.cards);
-    }
     if (mode === 'order') {
       generateWordPool(cardsToUse[0]);
     }
@@ -175,9 +164,6 @@ export default function App() {
       setShowHint(false);
       setIsCorrect(null);
       
-      if (appMode === 'choice') {
-        generateChoices(nextCard, currentDeck!.cards);
-      }
       if (appMode === 'order') {
         generateWordPool(nextCard);
       }
@@ -198,25 +184,6 @@ export default function App() {
     nextQuizCard();
   };
 
-  const handleChoiceSelect = (choice: Card | null) => {
-    if (selectedChoice !== null || isCorrect !== null) return; // Prevent multiple clicks
-    
-    setSelectedChoice(choice);
-    const correct = choice?.id === quizCards[quizIndex].id;
-    setIsCorrect(correct);
-    
-    if (correct) {
-      setScore(prev => prev + 1);
-    } else {
-      setMistakes(prev => [...prev, quizCards[quizIndex]]);
-    }
-    
-    // Auto-advance after a delay
-    setTimeout(() => {
-      nextQuizCard();
-    }, 1500);
-  };
-
   const handleWordSelect = (wordObj: {id: number, word: string}) => {
     if (isCorrect !== null) return;
     setWordPool(prev => prev.filter(w => w.id !== wordObj.id));
@@ -227,6 +194,11 @@ export default function App() {
     if (isCorrect !== null) return;
     setSelectedWords(prev => prev.filter(w => w.id !== wordObj.id));
     setWordPool(prev => [...prev, wordObj]);
+  };
+
+  const resetWordOrder = () => {
+    if (isCorrect !== null) return;
+    generateWordPool(quizCards[quizIndex]);
   };
 
   const checkWordOrder = () => {
@@ -389,17 +361,6 @@ export default function App() {
               </div>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">答えから覚える</h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 text-center">英文を先に見て<br/>内容をインプット</p>
-            </button>
-
-            <button 
-              onClick={() => startQuiz('choice')}
-              className="flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:-translate-y-1 transition-all group"
-            >
-              <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <List size={32} />
-              </div>
-              <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">4択クイズ</h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 text-center">正しい英文を<br/>4つの選択肢から選ぶ</p>
             </button>
 
             <button 
@@ -695,30 +656,26 @@ export default function App() {
     );
   }
 
-  if (appMode === 'choice' || appMode === 'time') {
-    const isTimeMode = appMode === 'time';
-    
+  if (appMode === 'time') {
     return (
       <div className="min-h-screen flex flex-col items-center py-6 md:py-8 px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
         <div className="w-full max-w-2xl flex items-center justify-between mb-4">
           <button onClick={() => setAppMode('menu')} className="p-2 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg">
             <ChevronLeft size={24} />
           </button>
-          {isTimeMode && (
-            <div className={`flex items-center gap-2 px-4 py-1.5 rounded-full font-black text-lg ${isFlipped ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400' : (timeLeft <= 3 ? 'bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400 animate-pulse' : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 shadow-sm border border-slate-200 dark:border-slate-700')}`}>
-              <Timer size={20} />
-              <span>{isFlipped ? "答え確認中: " : ""}{timeLeft}秒</span>
-            </div>
-          )}
+          <div className={`flex items-center gap-2 px-4 py-1.5 rounded-full font-black text-lg ${isFlipped ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400' : (timeLeft <= 3 ? 'bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400 animate-pulse' : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 shadow-sm border border-slate-200 dark:border-slate-700')}`}>
+            <Timer size={20} />
+            <span>{isFlipped ? "答え確認中: " : ""}{timeLeft}秒</span>
+          </div>
           <div className="font-bold text-slate-500">{quizIndex + 1} / {quizCards.length}</div>
         </div>
 
-        <div className={`w-full max-w-2xl bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-xl border border-slate-200 dark:border-slate-700 p-8 md:p-12 min-h-[400px] flex flex-col justify-center items-center transition-all ${isTimeMode && isFlipped ? 'border-emerald-500 dark:border-emerald-500 ring-4 ring-emerald-500/10' : ''}`}>
+        <div className={`w-full max-w-2xl bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-xl border border-slate-200 dark:border-slate-700 p-8 md:p-12 min-h-[400px] flex flex-col justify-center items-center transition-all ${isFlipped ? 'border-emerald-500 dark:border-emerald-500 ring-4 ring-emerald-500/10' : ''}`}>
           {!isFlipped ? (
             <div className="text-center animate-in fade-in zoom-in-95">
               <p className="text-2xl md:text-4xl font-bold text-slate-800 dark:text-slate-100 mb-8 leading-relaxed">{quizCard.front}</p>
               <p className="text-lg text-slate-600 dark:text-slate-300">{quizCard.translation}</p>
-              {isTimeMode && <p className="text-sm font-bold text-rose-500 mt-12">時間内に答えを思い出せ！</p>}
+              <p className="text-sm font-bold text-rose-500 mt-12">時間内に答えを思い出せ！</p>
             </div>
           ) : (
             <div className="text-center animate-in fade-in zoom-in-95 w-full">
@@ -735,42 +692,6 @@ export default function App() {
             </div>
           )}
         </div>
-
-        {!isTimeMode && (
-          <div className="w-full max-w-2xl grid grid-cols-1 gap-3 mt-6">
-            {choices.map((choice, idx) => {
-              let btnClass = "p-4 text-left rounded-2xl border-2 transition-all font-medium text-slate-700 dark:text-slate-200 ";
-              if (selectedChoice) {
-                if (choice.id === quizCard.id) {
-                  btnClass += "bg-emerald-50 border-emerald-500 text-emerald-700 dark:bg-emerald-900/30 dark:border-emerald-500";
-                } else if (selectedChoice.id === choice.id) {
-                  btnClass += "bg-rose-50 border-rose-500 text-rose-700 dark:bg-rose-900/30 dark:border-rose-500";
-                } else {
-                  btnClass += "bg-white border-slate-200 opacity-50 dark:bg-slate-800 dark:border-slate-700";
-                }
-              } else {
-                btnClass += "bg-white border-slate-200 hover:border-indigo-400 hover:bg-indigo-50 dark:bg-slate-800 dark:border-slate-700 dark:hover:border-indigo-500";
-              }
-
-              return (
-                <button 
-                  key={idx} 
-                  onClick={() => handleChoiceSelect(choice)}
-                  disabled={selectedChoice !== null || isCorrect !== null}
-                  className={btnClass}
-                >
-                  {choice.back}
-                </button>
-              );
-            })}
-          </div>
-        )}
-        
-        {!isTimeMode && isCorrect !== null && (
-          <div className={`mt-8 text-2xl font-black animate-in zoom-in ${isCorrect ? 'text-emerald-500' : 'text-rose-500'}`}>
-            {isCorrect ? '⭕️ 正解！' : '❌ 残念...'}
-          </div>
-        )}
       </div>
     );
   }
@@ -790,18 +711,30 @@ export default function App() {
           <p className="text-slate-600 dark:text-slate-400 mb-4">{quizCard.translation}</p>
           
           {/* Answer Area */}
-          <div className="min-h-[80px] p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 flex flex-wrap gap-2 items-center justify-center mb-6">
+          <div className="min-h-[80px] p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 flex flex-wrap gap-2 items-center justify-center mb-4">
             {selectedWords.length === 0 && <span className="text-slate-400">単語をタップして並べる</span>}
             {selectedWords.map((w) => (
               <button 
                 key={w.id} 
                 onClick={() => handleWordDeselect(w)}
                 disabled={isCorrect !== null}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold shadow-sm hover:bg-indigo-700 transition-colors"
+                className="px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold shadow-sm hover:bg-indigo-700 transition-all active:scale-95"
+                title="タップして戻す"
               >
                 {w.word}
               </button>
             ))}
+          </div>
+
+          <div className="flex justify-end mb-6">
+            <button 
+              onClick={resetWordOrder}
+              disabled={selectedWords.length === 0 || isCorrect !== null}
+              className="text-xs font-bold text-slate-400 hover:text-rose-500 flex items-center gap-1 transition-colors disabled:opacity-0"
+            >
+              <RotateCcw size={14} />
+              すべてやり直し
+            </button>
           </div>
 
           {/* Word Pool */}
