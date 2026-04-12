@@ -1,0 +1,21 @@
+{
+  "name": "Flashcard App",
+  "short_name": "Flashcards",
+  "description": "A powerful flashcard application for language learning.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "https://picsum.photos/seed/flashcard/192/192",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://picsum.photos/seed/flashcard/512/512",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
