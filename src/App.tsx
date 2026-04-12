@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { decks, Card, Deck } from './data/cards';
-import { Moon, Sun, Shuffle, Star, ChevronLeft, ChevronRight, RotateCcw, Lightbulb, MessageCircle, Home, BookOpen, GraduationCap, Brain, List, Timer, CheckCircle, XCircle, Settings } from 'lucide-react';
+import { Moon, Sun, MoonStar, Shuffle, Star, ChevronLeft, ChevronRight, RotateCcw, Lightbulb, MessageCircle, Home, BookOpen, GraduationCap, Brain, List, Timer, CheckCircle, XCircle, Settings } from 'lucide-react';
 
 type AppMode = 'home' | 'menu' | 'standard' | 'memorize' | 'self' | 'choice' | 'order' | 'time' | 'result';
 
@@ -45,7 +45,6 @@ export default function App() {
   const [selectedWords, setSelectedWords] = useState<{id: number, word: string}[]>([]);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
-  // Apply dark mode class to html element
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
@@ -277,14 +276,15 @@ export default function App() {
               </div>
               <div>
                 <h1 className="text-xl md:text-3xl font-bold text-slate-900 dark:text-white">基本例文マスター</h1>
-                <p className="text-xs md:text-sm text-slate-50 dark:text-slate-400">必ず役立つ基本セット</p>
+                <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400">必ず役立つ基本セット</p>
               </div>
             </div>
             <button 
               onClick={() => setIsDarkMode(!isDarkMode)}
               className="p-2 md:p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+              title="テーマ切り替え"
             >
-              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+              {isDarkMode ? <Sun size={20} /> : <MoonStar size={20} />}
             </button>
           </header>
 
@@ -298,9 +298,6 @@ export default function App() {
                 }}
                 className="group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden"
               >
-                <div className="absolute top-0 right-0 p-4 md:p-6 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <BookOpen size={60} />
-                </div>
                 <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                   {deck.title}
                 </h2>
@@ -350,17 +347,25 @@ export default function App() {
     return (
       <div className="min-h-screen flex flex-col items-center py-8 md:py-12 px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
         <div className="w-full max-w-2xl">
-          <header className="flex items-center gap-4 mb-8">
-            <button 
-              onClick={() => { setCurrentDeck(null); setAppMode('home'); }}
-              className="p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
-            >
-              <ChevronLeft size={24} />
-            </button>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">{currentDeck.title}</h1>
-              <p className="text-sm text-slate-500 dark:text-slate-400">学習モードを選択してください</p>
+          <header className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-4">
+              <button 
+                onClick={() => { setCurrentDeck(null); setAppMode('home'); }}
+                className="p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+              >
+                <ChevronLeft size={24} />
+              </button>
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">{currentDeck.title}</h1>
+                <p className="text-sm text-slate-500 dark:text-slate-400">学習モードを選択してください</p>
+              </div>
             </div>
+            <button 
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="p-2 md:p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+            >
+              {isDarkMode ? <Sun size={20} /> : <MoonStar size={20} />}
+            </button>
           </header>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -494,7 +499,7 @@ export default function App() {
             onClick={() => setIsDarkMode(!isDarkMode)}
             className={`p-1.5 md:p-2 rounded-lg transition-colors ${isDarkMode ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400' : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
           >
-            {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+            {isDarkMode ? <Sun size={18} /> : <MoonStar size={18} />}
           </button>
           
           <button 
