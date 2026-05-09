@@ -1,5 +1,6 @@
 {
-  "name": "Remix: English Flashcards",
+  "name": "⚡️暗証例文",
   "description": "A flashcard app for English learning with hints, dark mode, and favorites.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [],
+  "majorCapabilities": []
 }
