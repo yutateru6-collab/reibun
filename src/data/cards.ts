@@ -7,6 +7,9 @@ export interface Card {
   back: string;
 }
 
+import { vq1_1_QuestionsCards, vq1_2_QuestionsCards, vq2_1_QuestionsCards } from './questions';
+import { vq1_Cards, vq1_1_Cards, vq1_2_Cards, vq2_Cards, vq2_1_Cards } from './vision_quest_sentences';
+
 export interface Deck {
   id: string;
   title: string;
@@ -1868,6 +1871,359 @@ const test10Cards: Card[] = [
   }
 ];
 
+export const test17Cards: Card[] = [
+  {
+    id: 1101,
+    front: "(　　) book has two hundred pages.",
+    translation: "この本は200ページあります。",
+    comment: "This is a basic sentence pattern where 'This book' functions as the subject.",
+    hint: "This + book",
+    back: "This book has two hundred pages."
+  },
+  {
+    id: 1102,
+    front: "Giraffes (　　) long necks.",
+    translation: "キリンは首が長い。",
+    comment: "Expressing possession or a characteristic.",
+    hint: "have",
+    back: "Giraffes have long necks."
+  },
+  {
+    id: 1103,
+    front: "(　　) (　　) four people in my family.",
+    translation: "私は4人家族です。",
+    comment: "There are construction",
+    hint: "There + are",
+    back: "There are four people in my family."
+  },
+  {
+    id: 1104,
+    front: "I (　　) a fever last night.",
+    translation: "昨日の夜、熱がありました。",
+    comment: "Past tense expressing possession/experiencing.",
+    hint: "had",
+    back: "I had a fever last night."
+  },
+  {
+    id: 1105,
+    front: "Hurry up (　　) you’ll be late for your train.",
+    translation: "急がないと電車に乗り遅れますよ。",
+    comment: "Imperative + or",
+    hint: "or",
+    back: "Hurry up or you’ll be late for your train."
+  },
+  {
+    id: 1106,
+    front: "You never (　　) the future.",
+    translation: "未来のことは決してわからない。",
+    comment: "General truth.",
+    hint: "know",
+    back: "You never know the future."
+  },
+  {
+    id: 1107,
+    front: "We (　　) a lot of snow here last winter.",
+    translation: "昨年の冬、ここは雪がたくさん降った。",
+    comment: "Using 'we' to refer to people in general in a certain location.",
+    hint: "had",
+    back: "We had a lot of snow here last winter."
+  },
+  {
+    id: 1108,
+    front: "In Australia, (　　) celebrate Christmas in summer.",
+    translation: "オーストラリアでは夏にクリスマスを祝う。",
+    comment: "Using 'they' to refer to people in general in a certain location.",
+    hint: "they",
+    back: "In Australia, they celebrate Christmas in summer."
+  },
+  {
+    id: 1109,
+    front: "“What time is it?” “(　　) six thirty.”",
+    translation: "「何時ですか。」「6時30分です。」",
+    comment: "Using it for time.",
+    hint: "It's",
+    back: "“What time is it?” “It’s six thirty.”"
+  },
+  {
+    id: 1110,
+    front: "(　　) rained heavily all day yesterday.",
+    translation: "昨日は一日中、雨が激しく降った。",
+    comment: "Using it for weather.",
+    hint: "It",
+    back: "It rained heavily all day yesterday."
+  },
+  {
+    id: 1111,
+    front: "How far is (　　) from here to the station?",
+    translation: "ここから駅までどれくらいの距離がありますか。",
+    comment: "Using it for distance.",
+    hint: "it",
+    back: "How far is it from here to the station?"
+  },
+  {
+    id: 1112,
+    front: "Hi, Emma. How’s (　　) going?",
+    translation: "やあエマ。調子はどう？",
+    comment: "Idiomatic use of 'it'.",
+    hint: "it",
+    back: "Hi, Emma. How’s it going?"
+  },
+  {
+    id: 1113,
+    front: "(　　) like tea, and (　　) prefer coffee.",
+    translation: "お茶が好きな人もいれば、コーヒーのほうが好きな人もいる。",
+    comment: "Some... others...",
+    hint: "Some / others",
+    back: "Some like tea, and others prefer coffee."
+  },
+  {
+    id: 1114,
+    front: "The (　　) of high school students who go abroad on school trips is increasing.",
+    translation: "海外へ修学旅行に行く高校生が増えている。",
+    comment: "The number of...",
+    hint: "number",
+    back: "The number of high school students who go abroad on school trips is increasing."
+  },
+  {
+    id: 1115,
+    front: "There is (　　) wrong with my computer.",
+    translation: "私のコンピューターの調子が悪い。",
+    comment: "something wrong",
+    hint: "something",
+    back: "There is something wrong with my computer."
+  }
+];
+
+export const test18Cards: Card[] = [
+  {
+    id: 1116,
+    front: "The capital of Canada (　　) Ottawa.",
+    translation: "カナダの首都はオタワです。",
+    comment: "Subject: The capital of Canada",
+    hint: "is",
+    back: "The capital of Canada is Ottawa."
+  },
+  {
+    id: 1117,
+    front: "(　　) love is to trust.",
+    translation: "愛することは信頼することだ。",
+    comment: "To-infinitive as a subject",
+    hint: "To",
+    back: "To love is to trust."
+  },
+  {
+    id: 1118,
+    front: "(　　) abroad is a great experience.",
+    translation: "留学することはすばらしい経験だ。",
+    comment: "Gerund as a subject",
+    hint: "Studying",
+    back: "Studying abroad is a great experience."
+  },
+  {
+    id: 1119,
+    front: "(　　) is impossible to predict what will happen next.",
+    translation: "次に何が起こるかを予測するのは不可能だ。",
+    comment: "It as a formal subject (It is ... to do)",
+    hint: "It",
+    back: "It is impossible to predict what will happen next."
+  },
+  {
+    id: 1120,
+    front: "(　　) is not surprising that he refused the offer.",
+    translation: "彼がその申し出を断ったのは驚くことではない。",
+    comment: "It as a formal subject (It is ... that clause)",
+    hint: "It",
+    back: "It is not surprising that he refused the offer."
+  },
+  {
+    id: 1121,
+    front: "The internet (　　) us to communicate with people all over the world.",
+    translation: "インターネットのおかげで、世界の人々とコミュニケーションがとれる。",
+    comment: "Inanimate subject (A enables B to do)",
+    hint: "enables",
+    back: "The internet enables us to communicate with people all over the world."
+  },
+  {
+    id: 1122,
+    front: "The rain (　　) us from having a barbecue by the riverside.",
+    translation: "雨のために私たちは川辺でバーベキューができなかった。",
+    comment: "Inanimate subject (A prevents B from doing)",
+    hint: "prevented",
+    back: "The rain prevented us from having a barbecue by the riverside."
+  },
+  {
+    id: 1123,
+    front: "(　　) brought you to Japan?",
+    translation: "どうして日本に来たのですか。",
+    comment: "Inanimate subject (What brought ...?)",
+    hint: "What",
+    back: "What brought you to Japan?"
+  },
+  {
+    id: 1124,
+    front: "The research (　　) that having a cup of coffee every day improves your health.",
+    translation: "その研究によれば、毎日1杯のコーヒーを飲むと健康になる。",
+    comment: "Inanimate subject (A shows that ...)",
+    hint: "shows",
+    back: "The research shows that having a cup of coffee every day improves your health."
+  },
+  {
+    id: 1125,
+    front: "The weather forecast (　　) it’s going to be cloudy tomorrow.",
+    translation: "天気予報によると、明日はくもりです。",
+    comment: "Inanimate subject (A says ...)",
+    hint: "says",
+    back: "The weather forecast says it’s going to be cloudy tomorrow."
+  },
+  {
+    id: 1126,
+    front: "(　　) cost me 23,000 yen to repair my computer.",
+    translation: "私のコンピューターを修理するのに2万3千円かかった。",
+    comment: "It cost + person + money + to do",
+    hint: "It",
+    back: "It cost me 23,000 yen to repair my computer."
+  },
+  {
+    id: 1127,
+    front: "(　　) took me two hours to finish my assignment.",
+    translation: "私は宿題を終えるのに2時間かかった。",
+    comment: "It took + person + time + to do",
+    hint: "It",
+    back: "It took me two hours to finish my assignment."
+  },
+  {
+    id: 1128,
+    front: "(　　) does not matter to me where you go.",
+    translation: "君がどこへ行こうと私は構わない。",
+    comment: "It does not matter to + person + wh-clause",
+    hint: "It",
+    back: "It does not matter to me where you go."
+  }
+];
+
+export const test19Cards: Card[] = [
+  {
+    id: 1129,
+    front: "Customs (　　) from country to country.",
+    translation: "習慣は国によってさまざまだ。",
+    comment: "vary as an intransitive verb",
+    hint: "vary",
+    back: "Customs vary from country to country."
+  },
+  {
+    id: 1130,
+    front: "Olivia (　　) for Paris yesterday.",
+    translation: "昨日、オリビアはパリへたった。",
+    comment: "leave for vs leave",
+    hint: "left",
+    back: "Olivia left for Paris yesterday."
+  },
+  {
+    id: 1131,
+    front: "My brother has (　　) his umbrella on the train.",
+    translation: "弟は電車に傘を忘れてきた。",
+    comment: "leave + object + place",
+    hint: "left",
+    back: "My brother has left his umbrella on the train."
+  },
+  {
+    id: 1132,
+    front: "A well-known architect (　　) the church.",
+    translation: "有名な建築家がその教会を建てた。",
+    comment: "SVO sentence",
+    hint: "built",
+    back: "A well-known architect built the church."
+  },
+  {
+    id: 1133,
+    front: "The church was (　　) by a well-known architect.",
+    translation: "その教会は有名な建築家によって建てられた。",
+    comment: "Passive voice of SVO sentence",
+    hint: "built",
+    back: "The church was built by a well-known architect."
+  },
+  {
+    id: 1134,
+    front: "I need to (　　) my suitcase by tomorrow morning.",
+    translation: "私は明日の朝までにスーツケースに荷物を詰めなければならない。",
+    comment: "pack + object",
+    hint: "pack",
+    back: "I need to pack my suitcase by tomorrow morning."
+  },
+  {
+    id: 1135,
+    front: "You should (　　) wasting money on clothes.",
+    translation: "服への無駄遣いをやめるべきです。",
+    comment: "stop doing vs stop to do",
+    hint: "stop",
+    back: "You should stop wasting money on clothes."
+  },
+  {
+    id: 1136,
+    front: "A lot of parents (　　) that the video game was too violent.",
+    translation: "多くの親がそのテレビゲームはあまりにも暴力的だと苦情を言った。",
+    comment: "complain that ...",
+    hint: "complained",
+    back: "A lot of parents complained that the video game was too violent."
+  },
+  {
+    id: 1137,
+    front: "I (　　) why Bob is angry.",
+    translation: "なぜボブは怒っているんだろう。",
+    comment: "wonder + wh-clause",
+    hint: "wonder",
+    back: "I wonder why Bob is angry."
+  },
+  {
+    id: 1138,
+    front: "You don’t (　　) how much I care about you.",
+    translation: "私が君のことをどんなに心配しているかわかっていない。",
+    comment: "know + wh-clause",
+    hint: "know",
+    back: "You don’t know how much I care about you."
+  },
+  {
+    id: 1139,
+    front: "He (　　) us a model of the building.",
+    translation: "彼は私たちに建物の模型を見せてくれた。",
+    comment: "SVOO sentence (show O1 O2)",
+    hint: "showed",
+    back: "He showed us a model of the building."
+  },
+  {
+    id: 1140,
+    front: "I (　　) my parents that I needed a new computer.",
+    translation: "私は両親に新しいコンピューターが必要だということを納得させた。",
+    comment: "convince person that ...",
+    hint: "convinced",
+    back: "I convinced my parents that I needed a new computer."
+  },
+  {
+    id: 1141,
+    front: "This book (　　) us what love is.",
+    translation: "この本は私たちに愛とは何かを教えてくれる。",
+    comment: "teach person wh-clause",
+    hint: "teaches",
+    back: "This book teaches us what love is."
+  },
+  {
+    id: 1142,
+    front: "This landscape painting (　　) me of my hometown.",
+    translation: "この風景画を見ると、私は故郷を思い出す。",
+    comment: "remind person of ...",
+    hint: "reminds",
+    back: "This landscape painting reminds me of my hometown."
+  },
+  {
+    id: 1143,
+    front: "The media (　　) an important part in forming public opinion.",
+    translation: "メディアは世論の形成に重要な役割を果たしている。",
+    comment: "play a part in ...",
+    hint: "plays",
+    back: "The media plays an important part in forming public opinion."
+  }
+];
+
 export const decks: Deck[] = [
   {
     id: 'test1',
@@ -1928,5 +2284,53 @@ export const decks: Deck[] = [
     title: 'Test 10 (仮定法)',
     description: '',
     cards: test10Cards
+  },
+  {
+    id: 'vq-lesson1',
+    title: 'Lesson 1',
+    description: '主語',
+    cards: vq1_Cards
+  },
+  {
+    id: 'vq-lesson1-1',
+    title: 'Lesson 1-1',
+    description: '主語①',
+    cards: vq1_1_Cards
+  },
+  {
+    id: 'vq-lesson1-2',
+    title: 'Lesson 1-2',
+    description: '主語②',
+    cards: vq1_2_Cards
+  },
+  {
+    id: 'vq-lesson2',
+    title: 'Lesson 2',
+    description: '動詞',
+    cards: vq2_Cards
+  },
+  {
+    id: 'vq-lesson2-1',
+    title: 'Lesson 2-1',
+    description: '動詞①',
+    cards: vq2_1_Cards
+  },
+  {
+    id: 'vq-lesson1-1-q',
+    title: 'Lesson 1-1',
+    description: '主語①',
+    cards: vq1_1_QuestionsCards
+  },
+  {
+    id: 'vq-lesson1-2-q',
+    title: 'Lesson 1-2',
+    description: '主語②',
+    cards: vq1_2_QuestionsCards
+  },
+  {
+    id: 'vq-lesson2-1-q',
+    title: 'Lesson 2-1',
+    description: '動詞①',
+    cards: vq2_1_QuestionsCards
   }
 ];

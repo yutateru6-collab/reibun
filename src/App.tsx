@@ -2,7 +2,130 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { decks, Card, Deck } from './data/cards';
 import { Moon, Sun, MoonStar, Shuffle, Star, ChevronLeft, ChevronRight, RotateCcw, Lightbulb, MessageCircle, Home, BookOpen, GraduationCap, Brain, List, Timer, CheckCircle, XCircle, Settings } from 'lucide-react';
 
-type AppMode = 'home' | 'menu' | 'standard' | 'memorize' | 'self' | 'order' | 'time' | 'result';
+type AppMode = 'top' | 'vision_quest' | 'home' | 'menu' | 'standard' | 'memorize' | 'self' | 'order' | 'time' | 'result';
+
+function highlightAnswers(front: string, back: string): string {
+  if (!front || !back) return back;
+
+  const hasPlaceholder = /\([ 　\t]*\)|[＿_]{2,}|\(\s*[^)]+?(?:\s*\/\s*[^)]+?)+\s*\)/.test(front);
+  if (!hasPlaceholder) return back;
+
+  const lines = front.split('\n');
+  let templateLine = "";
+  for (const line of lines) {
+    if (/\([ 　\t]*\)|[＿_]{2,}|\(\s*[^)]+?(?:\s*\/\s*[^)]+?)+\s*\)/.test(line)) {
+      templateLine = line.trim();
+      break;
+    }
+  }
+
+  if (!templateLine) return back;
+
+  let workingTemplate = templateLine;
+  const parenPlaceholderSearch = /\([ 　\t]*\)/;
+  const underbarPlaceholderSearch = /[＿_]{2,}/;
+  const sortPlaceholderSearch = /\(\s*[^)]+?(?:\s*\/\s*[^)]+?)+\s*\)/;
+
+  let placeholderCount = 0;
+  
+  while (true) {
+    let matched = false;
+    const token = `__PH_${placeholderCount}__`;
+    if (parenPlaceholderSearch.test(workingTemplate)) {
+      workingTemplate = workingTemplate.replace(parenPlaceholderSearch, token);
+      placeholderCount++;
+      matched = true;
+    } else if (underbarPlaceholderSearch.test(workingTemplate)) {
+      workingTemplate = workingTemplate.replace(underbarPlaceholderSearch, token);
+      placeholderCount++;
+      matched = true;
+    } else if (sortPlaceholderSearch.test(workingTemplate)) {
+      workingTemplate = workingTemplate.replace(sortPlaceholderSearch, token);
+      placeholderCount++;
+      matched = true;
+    }
+    if (!matched) break;
+  }
+
+  if (placeholderCount === 0) return back;
+
+  const escapeRegExp = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  
+  const parts = workingTemplate.split(/__PH_\d+__/);
+  const regexParts = parts.map(part => {
+    let clean = escapeRegExp(part.trim());
+    return clean ? clean.replace(/\\\s+/g, '\\s+') : "";
+  });
+
+  let regexPattern = "^\\s*";
+  for (let i = 0; i < regexParts.length; i++) {
+    regexPattern += regexParts[i];
+    if (i < regexParts.length - 1) {
+      regexPattern += "\\s*(.+?)\\s*";
+    }
+  }
+  regexPattern += "\\s*$";
+
+  try {
+    const regex = new RegExp(regexPattern, "i");
+    const match = back.trim().match(regex);
+    if (match) {
+      let result = workingTemplate;
+      for (let p = 0; p < placeholderCount; p++) {
+        const value = match[p + 1] ? match[p + 1].trim() : "";
+        result = result.replace(`__PH_${p}__`, `[${value}]`);
+      }
+      return result;
+    }
+  } catch (e) {
+    // Fallback on regex compile or execution error
+  }
+
+  return back;
+}
+
+const GREETING_MESSAGES = [
+  { main: "生きててエライ！", sub: "勉強しようとアプリを開いただけで、今日の徳は積まれました。" },
+  { main: "伝説の勇者、現る。", sub: "睡魔という魔王を倒して、レベル上げを始めましょう。" },
+  { main: "脳内メモリを解放せよ。", sub: "無駄な情報の代わりに、最強の知識をインストールします。" },
+  { main: "正直、寝たいよね。", sub: "わかる。でも、今の10分が未来のあなたを救う（はず）。" },
+  { main: "スマホ依存 of ザ・イヤー。", sub: "SNSを見る指を止めてここに来たあなた、完全に「勝ち組」です。" },
+  { main: "筋肉は裏切るが、知識も……", sub: "いや、知識は裏切りません！たぶん。信じて突き進もう。" },
+  { main: "【朗報】神、降臨。", sub: "あなたが作業を始めると、全米が（私が）泣きだします。" },
+  { main: "さて、一丁やりますか。", sub: "集中力ブースト中。今のあなたなら、なんでもいける気がする。" },
+  { main: "現実逃避へようこそ！", sub: "他の作業から逃げてきた？OK、ここで一緒に戦おう。" },
+  { main: "おかえり！天才。", sub: "おっと、才能が溢れ出ていますね。さっさと終わらせちゃいましょう。" },
+  { main: "脳のアップデート開始。", sub: "バグ修正：昨日の「ど忘れ」を修正し、情報処理を最適化します。" },
+  { main: "逆襲、はじまる。", sub: "できすぎて困る準備はできていますか？" },
+  { main: "ここは精神と時の部屋。", sub: "外の世界の1時間は、ここでの集中10分分に相当します（諸説あり）。" },
+  { main: "おっと、努力の天才か？", sub: "ログインボーナス：私の「熱い視線」を差し上げます。" },
+  { main: "全俺が泣いた。", sub: "あなたが戻ってくるのを、サーバーも震えて待っていました。" },
+  { main: "「忘れた」とは言わせない。", sub: "エビングハウス（忘却曲線）の鼻を明かしてやりましょう。" },
+  { main: "ガチャの時間です。", sub: "今日は「SSR：一生忘れない最高の一日」が出る確率100%（願望）。" },
+  { main: "さて、無双しますか。", sub: "周りの奴らがスマホで遊んでいる間に、こっそり最強になりましょう。" },
+  { main: "これはもはや「推し」だと思え。", sub: "眺めているだけで幸せ……にはなりませんが、力にはなります。" },
+  { main: "あ、意識高い人だ！", sub: "画面の反射で自分の顔を見てごらん。……うん、いい顔してる。" },
+  { main: "諦めるには早すぎる。", sub: "諦めようかなと思った瞬間にこそ、次のブレイクスルーが隠されています。" },
+  { main: "全自動学習マシーンへ。", sub: "余計な思考をオフにして、手を動かすマシーンになりきろう！" },
+  { main: "限界は自分が決めた幻想。", sub: "あなたの潜在能力は、まだ1%も発揮されていません。本気出す？" },
+  { main: "とりあえず、1文字だけ。", sub: "1文字書いたら勝ち。ハードルを極限まで下げて始めましょう。" },
+  { main: "未来のあなたからお礼状。", sub: "「あの時サボらず勉強してくれてサンキュー！」との手紙が届いています。" },
+  { main: "天才は、習慣の別名。", sub: "やる気が出ない？大丈夫。やる気なんてただの幻、行動がすべてです。" },
+  { main: "脳みそが喜びの叫び。", sub: "新しい知識を吸収するたび、脳のニューロンが大歓声を上げています。" },
+  { main: "世界を驚かせる準備。", sub: "今は静かに牙を研ぐ時間。いつか周囲を「あっ」と言わせてやりましょう。" },
+  { main: "今ここ、全集中。", sub: "雑音をすべてシャットアウト。自分だけの知の宇宙へダイブ！" },
+  { main: "睡魔とのラストバトル。", sub: "まぶたが重い？冷たい水を飲むか、深呼吸を3回して物理攻撃だ！" },
+  { main: "最高のインプット体験。", sub: "このアプリ、実はあなたを賢くするためだけに生まれてきたんです。" },
+  { main: "一歩進めば昨日超え。", sub: "たとえ10秒でも勉強したなら、昨日の自分を軽々と超えています。" },
+  { main: "眠れる獅子、覚醒。", sub: "まだ本気を出していないだけ？今がその「本気」を解放する瞬間です。" },
+  { main: "エビデンスに基づく努力。", sub: "努力は裏切らない。脳科学的にも、反復学習こそが最強の武器。" },
+  { main: "スマホを裏返してみよう。", sub: "通知はすべて無視。今だけは、自分を高める時間。さあ裏返して！" },
+  { main: "これは無敵のロードマップ。", sub: "覚えた分だけ強くなる。完全にゲームのレベル上げと同じです。" },
+  { main: "心臓の鼓動を高めよ。", sub: "合格の瞬間、目的達成の瞬間を想像して。ワクワクしてきたでしょ？" },
+  { main: "神対応：毎日学習中。", sub: "学んでいる時のあなたの横顔、信じられないほど輝いてますよ。" },
+  { main: "宇宙一エラい学習者。", sub: "こんな時間（または合間）に勉強しようとするなんて、ノーベル平和賞もの。" },
+  { main: "おめでとう、本日一歩目。", sub: "最初の一歩が最も重い。それをクリアしたあなたに、拍手を送ります！" }
+];
 
 export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -25,13 +148,32 @@ export default function App() {
     return saved ? JSON.parse(saved) : [];
   });
 
+  const [yetList, setYetList] = useState<number[]>(() => {
+    const saved = localStorage.getItem('flashcard-yet-list');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const addYet = (id: number) => {
+    setYetList(prev => {
+      if (!prev.includes(id)) {
+        return [...prev, id];
+      }
+      return prev;
+    });
+  };
+
+  const removeYet = (id: number) => {
+    setYetList(prev => prev.filter(yId => yId !== id));
+  };
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [shuffledOrder, setShuffledOrder] = useState<number[]>([]);
 
   // New state variables for test modes
-  const [appMode, setAppMode] = useState<AppMode>('home');
+  const [appMode, setAppMode] = useState<AppMode>('top');
+  const [visionQuestTab, setVisionQuestTab] = useState<'sentences' | 'questions'>('sentences');
   const [timeLimit, setTimeLimit] = useState<number>(10);
   const [resultDisplayTime, setResultDisplayTime] = useState<number>(3);
   const [score, setScore] = useState(0);
@@ -44,6 +186,101 @@ export default function App() {
   const [wordPool, setWordPool] = useState<{id: number, word: string}[]>([]);
   const [selectedWords, setSelectedWords] = useState<{id: number, word: string}[]>([]);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+
+  const [isCommentOpen, setIsCommentOpen] = useState(false);
+  const [isQuizCommentOpen, setIsQuizCommentOpen] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+
+  const [greeting, setGreeting] = useState(() => {
+    const STORAGE_KEY = 'app_greeting_queue';
+    const totalMessages = GREETING_MESSAGES.length;
+    
+    let queue: number[] = [];
+    
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        queue = JSON.parse(stored);
+      }
+    } catch (e) {
+      console.error("Failed to parse greeting queue", e);
+    }
+
+    // キューが空か、無効な場合は新しいシャッフル配列を作成
+    if (!Array.isArray(queue) || queue.length === 0) {
+      queue = Array.from({ length: totalMessages }, (_, i) => i);
+      
+      // フィッシャー・イェーツ（Fisher-Yates）シャッフル
+      for (let i = queue.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [queue[i], queue[j]] = [queue[j], queue[i]];
+      }
+    }
+
+    // キューから1個取り出す
+    const nextIndex = queue.pop();
+    
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(queue));
+    } catch (e) {
+      console.warn("Failed to save greeting queue to localStorage", e);
+    }
+
+    return GREETING_MESSAGES[nextIndex ?? 0];
+  });
+
+  // 他のページにいって、トップにもどったら毎回確実にメッセージを変更する
+  useEffect(() => {
+    if (appMode === 'top') {
+      const STORAGE_KEY = 'app_greeting_queue';
+      const totalMessages = GREETING_MESSAGES.length;
+      
+      let queue: number[] = [];
+      
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          queue = JSON.parse(stored);
+        }
+      } catch (e) {
+        console.error("Failed to parse greeting queue", e);
+      }
+
+      if (!Array.isArray(queue) || queue.length === 0) {
+        queue = Array.from({ length: totalMessages }, (_, i) => i);
+        
+        for (let i = queue.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [queue[i], queue[j]] = [queue[j], queue[i]];
+        }
+      }
+
+      const nextIndex = queue.pop();
+      
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(queue));
+      } catch (e) {
+        console.warn("Failed to save greeting queue to localStorage", e);
+      }
+
+      setGreeting(GREETING_MESSAGES[nextIndex ?? 0]);
+    }
+  }, [appMode]);
+
+  // 画面遷移やデッキ選択、カード切り替え、クイズ進捗などのタイミングでスクロール位置を最上部に戻す
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [appMode, currentDeck, currentIndex, quizIndex]);
+
+  // カード切り替え、表面に戻る、デッキ選択等のタイミングでアコーディオンを閉じる
+  useEffect(() => {
+    setIsCommentOpen(false);
+  }, [currentIndex, currentDeck, isFlipped]);
+
+  // クイズ切り替え、回答フェーズ、クイズモード変更などのタイミングでクイズのアコーディオンを閉じる
+  useEffect(() => {
+    setIsQuizCommentOpen(false);
+  }, [quizIndex, isFlipped, appMode]);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -68,6 +305,11 @@ export default function App() {
     localStorage.setItem('flashcard-favorites', JSON.stringify(favorites));
   }, [favorites]);
 
+  // Save yetList to local storage
+  useEffect(() => {
+    localStorage.setItem('flashcard-yet-list', JSON.stringify(yetList));
+  }, [yetList]);
+
   const toggleFavorite = (id: number) => {
     setFavorites(prev => 
       prev.includes(id) ? prev.filter(fId => fId !== id) : [...prev, id]
@@ -79,6 +321,10 @@ export default function App() {
     if (!currentDeck) return [];
     
     let cards = currentDeck.cards;
+    if (currentDeck.id === 'yet-deck') {
+      cards = decks.flatMap(d => d.cards).filter(c => yetList.includes(c.id));
+    }
+    
     if (reviewFavoritesOnly) {
       cards = cards.filter(c => favorites.includes(c.id));
     }
@@ -100,7 +346,14 @@ export default function App() {
     }
     
     return cards;
-  }, [currentDeck, isShuffle, reviewFavoritesOnly, favorites, shuffledOrder]);
+  }, [currentDeck, isShuffle, reviewFavoritesOnly, favorites, yetList, shuffledOrder]);
+
+  // Adjust currentIndex if cards are dynamically removed during review
+  useEffect(() => {
+    if (currentIndex >= activeCards.length && activeCards.length > 0) {
+      setCurrentIndex(activeCards.length - 1);
+    }
+  }, [activeCards.length, currentIndex]);
 
   // Reset state when changing deck or settings
   useEffect(() => {
@@ -176,10 +429,15 @@ export default function App() {
   };
 
   const handleSelfAssess = (correct: boolean) => {
+    const currentQuizCard = quizCards[quizIndex];
     if (correct) {
       setScore(prev => prev + 1);
+      if (currentDeck?.id === 'yet-deck') {
+        removeYet(currentQuizCard.id);
+      }
     } else {
-      setMistakes(prev => [...prev, quizCards[quizIndex]]);
+      setMistakes(prev => [...prev, currentQuizCard]);
+      addYet(currentQuizCard.id);
     }
     nextQuizCard();
   };
@@ -236,19 +494,396 @@ export default function App() {
   }, [appMode, timeLeft, isFlipped, resultDisplayTime]);
 
 
-  // Home Screen
-  if (!currentDeck) {
+  // Top Screen (Course Selection)
+  if (appMode === 'top') {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center py-8 md:py-12 px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
+        <div className="w-full max-w-4xl flex flex-col items-center">
+          <div className="absolute top-4 right-4">
+            <button 
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="p-2 md:p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+              title="テーマ切り替え"
+            >
+              {isDarkMode ? <Sun size={20} /> : <MoonStar size={20} />}
+            </button>
+          </div>
+          
+          <div className="mb-12 text-center w-full max-w-2xl px-4">
+            <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-6">⚡️期末試験対策⚡️</h1>
+            
+            {/* ランダム励ましメッセージ機能 */}
+            <div className="text-center py-6 px-4 bg-white/50 dark:bg-slate-800/40 rounded-[2rem] border border-slate-200/50 dark:border-slate-700/40 shadow-sm animate-fade-in backdrop-blur-md">
+              {/* Moodバッジ */}
+              <div className="inline-block mb-3 px-4 py-1 bg-yellow-100 dark:bg-yellow-950/30 text-yellow-700 dark:text-yellow-400 rounded-full text-xs font-black border-2 border-yellow-300 dark:border-yellow-800 tracking-wider">
+                TODAY'S MOOD
+              </div>
+              {/* メインメッセージ */}
+              <h2 className="text-2xl md:text-3.5xl font-black text-slate-800 dark:text-white mb-3 tracking-tight">
+                {greeting.main}
+              </h2>
+              {/* サブメッセージ */}
+              <p className="text-indigo-600 dark:text-indigo-300 font-bold text-sm md:text-base bg-white/60 dark:bg-black/20 inline-block px-4 py-2 rounded-2xl shadow-xs leading-relaxed">
+                {greeting.sub}
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-3xl">
+            <button
+              onClick={() => setAppMode('home')}
+              className="group flex flex-col items-center justify-center p-8 md:p-12 bg-white dark:bg-slate-800 rounded-[2rem] shadow-md border-2 border-transparent hover:border-indigo-500 dark:hover:border-indigo-400 transition-all hover:-translate-y-2 hover:shadow-xl cursor-pointer"
+            >
+              <div className="w-20 h-20 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <GraduationCap size={40} />
+              </div>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">基本例文マスター</h2>
+              <p className="text-slate-500 dark:text-slate-400 text-center text-sm">必ず役立つ基本セット</p>
+            </button>
+
+            <button
+              onClick={() => setAppMode('vision_quest')}
+              className="group flex flex-col items-center justify-center p-8 md:p-12 bg-white dark:bg-slate-800 rounded-[2rem] shadow-md border-2 border-transparent hover:border-purple-500 dark:hover:border-purple-400 transition-all hover:-translate-y-2 hover:shadow-xl cursor-pointer"
+            >
+              <div className="w-20 h-20 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Brain size={40} />
+              </div>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2 tracking-wide font-sans text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-500 group-hover:from-purple-500 group-hover:to-indigo-400">VISION QUEST</h2>
+              <p className="text-slate-500 dark:text-slate-400 text-center text-sm">Next Level Training</p>
+            </button>
+          </div>
+
+          {yetList.length > 0 && (
+            <div className="w-full max-w-3xl mt-8 animate-in fade-in slide-in-from-bottom-4 duration-350">
+              <button
+                onClick={() => {
+                  setCurrentDeck({
+                    id: 'yet-deck',
+                    title: '「まだ」の集中復習',
+                    description: '自己申告テスト等で「まだ」を選んだカードの復習',
+                    cards: decks.flatMap(d => d.cards).filter(c => yetList.includes(c.id))
+                  });
+                  setAppMode('menu');
+                }}
+                className="w-full group flex flex-col sm:flex-row items-center justify-between p-6 md:p-8 bg-white dark:bg-slate-800 hover:bg-rose-50/10 dark:hover:bg-rose-950/15 rounded-[2rem] shadow-md border-2 border-rose-200 dark:border-rose-900/50 hover:border-rose-500 dark:hover:border-rose-400 transition-all hover:-translate-y-1 hover:shadow-xl text-left cursor-pointer"
+              >
+                <div className="flex items-center gap-4 text-left">
+                  <div className="w-14 h-14 bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+                    <Brain size={28} />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">「まだ」の集中復習モード</h2>
+                    <p className="text-slate-500 dark:text-slate-400 text-sm">
+                      現在 <span className="font-bold text-rose-600 dark:text-rose-400">{yetList.length}</span> 個の暗記中カードがあります
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 text-sm font-bold text-rose-600 dark:text-rose-400 mt-4 sm:mt-0 bg-rose-50 dark:bg-rose-950/40 px-4 py-2 rounded-xl group-hover:scale-105 transition-transform shrink-0">
+                  <span>復習する</span>
+                  <ChevronRight size={16} />
+                </div>
+              </button>
+            </div>
+          )}
+
+          {/* Local Storage Auto-Save Alert & Reset Info Panel */}
+          <div className="w-full max-w-3xl mt-12 p-6 bg-slate-100/60 dark:bg-slate-800/40 rounded-[2rem] border border-slate-200/50 dark:border-slate-700/40 text-left animate-in fade-in duration-350">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-sm mb-1">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                  </span>
+                  <span>自動レジューム（スマホ自動セーブ中）</span>
+                </div>
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                  お気に入りリスト（{favorites.length}件）や、復習したい「まだ」カード（{yetList.length}件）、ダークモード等の個人設定データは、スマートフォンのブラウザ内（LocalStorage）に自動で即時同期保存されています。アプリを閉じたり本体を再起動しても、いつでも続きからリスタートできます。
+                </p>
+              </div>
+
+              {(favorites.length > 0 || yetList.length > 0) && (
+                <div className="shrink-0 w-full md:w-auto text-right">
+                  {!showResetConfirm ? (
+                    <button
+                      onClick={() => setShowResetConfirm(true)}
+                      className="w-full md:w-auto px-4 py-2 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/20 dark:hover:bg-rose-950/35 text-rose-600 dark:text-rose-400 rounded-xl text-xs font-bold transition-all border border-rose-200/50 dark:border-rose-900/30 cursor-pointer"
+                    >
+                      記憶データを初期化
+                    </button>
+                  ) : (
+                    <div className="flex flex-row md:flex-col gap-2 items-center md:items-end justify-end w-full md:w-auto">
+                      <span className="text-[10px] text-rose-500 font-bold mr-2 md:mr-0 shrink-0">本当に消去しますか？</span>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => {
+                            setFavorites([]);
+                            setYetList([]);
+                            setShowResetConfirm(false);
+                          }}
+                          className="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[10px] font-extrabold transition-all cursor-pointer whitespace-nowrap"
+                        >
+                          はい、消去する
+                        </button>
+                        <button
+                          onClick={() => setShowResetConfirm(false)}
+                          className="px-3 py-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-[10px] font-extrabold transition-all cursor-pointer whitespace-nowrap"
+                        >
+                          戻る
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Vision Quest Placeholder
+  if (appMode === 'vision_quest') {
+    return (
+      <div className="min-h-screen flex flex-col items-center py-8 md:py-12 px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
+        <div className="w-full max-w-4xl flex flex-col items-center">
+          <header className="flex justify-between items-center w-full mb-8 md:mb-12">
+            <div className="flex items-center gap-4">
+              <button 
+                onClick={() => setAppMode('top')}
+                className="shrink-0 p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                title="トップへ戻る"
+              >
+                <ChevronLeft size={24} />
+              </button>
+              <div className="flex items-center gap-2 md:gap-3">
+                <div className="p-2 md:p-3 bg-purple-600 rounded-xl md:rounded-2xl shadow-lg shadow-purple-200 dark:shadow-none hidden md:flex">
+                  <Brain className="text-white" size={24} />
+                </div>
+                <div>
+                  <h1 className="text-xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-500 tracking-wide font-sans">VISION QUEST</h1>
+                  <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400">Next Level Training</p>
+                </div>
+              </div>
+            </div>
+            <button 
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="p-2 md:p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+              title="テーマ切り替え"
+            >
+              {isDarkMode ? <Sun size={20} /> : <MoonStar size={20} />}
+            </button>
+          </header>
+
+          <div className="flex justify-center mb-8 w-full max-w-sm">
+            <div className="flex bg-slate-200/50 dark:bg-slate-800/50 p-1 rounded-xl w-full">
+              <button 
+                onClick={() => setVisionQuestTab('sentences')}
+                className={`flex-1 py-3 px-4 rounded-lg font-bold text-sm transition-all text-center ${visionQuestTab === 'sentences' ? 'bg-white dark:bg-slate-700 text-purple-600 dark:text-purple-400 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}
+              >
+                例文
+              </button>
+              <button 
+                onClick={() => setVisionQuestTab('questions')}
+                className={`flex-1 py-3 px-4 rounded-lg font-bold text-sm transition-all text-center ${visionQuestTab === 'questions' ? 'bg-white dark:bg-slate-700 text-purple-600 dark:text-purple-400 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}
+              >
+                問題
+              </button>
+            </div>
+          </div>
+
+          {visionQuestTab === 'sentences' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
+              <button
+                onClick={() => {
+                  setCurrentDeck(decks.find(d => d.id === 'vq-lesson1') || decks[0]);
+                  setAppMode('menu');
+                }}
+                className="group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden"
+              >
+                <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                  Lesson 1
+                  <span className="block text-sm text-slate-500 dark:text-slate-400 mt-1 font-normal">主語</span>
+                </h2>
+                <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
+                  <span>学習を始める</span>
+                  <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                </div>
+              </button>
+              <button
+                onClick={() => {
+                  setCurrentDeck(decks.find(d => d.id === 'vq-lesson1-1') || decks[0]);
+                  setAppMode('menu');
+                }}
+                className="group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden"
+              >
+                <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                  Lesson 1-1
+                  <span className="block text-sm text-slate-500 dark:text-slate-400 mt-1 font-normal">主語①</span>
+                </h2>
+                <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
+                  <span>学習を始める</span>
+                  <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                </div>
+              </button>
+              <button
+                onClick={() => {
+                  setCurrentDeck(decks.find(d => d.id === 'vq-lesson1-2') || decks[0]);
+                  setAppMode('menu');
+                }}
+                className="group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden opacity-90"
+              >
+                 <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                  Lesson 1-2
+                  <span className="block text-sm text-slate-500 dark:text-slate-400 mt-1 font-normal">主語②</span>
+                </h2>
+                <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
+                  <span>学習を始める</span>
+                  <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                </div>
+              </button>
+              <button
+                 onClick={() => {
+                   setCurrentDeck(decks.find(d => d.id === 'vq-lesson2') || decks[0]);
+                   setAppMode('menu');
+                 }}
+                 className="group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden"
+               >
+                 <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                   Lesson 2
+                   <span className="block text-sm text-slate-500 dark:text-slate-400 mt-1 font-normal">動詞</span>
+                 </h2>
+                 <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
+                   <span>学習を始める</span>
+                   <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                 </div>
+               </button>
+              <button
+                 onClick={() => {
+                   setCurrentDeck(decks.find(d => d.id === 'vq-lesson2-1') || decks[0]);
+                   setAppMode('menu');
+                 }}
+                 className="group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden"
+               >
+                 <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                   Lesson 2-1
+                   <span className="block text-sm text-slate-500 dark:text-slate-400 mt-1 font-normal">動詞①</span>
+                 </h2>
+                 <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
+                   <span>学習を始める</span>
+                   <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                 </div>
+               </button>
+            </div>
+          )}
+
+          {visionQuestTab === 'questions' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
+              <button
+                onClick={() => {
+                  setCurrentDeck(decks.find(d => d.id === 'vq-lesson1-1-q') || decks[0]);
+                  setAppMode('menu');
+                }}
+                className="group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden"
+              >
+                <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                  Lesson 1-1 問題
+                  <span className="block text-sm text-slate-500 dark:text-slate-400 mt-1 font-normal">主語①</span>
+                </h2>
+                <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
+                  <span>問題に挑戦する</span>
+                  <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                </div>
+              </button>
+              <button
+                onClick={() => {
+                  setCurrentDeck(decks.find(d => d.id === 'vq-lesson1-2-q') || decks[0]);
+                  setAppMode('menu');
+                }}
+                className="group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden opacity-90"
+              >
+                 <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                  Lesson 1-2 問題
+                  <span className="block text-sm text-slate-500 dark:text-slate-400 mt-1 font-normal">主語②</span>
+                </h2>
+                <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
+                  <span>問題に挑戦する</span>
+                  <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                </div>
+              </button>
+              <button
+                 onClick={() => {
+                   setCurrentDeck(decks.find(d => d.id === 'vq-lesson2-1-q') || decks[0]);
+                   setAppMode('menu');
+                 }}
+                 className="group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden"
+               >
+                 <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                   Lesson 2-1 問題
+                   <span className="block text-sm text-slate-500 dark:text-slate-400 mt-1 font-normal">動詞①</span>
+                 </h2>
+                 <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
+                   <span>問題に挑戦する</span>
+                   <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                 </div>
+               </button>
+            </div>
+          )}
+
+          {yetList.length > 0 && (
+            <div className="mt-12 p-6 bg-rose-50 dark:bg-rose-900/10 rounded-3xl border border-rose-100 dark:border-rose-900/30 w-full max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-300">
+              <div className="flex items-center gap-3 mb-4">
+                <Brain className="text-rose-500" size={24} />
+                <h3 className="text-lg font-bold text-rose-900 dark:text-rose-100">「まだ」の集中復習</h3>
+              </div>
+              <p className="text-rose-800/70 dark:text-rose-200/60 text-sm mb-6">
+                自己申告テスト等で「まだ」と評価した例文や未習熟リストに登録されている例文が <span className="font-bold text-rose-600 dark:text-rose-400">{yetList.length}</span> 個あります。
+              </p>
+              <button 
+                onClick={() => {
+                  setReviewFavoritesOnly(false);
+                  setCurrentDeck({
+                    id: 'yet-deck',
+                    title: '「まだ」の復習デッキ',
+                    description: '「まだ」と評価した例文の集中復習',
+                    cards: decks.flatMap(d => d.cards).filter(c => yetList.includes(c.id))
+                  });
+                  setAppMode('menu');
+                }}
+                className="w-full py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-2xl font-bold shadow-lg shadow-rose-200 dark:shadow-none transition-all active:scale-[0.98] cursor-pointer"
+              >
+                「まだ」のカードを復習する
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Home Screen (Basic Sentence Master)
+  if (appMode === 'home') {
     return (
       <div className="min-h-screen flex flex-col items-center py-8 md:py-12 px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
         <div className="w-full max-w-4xl">
           <header className="flex justify-between items-center mb-8 md:mb-12">
-            <div className="flex items-center gap-2 md:gap-3">
-              <div className="p-2 md:p-3 bg-indigo-600 rounded-xl md:rounded-2xl shadow-lg shadow-indigo-200 dark:shadow-none">
-                <GraduationCap className="text-white" size={24} />
-              </div>
-              <div>
-                <h1 className="text-xl md:text-3xl font-bold text-slate-900 dark:text-white">基本例文マスター</h1>
-                <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400">必ず役立つ基本セット</p>
+            <div className="flex items-center gap-4">
+              <button 
+                onClick={() => setAppMode('top')}
+                className="shrink-0 p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                title="トップへ戻る"
+              >
+                <ChevronLeft size={24} />
+              </button>
+              <div className="flex items-center gap-2 md:gap-3">
+                <div className="p-2 md:p-3 bg-indigo-600 rounded-xl md:rounded-2xl shadow-lg shadow-indigo-200 dark:shadow-none hidden md:flex">
+                  <GraduationCap className="text-white" size={24} />
+                </div>
+                <div>
+                  <h1 className="text-xl md:text-3xl font-bold text-slate-900 dark:text-white">基本例文マスター</h1>
+                  <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400">必ず役立つ基本セット</p>
+                </div>
               </div>
             </div>
             <button 
@@ -295,7 +930,7 @@ export default function App() {
                 <h3 className="text-lg font-bold text-amber-900 dark:text-amber-100">お気に入りの復習</h3>
               </div>
               <p className="text-amber-800/70 dark:text-amber-200/60 text-sm mb-6">
-                現在 {favorites.length} 個のカードがお気に入りに登録されています。
+                現在 {favorites.length} 個 of カードがお気に入りに登録されています。
               </p>
               <button 
                 onClick={() => {
@@ -303,9 +938,36 @@ export default function App() {
                   setReviewFavoritesOnly(true);
                   setAppMode('menu');
                 }}
-                className="w-full py-4 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl font-bold shadow-lg shadow-amber-200 dark:shadow-none transition-all active:scale-[0.98]"
+                className="w-full py-4 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl font-bold shadow-lg shadow-amber-200 dark:shadow-none transition-all active:scale-[0.98] cursor-pointer"
               >
                 お気に入りだけを復習する
+              </button>
+            </div>
+          )}
+
+          {yetList.length > 0 && (
+            <div className="mt-8 p-6 bg-rose-50 dark:bg-rose-900/10 rounded-3xl border border-rose-100 dark:border-rose-900/30 animate-in fade-in slide-in-from-bottom-4 duration-300">
+              <div className="flex items-center gap-3 mb-4">
+                <Brain className="text-rose-500" size={24} />
+                <h3 className="text-lg font-bold text-rose-900 dark:text-rose-100">「まだ」の集中復習</h3>
+              </div>
+              <p className="text-rose-800/70 dark:text-rose-200/60 text-sm mb-6">
+                自己申告テスト等で「まだ」と評価した例文や未習熟リストに登録されている例文が <span className="font-bold text-rose-600 dark:text-rose-400">{yetList.length}</span> 個あります。
+              </p>
+              <button 
+                onClick={() => {
+                  setReviewFavoritesOnly(false);
+                  setCurrentDeck({
+                    id: 'yet-deck',
+                    title: '「まだ」の復習デッキ',
+                    description: '「まだ」と評価した例文の集中復習',
+                    cards: decks.flatMap(d => d.cards).filter(c => yetList.includes(c.id))
+                  });
+                  setAppMode('menu');
+                }}
+                className="w-full py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-2xl font-bold shadow-lg shadow-rose-200 dark:shadow-none transition-all active:scale-[0.98] cursor-pointer"
+              >
+                「まだ」のカードを復習する
               </button>
             </div>
           )}
@@ -322,7 +984,11 @@ export default function App() {
           <header className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-4">
               <button 
-                onClick={() => { setCurrentDeck(null); setAppMode('home'); }}
+                onClick={() => { 
+                  const isVisionQuest = currentDeck?.id.startsWith('vq-');
+                  setCurrentDeck(null); 
+                  setAppMode(isVisionQuest ? 'vision_quest' : 'home'); 
+                }}
                 className="p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
               >
                 <ChevronLeft size={24} />
@@ -343,65 +1009,88 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <button 
               onClick={() => { setAppMode('standard'); }}
-              className="flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:-translate-y-1 transition-all group"
+              className="flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:-translate-y-1 transition-all group cursor-pointer"
             >
-              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                 <BookOpen size={32} />
               </div>
+              <span className="text-[10px] font-extrabold px-2 py-0.5 bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 rounded-full mb-1">
+                基本学習・じっくり覚える
+              </span>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">単語カード</h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 text-center">通常のフラッシュカードで<br/>じっくり学習</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 text-center leading-relaxed">
+                通常のフラッシュカードでおもて裏を交互に確認し、自分の強みと弱みを分析しながら学習できます。
+              </p>
             </button>
 
             <button 
               onClick={() => { setAppMode('memorize'); setIsFlipped(false); }}
-              className="flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:-translate-y-1 transition-all group"
+              className="flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:-translate-y-1 transition-all group cursor-pointer"
             >
-              <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                 <RotateCcw size={32} />
               </div>
+              <span className="text-[10px] font-extrabold px-2 py-0.5 bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400 rounded-full mb-1">
+                インプット・英文から入る
+              </span>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">答えから覚える</h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 text-center">英文を先に見て<br/>内容をインプット</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 text-center leading-relaxed">
+                完成した英文を真っ先に見てイメージし、そこから和訳とポイントをインプットする暗記用モード。
+              </p>
             </button>
 
             <button 
               onClick={() => startQuiz('order')}
-              className="flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:-translate-y-1 transition-all group"
+              className="flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:-translate-y-1 transition-all group cursor-pointer"
             >
-              <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                 <Shuffle size={32} />
               </div>
+              <span className="text-[10px] font-extrabold px-2 py-0.5 bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400 rounded-full mb-1">
+                語順トレーニング・暗唱仕上げ
+              </span>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">並べ替えクイズ</h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 text-center">バラバラの単語を<br/>正しい語順に並べる</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 text-center leading-relaxed">
+                正解のパーツ（単語）をシャッフルした状態から、タップして正しい英文の並びを作ります。
+              </p>
             </button>
 
             <button 
               onClick={() => startQuiz('self')}
-              className="flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:-translate-y-1 transition-all group"
+              className="flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:-translate-y-1 transition-all group cursor-pointer"
             >
-              <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                 <Brain size={32} />
               </div>
+              <span className="text-[10px] font-extrabold px-2 py-0.5 bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 rounded-full mb-1">
+                実力判定・高速アウトプット
+              </span>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">自己申告テスト</h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 text-center">わかったか・わからないかを<br/>自分で判定</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 text-center leading-relaxed">
+                表示された英語を見て頭の中で日本語の意味を思い出しながらめくり、判定する自己評価式テスト。
+              </p>
             </button>
 
-            <div className="flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-xl flex items-center justify-center">
-                  <Timer size={24} />
+            <div className="flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 md:col-span-2">
+              <div className="flex flex-col items-center justify-center gap-2 mb-4 text-center">
+                <div className="w-16 h-16 bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-2xl flex items-center justify-center mb-1">
+                  <Timer size={32} />
                 </div>
-                <div>
-                  <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">タイムアタック</h2>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">制限時間内に頭で答えを出すサバイバル</p>
-                </div>
+                <span className="text-[10px] font-extrabold px-2 py-0.5 bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400 rounded-full">
+                  瞬発力強化・自動オート再生
+                </span>
+                <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">タイムアタック</h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400 text-center max-w-md leading-relaxed">
+                  表示された英語を見て、設定した秒数以内に日本語の意味を瞬時に思い出すスピード学習モードです。
+                </p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg mb-6">
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400 ml-1">考える時間:</span>
+                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400 ml-1">考える時間 (表面):</span>
                   <select 
                     value={timeLimit} 
                     onChange={(e) => setTimeLimit(Number(e.target.value))}
-                    className="p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 font-bold outline-none focus:ring-2 focus:ring-rose-500/20"
+                    className="p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 font-bold outline-none focus:ring-2 focus:ring-rose-500/20 cursor-pointer"
                   >
                     <option value={3}>3秒 (神速)</option>
                     <option value={5}>5秒 (超上級)</option>
@@ -410,11 +1099,11 @@ export default function App() {
                   </select>
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400 ml-1">答えを表示する時間:</span>
+                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400 ml-1">答えを表示する時間 (裏面):</span>
                   <select 
                     value={resultDisplayTime} 
                     onChange={(e) => setResultDisplayTime(Number(e.target.value))}
-                    className="p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 font-bold outline-none focus:ring-2 focus:ring-rose-500/20"
+                    className="p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 font-bold outline-none focus:ring-2 focus:ring-rose-500/20 cursor-pointer"
                   >
                     <option value={1}>1秒 (一瞬)</option>
                     <option value={2}>2秒 (高速)</option>
@@ -425,10 +1114,13 @@ export default function App() {
               </div>
               <button 
                 onClick={() => startQuiz('time')}
-                className="w-full max-w-sm py-3 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-bold shadow-md transition-all active:scale-[0.98]"
+                className="w-full max-w-sm py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-2xl font-bold shadow-md transition-all active:scale-[0.98] cursor-pointer"
               >
                 タイムアタック開始！
               </button>
+              <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-2 text-center">
+                ※ 画面に触らなくても、設定した秒数で自動的に「問題（表面）」➔「答え（裏面）」➔「次のカード」とテンポよく切り替わります。
+              </p>
             </div>
           </div>
         </div>
@@ -455,35 +1147,48 @@ export default function App() {
           </h1>
         </div>
         
-        <div className="flex items-center gap-1 md:gap-2 bg-white dark:bg-slate-800 p-1 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+        <div className="flex items-center gap-1 md:gap-1.5 bg-white dark:bg-slate-800 p-1 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
           <button 
             onClick={() => setIsDarkMode(!isDarkMode)}
-            className={`p-1.5 md:p-2 rounded-lg transition-colors ${isDarkMode ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400' : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
+            className={`p-1 md:p-1.5 rounded-xl transition-colors flex flex-col items-center justify-center min-w-[46px] md:min-w-[52px] ${isDarkMode ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400' : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
           >
-            {isDarkMode ? <Sun size={18} /> : <MoonStar size={18} />}
+            {isDarkMode ? <Sun size={16} /> : <MoonStar size={16} />}
+            <span className="text-[9px] font-extrabold mt-0.5 tracking-tighter opacity-80">
+              {isDarkMode ? 'ライト' : 'ダーク'}
+            </span>
           </button>
           
           <button 
             onClick={() => setIsShuffle(!isShuffle)}
-            className={`p-1.5 md:p-2 rounded-lg transition-colors ${isShuffle ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400' : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
+            className={`p-1 md:p-1.5 rounded-xl transition-colors flex flex-col items-center justify-center min-w-[46px] md:min-w-[52px] ${isShuffle ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400' : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
           >
-            <Shuffle size={18} />
+            <Shuffle size={16} />
+            <span className="text-[9px] font-extrabold mt-0.5 tracking-tighter opacity-80">
+              {isShuffle ? 'シャッフル' : '順序'}
+            </span>
           </button>
 
           {!isMemorize && (
             <button 
               onClick={() => setIsBackDefault(!isBackDefault)}
-              className={`p-1.5 md:p-2 rounded-lg transition-colors ${isBackDefault ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400' : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
+              className={`p-1 md:p-1.5 rounded-xl transition-colors flex flex-col items-center justify-center min-w-[46px] md:min-w-[52px] ${isBackDefault ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400' : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
             >
-              <RotateCcw size={18} />
+              <RotateCcw size={16} />
+              <span className="text-[9px] font-extrabold mt-0.5 tracking-tighter opacity-80 whitespace-nowrap">
+                {isBackDefault ? '裏から' : '表から'}
+              </span>
             </button>
           )}
 
           <button 
             onClick={() => setReviewFavoritesOnly(!reviewFavoritesOnly)}
-            className={`p-1.5 md:p-2 rounded-lg transition-colors ${reviewFavoritesOnly ? 'bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400' : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
+            className={`p-1 md:p-1.5 rounded-xl transition-colors flex flex-col items-center justify-center min-w-[46px] md:min-w-[52px] ${reviewFavoritesOnly ? 'bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400' : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
+            title="お気に入りカードのみを絞り込んで学習"
           >
-            <Star size={18} className={reviewFavoritesOnly ? "fill-current" : ""} />
+            <Star size={16} className={reviewFavoritesOnly ? "fill-current text-amber-500" : ""} />
+            <span className="text-[9px] font-extrabold mt-0.5 tracking-tighter opacity-80 whitespace-nowrap">
+              {reviewFavoritesOnly ? '★限定' : 'すべて'}
+            </span>
           </button>
         </div>
       </div>
@@ -495,15 +1200,39 @@ export default function App() {
             <span className="text-xs md:text-sm font-bold text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm">
               {currentIndex + 1} / {activeCards.length}
             </span>
-            <button 
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleFavorite(currentCard.id);
-              }}
-              className={`p-2 transition-all active:scale-125 ${favorites.includes(currentCard.id) ? 'text-amber-400' : 'text-slate-300 dark:text-slate-600 hover:text-amber-300'}`}
-            >
-              <Star size={24} md:size={28} className={favorites.includes(currentCard.id) ? "fill-current" : ""} />
-            </button>
+            <div className="flex gap-2">
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFavorite(currentCard.id);
+                }}
+                className={`flex items-center gap-1 px-3 py-1.5 rounded-xl border transition-all active:scale-95 ${favorites.includes(currentCard.id) ? 'text-amber-500 border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/20 font-extrabold' : 'text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-700 hover:text-slate-600 bg-white dark:bg-slate-800'}`}
+                title="このカードをお気に入りに登録・解除"
+              >
+                <Star size={14} className={favorites.includes(currentCard.id) ? "fill-current" : ""} />
+                <span className="text-[10px] font-extrabold tracking-wider">
+                  {favorites.includes(currentCard.id) ? 'お気に入り登録中' : 'お気に入り登録'}
+                </span>
+              </button>
+
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (yetList.includes(currentCard.id)) {
+                    removeYet(currentCard.id);
+                  } else {
+                    addYet(currentCard.id);
+                  }
+                }}
+                className={`flex items-center gap-1 px-3 py-1.5 rounded-xl border transition-all active:scale-95 ${yetList.includes(currentCard.id) ? 'text-rose-600 border-rose-200 dark:border-rose-900 bg-rose-50/80 dark:bg-rose-950/20 font-extrabold' : 'text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-700 hover:text-rose-600 dark:hover:text-rose-400 bg-white dark:bg-slate-800'}`}
+                title="このカードを「まだ」リストに登録・解除"
+              >
+                <div className={`w-2 h-2 rounded-full ${yetList.includes(currentCard.id) ? 'bg-rose-500 animate-pulse' : 'bg-slate-300 dark:bg-slate-600'}`}></div>
+                <span className="text-[10px] font-extrabold tracking-wider">
+                  {yetList.includes(currentCard.id) ? '「まだ」登録中' : '「まだ」リスト追加'}
+                </span>
+              </button>
+            </div>
           </div>
 
           {/* Card */}
@@ -514,57 +1243,127 @@ export default function App() {
               if (isFlipped) setShowHint(false); // Reset hint when flipping back to front
             }}
           >
-            {(!isMemorize && !isFlipped) || (isMemorize && isFlipped) ? (
-              <div className="flex flex-col items-center text-center w-full animate-in fade-in zoom-in-95 duration-200">
-                <p className="text-xl md:text-4xl font-bold text-slate-800 dark:text-slate-100 mb-6 md:mb-8 leading-relaxed">
-                  {currentCard.front}
-                </p>
-                <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-8 md:mb-10">
-                  {currentCard.translation}
-                </p>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center text-center w-full animate-in fade-in zoom-in-95 duration-200">
-                <div className="absolute top-6 md:top-8 left-6 md:left-8 text-emerald-500 dark:text-emerald-400 flex items-center gap-2 font-black tracking-wider uppercase text-xs md:text-sm">
-                  <span className="text-xl md:text-2xl">✅</span> 完成文
-                </div>
-                <p className="text-2xl md:text-5xl font-bold text-emerald-600 dark:text-emerald-400 leading-tight mt-10 md:mt-12 mb-6 md:mb-8">
-                  {currentCard.back}
-                </p>
-                <div className="h-1 w-16 md:w-24 bg-emerald-100 dark:bg-emerald-900/30 rounded-full mb-6 md:mb-8"></div>
-                <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 font-medium mb-8">
-                  {currentCard.translation}
-                </p>
-
-                <div className="w-full" onClick={(e) => e.stopPropagation()}>
-                  {!showHint ? (
-                    <button 
-                      onClick={() => setShowHint(true)}
-                      className="mx-auto flex items-center gap-2 px-5 py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:hover:bg-indigo-900/50 dark:text-indigo-400 rounded-xl md:rounded-2xl transition-colors text-sm md:text-base font-bold"
-                    >
-                      <Lightbulb size={18} />
-                      ヒント
-                    </button>
+            {currentDeck.id.startsWith('vq-') ? (
+              // --- Vision Quest デッキ用の表示 ---
+              !isFlipped ? (
+                // 表面（めくる前）
+                <div className="flex flex-col items-center text-center w-full animate-in fade-in zoom-in-95 duration-200">
+                  {isMemorize ? (
+                    // 答えから覚える（英 ➔ 和）：表面は完成英文のみ
+                    <p className="text-2xl md:text-5xl font-bold text-slate-800 dark:text-slate-100 leading-tight my-8">
+                      {currentCard.back}
+                    </p>
                   ) : (
+                    // 通常単語カード（和 ➔ 英）：表面は日本語訳のみ
+                    <p className="text-xl md:text-3xl font-medium text-slate-800 dark:text-slate-100 my-8 leading-relaxed">
+                      {currentCard.translation}
+                    </p>
+                  )}
+                  <p className="text-xs text-slate-400 dark:text-slate-500 mt-6 md:mt-10 animate-pulse">
+                    タップして{isMemorize ? "日本語訳" : "完成文"}を見る
+                  </p>
+                </div>
+              ) : (
+                // 裏面（めくった後：回答とコメント）
+                <div className="flex flex-col items-center text-center w-full animate-in fade-in zoom-in-95 duration-200">
+                  <div className="absolute top-6 md:top-8 left-6 md:left-8 text-emerald-500 dark:text-emerald-400 flex items-center gap-2 font-black tracking-wider uppercase text-xs md:text-sm">
+                    <span className="text-xl md:text-2xl">✅</span> 完成文
+                  </div>
+                  <p className="text-2xl md:text-5xl font-bold text-emerald-600 dark:text-emerald-400 leading-tight mt-10 md:mt-12 mb-6 md:mb-8">
+                    {highlightAnswers(currentCard.front, currentCard.back)}
+                  </p>
+                  <div className="h-1 w-16 md:w-24 bg-emerald-100 dark:bg-emerald-900/30 rounded-full mb-6 md:mb-8"></div>
+                  <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 font-medium mb-8">
+                    {currentCard.translation}
+                  </p>
+
+                  {currentCard.comment && (
                     <div 
-                      onClick={() => setShowHint(false)}
-                      className="w-full bg-slate-50 dark:bg-slate-900/30 rounded-2xl md:rounded-3xl p-4 md:p-6 text-left border border-slate-100 dark:border-slate-800/50 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-900/50 transition-colors"
+                      className="w-full text-left" 
+                      onClick={(e) => e.stopPropagation()}
                     >
-                      <div className="flex items-start gap-2 md:gap-3 mb-3 md:mb-4 text-slate-600 dark:text-slate-400">
-                        <MessageCircle size={18} md:size={22} className="shrink-0 mt-1" />
-                        <p className="text-sm md:text-base font-bold italic">
-                          {currentCard.comment.replace(/^\(|\)$/g, '')}
-                        </p>
-                      </div>
-                      <div className="flex items-start gap-2 md:gap-3 text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/50 p-3 md:p-4 rounded-xl md:rounded-2xl border border-slate-100 dark:border-slate-800/50">
-                        <span className="text-lg md:text-xl shrink-0">💡</span>
-                        <p className="text-sm md:text-base leading-relaxed font-medium">{currentCard.hint}</p>
-                      </div>
-                      <p className="text-[10px] text-center text-slate-300 dark:text-slate-600 mt-2 font-medium">タップして閉じる</p>
+                      <button
+                        onClick={() => setIsCommentOpen(!isCommentOpen)}
+                        className="w-full flex items-center justify-between px-5 py-3.5 bg-purple-50/80 hover:bg-purple-100/80 text-purple-600 dark:bg-purple-950/40 dark:hover:bg-purple-900/50 dark:text-purple-400 rounded-xl md:rounded-2xl transition-all duration-200 text-sm md:text-base font-bold shadow-sm border border-purple-100/50 dark:border-purple-900/30 cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2">
+                          <MessageCircle size={18} className="text-purple-500 shrink-0" />
+                          <span>💡 ぽいんと</span>
+                        </div>
+                        <span className="text-xs text-purple-400 font-bold shrink-0">
+                          {isCommentOpen ? "タップで折りたたむ ▲" : "タップで表示 ▼"}
+                        </span>
+                      </button>
+
+                      {isCommentOpen && (
+                        <div className="mt-3 w-full bg-slate-50 dark:bg-slate-900/30 rounded-2xl md:rounded-3xl p-4 md:p-6 text-left border border-slate-100 dark:border-slate-800/50 text-slate-700 dark:text-slate-300 animate-in fade-in slide-in-from-top-2 duration-200">
+                          <div className="flex items-start gap-2 md:gap-3">
+                            <p className="text-sm md:text-base font-medium whitespace-pre-wrap leading-relaxed">
+                              {currentCard.comment}
+                            </p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
-              </div>
+              )
+            ) : (
+              // --- 通常のデッキ用の表示（既存のロジック） ---
+              (!isMemorize && !isFlipped) || (isMemorize && isFlipped) ? (
+                <div className="flex flex-col items-center text-center w-full animate-in fade-in zoom-in-95 duration-200">
+                  <p className="text-xl md:text-4xl font-bold text-slate-800 dark:text-slate-100 mb-6 md:mb-8 leading-relaxed">
+                    {currentCard.front}
+                  </p>
+                  <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-8 md:mb-10">
+                    {currentCard.translation}
+                  </p>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center text-center w-full animate-in fade-in zoom-in-95 duration-200">
+                  <div className="absolute top-6 md:top-8 left-6 md:left-8 text-emerald-500 dark:text-emerald-400 flex items-center gap-2 font-black tracking-wider uppercase text-xs md:text-sm">
+                    <span className="text-xl md:text-2xl">✅</span> 完成文
+                  </div>
+                  <p className="text-2xl md:text-5xl font-bold text-emerald-600 dark:text-emerald-400 leading-tight mt-10 md:mt-12 mb-6 md:mb-8">
+                    {currentCard.back}
+                  </p>
+                  <div className="h-1 w-16 md:w-24 bg-emerald-100 dark:bg-emerald-900/30 rounded-full mb-6 md:mb-8"></div>
+                  <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 font-medium mb-8">
+                    {currentCard.translation}
+                  </p>
+
+                  <div className="w-full" onClick={(e) => e.stopPropagation()}>
+                    {!showHint ? (
+                      <button 
+                        onClick={() => setShowHint(true)}
+                        className="mx-auto flex items-center gap-2 px-5 py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:hover:bg-indigo-900/50 dark:text-indigo-400 rounded-xl md:rounded-2xl transition-colors text-sm md:text-base font-bold"
+                      >
+                        <Lightbulb size={18} />
+                        ヒント
+                      </button>
+                    ) : (
+                      <div 
+                        onClick={() => setShowHint(false)}
+                        className="w-full bg-slate-50 dark:bg-slate-900/30 rounded-2xl md:rounded-3xl p-4 md:p-6 text-left border border-slate-100 dark:border-slate-800/50 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-900/50 transition-colors"
+                      >
+                        <div className="flex items-start gap-2 md:gap-3 mb-3 md:mb-4 text-slate-600 dark:text-slate-400">
+                          <MessageCircle size={18} md:size={22} className="shrink-0 mt-1" />
+                          <p className="text-sm md:text-base font-bold italic whitespace-pre-wrap">
+                            {currentCard.comment.replace(/^\(|\)$/g, '')}
+                          </p>
+                        </div>
+                        {currentCard.hint && (
+                          <div className="flex items-start gap-2 md:gap-3 text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/50 p-3 md:p-4 rounded-xl md:rounded-2xl border border-slate-100 dark:border-slate-800/50">
+                            <span className="text-lg md:text-xl shrink-0">💡</span>
+                            <p className="text-sm md:text-base leading-relaxed font-medium whitespace-pre-wrap">{currentCard.hint}</p>
+                          </div>
+                        )}
+                        <p className="text-[10px] text-center text-slate-300 dark:text-slate-600 mt-2 font-medium">タップして閉じる</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )
             )}
           </div>
 
@@ -626,16 +1425,58 @@ export default function App() {
         >
           {!isFlipped ? (
             <div className="text-center animate-in fade-in zoom-in-95">
-              <p className="text-2xl md:text-4xl font-bold text-slate-800 dark:text-slate-100 mb-8">{quizCard.front}</p>
-              <p className="text-lg text-slate-600 dark:text-slate-300">{quizCard.translation}</p>
-              <p className="text-sm text-slate-400 mt-12 animate-pulse">タップして答えを見る</p>
+              <div className="text-indigo-500 dark:text-indigo-400 flex items-center justify-center gap-2 font-black tracking-wider uppercase text-xs mb-6">
+                <span className="text-lg">📢</span> 英語
+              </div>
+              <p className="text-xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 mb-8 leading-relaxed">
+                {quizCard.back}
+              </p>
+              <p className="text-sm text-slate-400 mt-12 animate-pulse font-medium">タップして日本語訳を見る</p>
             </div>
           ) : (
             <div className="text-center animate-in fade-in zoom-in-95 w-full">
-              <p className="text-2xl md:text-4xl font-bold text-emerald-600 dark:text-emerald-400 mb-8">{quizCard.back}</p>
-              <p className="text-lg text-slate-600 dark:text-slate-300 mb-12">{quizCard.translation}</p>
-              
-              <div className="flex gap-4 justify-center w-full mt-8" onClick={e => e.stopPropagation()}>
+              <div className="text-emerald-500 dark:text-emerald-400 flex items-center justify-center gap-2 font-black tracking-wider uppercase text-xs mb-6">
+                <span className="text-lg">💡</span> 日本語での意味
+              </div>
+              <p className="text-2xl md:text-4xl font-bold text-emerald-600 dark:text-emerald-400 mb-8 leading-relaxed">
+                {quizCard.translation}
+              </p>
+              <div className="h-px w-24 bg-slate-100 dark:bg-slate-700/50 mx-auto mb-8"></div>
+              <p className="text-lg text-slate-500 dark:text-slate-400 font-medium mb-12">
+                {quizCard.back}
+              </p>
+                
+                {(currentDeck.id.startsWith('vq-') && quizCard.comment) && (
+                  <div 
+                    className="w-full text-left mb-8" 
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <button
+                      onClick={() => setIsQuizCommentOpen(!isQuizCommentOpen)}
+                      className="w-full flex items-center justify-between px-5 py-3.5 bg-purple-50/80 hover:bg-purple-100/80 text-purple-600 dark:bg-purple-950/40 dark:hover:bg-purple-900/50 dark:text-purple-400 rounded-xl md:rounded-2xl transition-all duration-200 text-sm md:text-base font-bold shadow-sm border border-purple-100/50 dark:border-purple-900/30 cursor-pointer"
+                    >
+                      <div className="flex items-center gap-2">
+                        <MessageCircle size={18} className="text-purple-500 shrink-0" />
+                        <span>💡 ぽいんと</span>
+                      </div>
+                      <span className="text-xs text-purple-400 font-bold shrink-0">
+                        {isQuizCommentOpen ? "タップで折りたたむ ▲" : "タップで表示 ▼"}
+                      </span>
+                    </button>
+
+                    {isQuizCommentOpen && (
+                      <div className="mt-3 w-full bg-slate-50 dark:bg-slate-900/30 rounded-2xl md:rounded-3xl p-4 md:p-6 text-left border border-slate-100 dark:border-slate-800/50 text-slate-700 dark:text-slate-300 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div className="flex items-start gap-2 md:gap-3">
+                          <p className="text-sm md:text-base font-medium whitespace-pre-wrap leading-relaxed">
+                            {quizCard.comment}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+                
+                <div className="flex gap-4 justify-center w-full mt-4" onClick={e => e.stopPropagation()}>
                 <button 
                   onClick={() => handleSelfAssess(false)}
                   className="flex-1 py-4 bg-rose-100 text-rose-600 hover:bg-rose-200 dark:bg-rose-900/30 dark:text-rose-400 rounded-2xl font-bold flex items-center justify-center gap-2 transition-colors"
@@ -673,22 +1514,56 @@ export default function App() {
         <div className={`w-full max-w-2xl bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-xl border border-slate-200 dark:border-slate-700 p-8 md:p-12 min-h-[400px] flex flex-col justify-center items-center transition-all ${isFlipped ? 'border-emerald-500 dark:border-emerald-500 ring-4 ring-emerald-500/10' : ''}`}>
           {!isFlipped ? (
             <div className="text-center animate-in fade-in zoom-in-95">
-              <p className="text-2xl md:text-4xl font-bold text-slate-800 dark:text-slate-100 mb-8 leading-relaxed">{quizCard.front}</p>
-              <p className="text-lg text-slate-600 dark:text-slate-300">{quizCard.translation}</p>
-              <p className="text-sm font-bold text-rose-500 mt-12">時間内に答えを思い出せ！</p>
+              <div className="text-rose-500 dark:text-rose-400 flex items-center justify-center gap-2 font-black tracking-wider uppercase text-xs mb-6">
+                <span className="text-lg">📢</span> 英語
+              </div>
+              <p className="text-xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 mb-8 leading-relaxed">
+                {quizCard.back}
+              </p>
+              <p className="text-sm font-bold text-rose-500 mt-12 animate-pulse">時間内に日本語訳を思い出せ！</p>
             </div>
           ) : (
             <div className="text-center animate-in fade-in zoom-in-95 w-full">
-              <div className="text-emerald-500 dark:text-emerald-400 flex items-center justify-center gap-2 font-black tracking-wider uppercase text-sm mb-6">
-                <span className="text-2xl">✅</span> 完成文
+              <div className="text-emerald-500 dark:text-emerald-400 flex items-center justify-center gap-2 font-black tracking-wider uppercase text-xs mb-6">
+                <span className="text-lg">💡</span> 日本語での意味
               </div>
-              <p className="text-2xl md:text-5xl font-bold text-emerald-600 dark:text-emerald-400 leading-tight mb-8">
-                {quizCard.back}
-              </p>
-              <div className="h-1 w-24 bg-emerald-100 dark:bg-emerald-900/30 rounded-full mx-auto mb-8"></div>
-              <p className="text-lg text-slate-500 dark:text-slate-400 font-medium">
+              <p className="text-2xl md:text-4xl font-bold text-emerald-600 dark:text-emerald-400 mb-8 leading-relaxed">
                 {quizCard.translation}
               </p>
+              <div className="h-px w-24 bg-slate-100 dark:bg-slate-700/50 mx-auto mb-8"></div>
+              <p className="text-lg text-slate-500 dark:text-slate-400 font-medium mb-8">
+                {quizCard.back}
+              </p>
+              
+              {(currentDeck.id.startsWith('vq-') && quizCard.comment) && (
+                <div 
+                  className="w-full text-left" 
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    onClick={() => setIsQuizCommentOpen(!isQuizCommentOpen)}
+                    className="w-full flex items-center justify-between px-5 py-3.5 bg-purple-50/80 hover:bg-purple-100/80 text-purple-600 dark:bg-purple-950/40 dark:hover:bg-purple-900/50 dark:text-purple-400 rounded-xl md:rounded-2xl transition-all duration-200 text-sm md:text-base font-bold shadow-sm border border-purple-100/50 dark:border-purple-900/30 cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2">
+                      <MessageCircle size={18} className="text-purple-500 shrink-0" />
+                      <span>💡 ぽいんと</span>
+                    </div>
+                    <span className="text-xs text-purple-400 font-bold shrink-0">
+                      {isQuizCommentOpen ? "タップで折りたたむ ▲" : "タップで表示 ▼"}
+                    </span>
+                  </button>
+
+                  {isQuizCommentOpen && (
+                    <div className="mt-3 w-full bg-slate-50 dark:bg-slate-900/30 rounded-2xl md:rounded-3xl p-4 md:p-6 text-left border border-slate-100 dark:border-slate-800/50 text-slate-700 dark:text-slate-300 animate-in fade-in slide-in-from-top-2 duration-200">
+                      <div className="flex items-start gap-2 md:gap-3">
+                        <p className="text-sm md:text-base font-medium whitespace-pre-wrap leading-relaxed">
+                          {quizCard.comment}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -767,9 +1642,41 @@ export default function App() {
               {isCorrect ? '⭕️ 正解！' : '❌ 残念...'}
             </div>
             {!isCorrect && (
-              <div className="p-4 bg-rose-50 dark:bg-rose-900/20 rounded-2xl border border-rose-200 dark:border-rose-900/50">
+              <div className="p-4 bg-rose-50 dark:bg-rose-900/20 rounded-2xl border border-rose-200 dark:border-rose-900/50 mb-4">
                 <p className="text-sm text-rose-600 dark:text-rose-400 font-bold mb-1">正解は：</p>
-                <p className="text-lg text-rose-700 dark:text-rose-300 font-bold">{quizCard.back}</p>
+                <p className="text-lg text-rose-700 dark:text-rose-300 font-bold">
+                  {currentDeck.id.startsWith('vq-') ? highlightAnswers(quizCard.front, quizCard.back) : quizCard.back}
+                </p>
+              </div>
+            )}
+            
+            {(currentDeck.id.startsWith('vq-') && quizCard.comment) && (
+              <div 
+                className="w-full text-left" 
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  onClick={() => setIsQuizCommentOpen(!isQuizCommentOpen)}
+                  className="w-full flex items-center justify-between px-5 py-3.5 bg-purple-50/80 hover:bg-purple-100/80 text-purple-600 dark:bg-purple-950/40 dark:hover:bg-purple-900/50 dark:text-purple-400 rounded-xl md:rounded-2xl transition-all duration-200 text-sm md:text-base font-bold shadow-sm border border-purple-100/50 dark:border-purple-900/30 cursor-pointer"
+                >
+                  <div className="flex items-center gap-2">
+                    <MessageCircle size={18} className="text-purple-500 shrink-0" />
+                    <span>💡 ぽいんと</span>
+                  </div>
+                  <span className="text-xs text-purple-400 font-bold shrink-0">
+                    {isQuizCommentOpen ? "タップで折りたたむ ▲" : "タップで表示 ▼"}
+                  </span>
+                </button>
+
+                {isQuizCommentOpen && (
+                  <div className="mt-3 w-full bg-slate-50 dark:bg-slate-900/30 rounded-2xl md:rounded-3xl p-4 md:p-6 text-left border border-slate-100 dark:border-slate-800/50 text-slate-700 dark:text-slate-300 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="flex items-start gap-2 md:gap-3">
+                      <p className="text-sm md:text-base font-medium whitespace-pre-wrap leading-relaxed">
+                        {quizCard.comment}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
