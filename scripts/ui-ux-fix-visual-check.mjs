@@ -29,7 +29,8 @@ async function assertNoHorizontalOverflow(page, name) {
 }
 
 async function mobileFlow(width, height, prefix) {
-  const page = await browser.newPage({ viewport: { width, height } });
+  const context = await browser.newContext({ viewport: { width, height } });
+  const page = await context.newPage();
   await page.goto(baseURL, { waitUntil: 'networkidle' });
 
   await page.screenshot({ path: `${outDir}/${prefix}-01-top.png`, fullPage: true });
@@ -80,13 +81,14 @@ async function mobileFlow(width, height, prefix) {
   await page.getByRole('button', { name: /ミニ解説/ }).waitFor();
   await page.screenshot({ path: `${outDir}/${prefix}-06-self-mini-explanation.png`, fullPage: true });
 
-  await page.close();
+  await context.close();
 }
 
 await mobileFlow(320, 568, 'small320');
 await mobileFlow(390, 844, 'mobile390');
 
-const vqPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+const vqContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
+const vqPage = await vqContext.newPage();
 await vqPage.goto(baseURL, { waitUntil: 'networkidle' });
 await vqPage.getByRole('button', { name: /VISION QUEST/ }).click();
 await vqPage.getByText('今回の試験範囲まとめ', { exact: true }).waitFor();
@@ -100,7 +102,7 @@ await vqPage.getByRole('button').filter({ hasText: 'Lesson 1' }).first().waitFor
 await vqPage.screenshot({ path: `${outDir}/mobile390-08-vq-expanded.png`, fullPage: true });
 await assertNoHorizontalOverflow(vqPage, 'vq-expanded');
 await axeSummary(vqPage, 'vq-expanded');
-await vqPage.close();
+await vqContext.close();
 
 fs.writeFileSync(`${outDir}/summary.json`, JSON.stringify({ baseURL, results }, null, 2));
 await browser.close();
