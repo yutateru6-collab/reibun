@@ -10,7 +10,7 @@ permissions:
 jobs:
   live:
     runs-on: ubuntu-latest
-    timeout-minutes: 18
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -21,14 +21,20 @@ jobs:
         run: |
           npm install --no-save playwright
           npx playwright install --with-deps chromium webkit
-      - name: Exercise live Cloudflare interactions including Hope Test1 No.7
+      - name: Exercise live Cloudflare critical interactions
         env:
           APP_URL: https://reibun.itisnowornever271.workers.dev/?live_audit=ecad42e822cfe492
         run: node scripts/postfix-interaction-regression.mjs
-      - name: Upload live screenshots and report
+      - name: Exhaustively open mini explanations on all 54 Hope official-test cards
+        env:
+          APP_URL: https://reibun.itisnowornever271.workers.dev/?all54_audit=ecad42e822cfe492
+        run: node scripts/live-all-hope-tests-ui-audit.mjs
+      - name: Upload live screenshots and reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: live-hope-test-explanation-audit
-          path: audit/postfix-interactions
+          path: |
+            audit/postfix-interactions
+            audit/all-hope-test-explanations
           retention-days: 7
