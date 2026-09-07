@@ -1,0 +1,58 @@
+name: Fix Hope source wrap
+
+on:
+  push:
+    branches: [exam-2026-midterm-v1]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix-and-verify:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: exam-2026-midterm-v1
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Restore source-confirmed Hope Lesson 10 No.7
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('src/data/hope_example_bank.ts')
+          text = path.read_text(encoding='utf-8')
+          old = '{ id: 4089, front: "The ratio of robots to humans in this factory is 3 to", translation: "この工場ではロボットと人間の比率は３対２だ。", comment: sourceComment("Hope Example Bank Lesson 10 p.52 No.7"), hint: "", back: "The ratio of robots to humans in this factory is 3 to" },'
+          new = '{ id: 4089, front: "The ratio of robots to humans in this factory is 3 to 2.", translation: "この工場ではロボットと人間の比率は３対２だ。", comment: sourceComment("Hope Example Bank Lesson 10 p.52 No.7"), hint: "", back: "The ratio of robots to humans in this factory is 3 to 2." },'
+          if old not in text:
+              raise SystemExit('Expected truncated ID 4089 line was not found')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Validate source-derived content
+        run: npx tsx scripts/validate-content.ts
+
+      - name: Type-check
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Commit verified repair
+        run: |
+          git checkout HEAD -- .github/workflows/fix-hope-wrap.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/hope_example_bank.ts
+          git commit -m "fix: restore complete Hope Lesson 10 ratio sentence"
+          git push origin HEAD:exam-2026-midterm-v1
