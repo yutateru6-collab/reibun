@@ -9,6 +9,7 @@ export interface Card {
 
 import { vq1_1_QuestionsCards, vq1_2_QuestionsCards, vq2_1_QuestionsCards } from './questions';
 import { vq1_Cards, vq1_1_Cards, vq1_2_Cards, vq2_Cards, vq2_1_Cards } from './vision_quest_sentences';
+import { hopeMiniExplanations } from './hope_mini_explanations';
 import {
   hopeLesson1Cards,
   hopeLesson2Cards,
@@ -45,21 +46,28 @@ export interface Deck {
   cards: Card[];
 }
 
+const withHopeMiniExplanations = (cards: Card[]): Card[] =>
+  cards.map((card) => ({
+    ...card,
+    comment: hopeMiniExplanations[card.id] ?? card.comment,
+  }));
+
 // 暗唱例文は、今回添付された Hope Example Bank 110文だけを正式データとして使用する。
 // 追加前に入っていた旧 Test 1〜10 の暗唱例文データは削除済み。
+// 表示用の comment は、暗記のフックになる「ミニ解説」に差し替える。
 export const basicExampleDecks: Deck[] = [
-  { id: 'hope-lesson1', title: 'Lesson 1', description: 'Example Bank p.8', cards: hopeLesson1Cards },
-  { id: 'hope-lesson2', title: 'Lesson 2', description: 'Example Bank p.12', cards: hopeLesson2Cards },
-  { id: 'hope-lesson3', title: 'Lesson 3', description: 'Example Bank p.18', cards: hopeLesson3Cards },
-  { id: 'hope-lesson4', title: 'Lesson 4', description: 'Example Bank p.22', cards: hopeLesson4Cards },
-  { id: 'hope-lesson5', title: 'Lesson 5', description: 'Example Bank p.28', cards: hopeLesson5Cards },
-  { id: 'hope-lesson6', title: 'Lesson 6', description: 'Example Bank p.32', cards: hopeLesson6Cards },
-  { id: 'hope-lesson7', title: 'Lesson 7', description: 'Example Bank p.38', cards: hopeLesson7Cards },
-  { id: 'hope-lesson8', title: 'Lesson 8', description: 'Example Bank p.42', cards: hopeLesson8Cards },
-  { id: 'hope-lesson9', title: 'Lesson 9', description: 'Example Bank p.48', cards: hopeLesson9Cards },
-  { id: 'hope-lesson10', title: 'Lesson 10', description: 'Example Bank p.52', cards: hopeLesson10Cards },
-  { id: 'hope-lesson11', title: 'Lesson 11', description: 'Example Bank p.58', cards: hopeLesson11Cards },
-  { id: 'hope-lesson12', title: 'Lesson 12', description: 'Example Bank p.62', cards: hopeLesson12Cards },
+  { id: 'hope-lesson1', title: 'Lesson 1', description: 'Example Bank p.8', cards: withHopeMiniExplanations(hopeLesson1Cards) },
+  { id: 'hope-lesson2', title: 'Lesson 2', description: 'Example Bank p.12', cards: withHopeMiniExplanations(hopeLesson2Cards) },
+  { id: 'hope-lesson3', title: 'Lesson 3', description: 'Example Bank p.18', cards: withHopeMiniExplanations(hopeLesson3Cards) },
+  { id: 'hope-lesson4', title: 'Lesson 4', description: 'Example Bank p.22', cards: withHopeMiniExplanations(hopeLesson4Cards) },
+  { id: 'hope-lesson5', title: 'Lesson 5', description: 'Example Bank p.28', cards: withHopeMiniExplanations(hopeLesson5Cards) },
+  { id: 'hope-lesson6', title: 'Lesson 6', description: 'Example Bank p.32', cards: withHopeMiniExplanations(hopeLesson6Cards) },
+  { id: 'hope-lesson7', title: 'Lesson 7', description: 'Example Bank p.38', cards: withHopeMiniExplanations(hopeLesson7Cards) },
+  { id: 'hope-lesson8', title: 'Lesson 8', description: 'Example Bank p.42', cards: withHopeMiniExplanations(hopeLesson8Cards) },
+  { id: 'hope-lesson9', title: 'Lesson 9', description: 'Example Bank p.48', cards: withHopeMiniExplanations(hopeLesson9Cards) },
+  { id: 'hope-lesson10', title: 'Lesson 10', description: 'Example Bank p.52', cards: withHopeMiniExplanations(hopeLesson10Cards) },
+  { id: 'hope-lesson11', title: 'Lesson 11', description: 'Example Bank p.58', cards: withHopeMiniExplanations(hopeLesson11Cards) },
+  { id: 'hope-lesson12', title: 'Lesson 12', description: 'Example Bank p.62', cards: withHopeMiniExplanations(hopeLesson12Cards) },
 ];
 
 // こちらは今回添付された Hope Test 1〜6 の公式穴埋め。旧暗唱例文とは別データ。

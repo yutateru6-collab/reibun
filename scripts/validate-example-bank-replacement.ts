@@ -11,17 +11,23 @@ assert(basicExampleDecks.length === 12, `Expected 12 Hope lesson decks, got ${ba
 assert(total === 110, `Expected exactly 110 attached Hope examples, got ${total}`);
 assert(hopeExampleCards.length === 110, `Hope source must contain exactly 110 examples, got ${hopeExampleCards.length}`);
 
-const activeIds = basicExampleDecks.flatMap((deck) => deck.cards.map((card) => card.id));
+const activeCards = basicExampleDecks.flatMap((deck) => deck.cards);
+const activeIds = activeCards.map((card) => card.id);
 const expectedIds = Array.from({ length: 110 }, (_, index) => 4001 + index);
 assert(
   JSON.stringify(activeIds) === JSON.stringify(expectedIds),
   'Active memorization examples must be exactly Hope IDs 4001-4110 in source order.'
 );
 
+const sourceById = new Map(hopeExampleCards.map((card) => [card.id, card]));
 for (const deck of basicExampleDecks) {
   assert(deck.id.startsWith('hope-lesson'), `Unexpected memorization deck: ${deck.id}`);
   for (const card of deck.cards) {
-    assert(card.comment.includes('Hope Example Bank'), `Card ${card.id} is not sourced from the attached Hope Example Bank.`);
+    const source = sourceById.get(card.id);
+    assert(source, `Card ${card.id} does not exist in the attached Hope Example Bank source.`);
+    assert(card.front === source.front, `Card ${card.id} English differs from the attached Hope source.`);
+    assert(card.translation === source.translation, `Card ${card.id} Japanese differs from the attached Hope source.`);
+    assert(card.back === source.back, `Card ${card.id} answer differs from the attached Hope source.`);
   }
 }
 
@@ -43,5 +49,6 @@ console.log(JSON.stringify({
   activeMemorizationDecks: basicExampleDecks.length,
   activeMemorizationCards: total,
   idRange: `${activeIds[0]}-${activeIds[activeIds.length - 1]}`,
+  sourceDataMatchedExactly: true,
   legacyExampleBankPresent: false,
 }, null, 2));

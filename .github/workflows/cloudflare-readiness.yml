@@ -29,6 +29,9 @@ jobs:
       - name: Validate source-derived content
         run: npx tsx scripts/validate-content.ts
 
+      - name: Validate Hope mini explanations
+        run: npx tsx scripts/validate-hope-mini-explanations.ts
+
       - name: Type-check
         run: npm run lint
 
@@ -46,6 +49,7 @@ jobs:
         env:
           PUBLIC_URL: https://reibun.itisnowornever271.workers.dev
           EXPECTED_CONTENT_VERSION: 2026-midterm-v1
+          EXPECTED_MINI_MARKER: 投稿は一瞬、スクショは長生き。
         run: |
           set -euo pipefail
           echo "Waiting for Cloudflare Git deployment: $PUBLIC_URL"
@@ -65,8 +69,10 @@ jobs:
                 js_status=000
               fi
 
-              if [ "$manifest_status" = "200" ] && [ "$js_status" = "200" ] && grep -Fq "$EXPECTED_CONTENT_VERSION" /tmp/reibun.js; then
-                echo "Live Cloudflare Worker is healthy and serves the expected content version."
+              if [ "$manifest_status" = "200" ] && [ "$js_status" = "200" ] \
+                && grep -Fq "$EXPECTED_CONTENT_VERSION" /tmp/reibun.js \
+                && grep -Fq "$EXPECTED_MINI_MARKER" /tmp/reibun.js; then
+                echo "Live Cloudflare Worker serves the expected content and Hope mini explanations."
                 exit 0
               fi
             fi

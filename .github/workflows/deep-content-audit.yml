@@ -31,6 +31,9 @@ jobs:
       - name: Verify attached Hope example bank fully replaced legacy content
         run: npx tsx scripts/validate-example-bank-replacement.ts
 
+      - name: Verify all 110 Hope mini explanations
+        run: npx tsx scripts/validate-hope-mini-explanations.ts
+
       - name: Independently hash-check all 66 visible VQ exercises
         run: npx tsx scripts/validate-vq-exercises.ts
 
@@ -55,6 +58,13 @@ jobs:
             exit 1
           fi
           echo 'Legacy memorization content is absent from the production bundle.'
+
+      - name: Verify mini explanations are bundled
+        run: |
+          set -euo pipefail
+          grep -R -F -q '投稿は一瞬、スクショは長生き。' dist
+          grep -R -F -q '💡ミニ解説' dist
+          echo 'Hope mini explanations are present in the production bundle.'
 
       - name: Validate Cloudflare bundle
         run: npx wrangler deploy --dry-run --outdir .wrangler-dryrun
