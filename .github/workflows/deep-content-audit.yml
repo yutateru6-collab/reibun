@@ -28,6 +28,9 @@ jobs:
       - name: Validate all source-derived content
         run: npx tsx scripts/validate-content.ts
 
+      - name: Verify attached Hope example bank fully replaced legacy content
+        run: npx tsx scripts/validate-example-bank-replacement.ts
+
       - name: Independently hash-check all 66 visible VQ exercises
         run: npx tsx scripts/validate-vq-exercises.ts
 
@@ -39,6 +42,19 @@ jobs:
 
       - name: Verify build output
         run: test -f dist/index.html
+
+      - name: Verify legacy memorization text is absent from production bundle
+        run: |
+          set -euo pipefail
+          if grep -R -F -q 'Who plays the hero?' dist; then
+            echo 'Legacy memorization sentence is still bundled.'
+            exit 1
+          fi
+          if grep -R -F -q 'Test 1 (文の種類)' dist; then
+            echo 'Legacy memorization deck title is still bundled.'
+            exit 1
+          fi
+          echo 'Legacy memorization content is absent from the production bundle.'
 
       - name: Validate Cloudflare bundle
         run: npx wrangler deploy --dry-run --outdir .wrangler-dryrun
