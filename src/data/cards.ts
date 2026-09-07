@@ -52,6 +52,15 @@ const withHopeMiniExplanations = (cards: Card[]): Card[] =>
     comment: hopeMiniExplanations[card.id] ?? card.comment,
   }));
 
+// Hope Test 1〜6 は Hope Example Bank Lesson 1〜6 と同じ54例文に対応する。
+// Test card IDs 4201〜4254 は対応する Example Bank IDs 4001〜4054 のちょうど +200 なので、
+// 公式穴埋めでも同じミニ解説を表示する。原資料の英文・和訳・空欄・正答は変更しない。
+const withHopeOfficialTestMiniExplanations = (cards: Card[]): Card[] =>
+  cards.map((card) => ({
+    ...card,
+    comment: hopeMiniExplanations[card.id - 200] ?? card.comment,
+  }));
+
 // 暗唱例文は、今回添付された Hope Example Bank 110文だけを正式データとして使用する。
 // 追加前に入っていた旧 Test 1〜10 の暗唱例文データは削除済み。
 // 表示用の comment は、暗記のフックになる「ミニ解説」に差し替える。
@@ -71,13 +80,14 @@ export const basicExampleDecks: Deck[] = [
 ];
 
 // こちらは今回添付された Hope Test 1〜6 の公式穴埋め。旧暗唱例文とは別データ。
+// 出題文は公式穴埋めを維持しつつ、答え確認時の comment は対応するミニ解説を表示する。
 export const basicTestDecks: Deck[] = [
-  { id: 'hope-test1', title: 'Test 1', description: '適切な主語を用いる', cards: hopeTest1Cards },
-  { id: 'hope-test2', title: 'Test 2', description: '適切な動詞を用いる', cards: hopeTest2Cards },
-  { id: 'hope-test3', title: 'Test 3', description: 'Hope公式穴埋め', cards: hopeTest3Cards },
-  { id: 'hope-test4', title: 'Test 4', description: 'Hope公式穴埋め', cards: hopeTest4Cards },
-  { id: 'hope-test5', title: 'Test 5', description: 'Hope公式穴埋め', cards: hopeTest5Cards },
-  { id: 'hope-test6', title: 'Test 6', description: 'Hope公式穴埋め', cards: hopeTest6Cards },
+  { id: 'hope-test1', title: 'Test 1', description: '適切な主語を用いる', cards: withHopeOfficialTestMiniExplanations(hopeTest1Cards) },
+  { id: 'hope-test2', title: 'Test 2', description: '適切な動詞を用いる', cards: withHopeOfficialTestMiniExplanations(hopeTest2Cards) },
+  { id: 'hope-test3', title: 'Test 3', description: 'Hope公式穴埋め', cards: withHopeOfficialTestMiniExplanations(hopeTest3Cards) },
+  { id: 'hope-test4', title: 'Test 4', description: 'Hope公式穴埋め', cards: withHopeOfficialTestMiniExplanations(hopeTest4Cards) },
+  { id: 'hope-test5', title: 'Test 5', description: 'Hope公式穴埋め', cards: withHopeOfficialTestMiniExplanations(hopeTest5Cards) },
+  { id: 'hope-test6', title: 'Test 6', description: 'Hope公式穴埋め', cards: withHopeOfficialTestMiniExplanations(hopeTest6Cards) },
 ];
 
 export const visionQuestSentenceBaseDecks: Deck[] = [
