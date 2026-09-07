@@ -1,0 +1,42 @@
+name: Apply stale UI auto-refresh
+
+on:
+  push:
+    branches: [auto-refresh-stale-ui]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: auto-refresh-stale-ui
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/apply-auto-refresh-stale-ui.mjs
+      - run: npm install
+      - run: npx tsx scripts/validate-content.ts
+      - run: npx tsx scripts/validate-hope-mini-explanations.ts
+      - run: npm run lint
+      - run: npm run build
+      - name: Verify update guard bundled
+        run: |
+          grep -R -Fq '__ui_check' dist/assets
+          grep -R -Fq '__ui_v' dist/assets
+      - name: Commit app change
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/App.tsx
+          if git diff --cached --quiet; then
+            echo 'No app changes to commit'
+          else
+            git commit -m 'fix: auto-refresh stale deployed UI in long-lived tabs'
+            git push origin HEAD:auto-refresh-stale-ui
+          fi
