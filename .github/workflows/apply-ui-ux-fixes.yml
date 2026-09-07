@@ -1,0 +1,66 @@
+name: Apply UI UX fixes
+
+on:
+  push:
+    branches: [ui-ux-fixes-except-card-face]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout fix branch
+        uses: actions/checkout@v4
+        with:
+          ref: ui-ux-fixes-except-card-face
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Apply all approved UI UX fixes except card-face change
+        run: node scripts/apply-ui-ux-fixes-except-card-face.mjs
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Type-check
+        run: npm run lint
+
+      - name: Production build
+        run: npm run build
+
+      - name: Verify intentionally held card-face behavior
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs = require('fs');
+          const app = fs.readFileSync('src/App.tsx', 'utf8');
+          const marker = '// --- 通常のデッキ用の表示（既存のロジック） ---';
+          const i = app.indexOf(marker);
+          if (i < 0) throw new Error('normal deck block not found');
+          const block = app.slice(i, i + 1800);
+          if (!block.includes('{currentCard.front}') || !block.includes('{currentCard.translation}')) {
+            throw new Error('Held item changed: normal Hope card face no longer shows both English and Japanese.');
+          }
+          console.log('Held item preserved: normal Hope card face remains unchanged.');
+          NODE
+
+      - name: Commit approved fixes
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/App.tsx src/data/hope_mini_explanations.ts index.html public/manifest.json public/icon.svg
+          if git diff --cached --quiet; then
+            echo "No approved fixes changed."
+            exit 0
+          fi
+          git commit -m "fix: apply UI UX audit improvements except card face"
+          git push origin HEAD:ui-ux-fixes-except-card-face
