@@ -1,21 +1,17 @@
 {
-  "name": "Flashcard App",
-  "short_name": "Flashcards",
-  "description": "A powerful flashcard application for language learning.",
+  "name": "例文マスター｜中間試験対策",
+  "short_name": "例文マスター",
+  "description": "暗唱例文とVision Questの試験範囲を、カード・穴埋め・語順・タイムアタックで反復できる学習アプリ。",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#f8fafc",
   "theme_color": "#4f46e5",
   "icons": [
     {
-      "src": "https://picsum.photos/seed/flashcard/192/192",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "https://picsum.photos/seed/flashcard/512/512",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ]
 }
