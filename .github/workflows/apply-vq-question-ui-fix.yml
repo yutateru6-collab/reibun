@@ -26,6 +26,7 @@ jobs:
       - name: Verify source and build
         run: |
           npm install
+          npm install --no-save playwright
           npx tsx scripts/validate-content.ts
           npx tsx scripts/validate-vq-exercises.ts
           npm run lint
