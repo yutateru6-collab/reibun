@@ -1,0 +1,51 @@
+name: Interaction regression audit
+
+on:
+  push:
+    branches: [interaction-regression-audit]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install app dependencies
+        run: npm install
+      - name: Validate source-derived content
+        run: npx tsx scripts/validate-content.ts
+      - name: Validate Hope mini explanations
+        run: npx tsx scripts/validate-hope-mini-explanations.ts
+      - name: Type-check
+        run: npm run lint
+      - name: Production build
+        run: npm run build
+      - name: Install Playwright engines
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium webkit
+      - name: Start production preview
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/reibun-preview.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:4173 >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/reibun-preview.log
+          exit 1
+      - name: Audit all critical interactions
+        run: node scripts/interaction-audit.mjs
+      - name: Upload audit report and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: interaction-regression-audit
+          path: audit/interactions
+          retention-days: 7
