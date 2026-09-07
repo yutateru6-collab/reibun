@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { decks, Card, Deck } from './data/cards';
+import { decks, Card, Deck, basicExampleDecks, basicTestDecks, visionQuestSentenceDecks, visionQuestQuestionDecks } from './data/cards';
+import { CONTENT_VERSION } from './data/exam_source_ledger';
 import { Moon, Sun, MoonStar, Shuffle, Star, ChevronLeft, ChevronRight, RotateCcw, Lightbulb, MessageCircle, Home, BookOpen, GraduationCap, Brain, List, Timer, CheckCircle, XCircle, Settings } from 'lucide-react';
 
 type AppMode = 'top' | 'vision_quest' | 'home' | 'menu' | 'standard' | 'memorize' | 'self' | 'order' | 'time' | 'result';
+
+const FAVORITES_STORAGE_KEY = `flashcard-favorites:${CONTENT_VERSION}`;
+const YET_STORAGE_KEY = `flashcard-yet-list:${CONTENT_VERSION}`;
 
 function highlightAnswers(front: string, back: string): string {
   if (!front || !back) return back;
@@ -144,12 +148,12 @@ export default function App() {
   const [reviewFavoritesOnly, setReviewFavoritesOnly] = useState(false);
   
   const [favorites, setFavorites] = useState<number[]>(() => {
-    const saved = localStorage.getItem('flashcard-favorites');
+    const saved = localStorage.getItem(FAVORITES_STORAGE_KEY);
     return saved ? JSON.parse(saved) : [];
   });
 
   const [yetList, setYetList] = useState<number[]>(() => {
-    const saved = localStorage.getItem('flashcard-yet-list');
+    const saved = localStorage.getItem(YET_STORAGE_KEY);
     return saved ? JSON.parse(saved) : [];
   });
 
@@ -174,6 +178,7 @@ export default function App() {
   // New state variables for test modes
   const [appMode, setAppMode] = useState<AppMode>('top');
   const [visionQuestTab, setVisionQuestTab] = useState<'sentences' | 'questions'>('sentences');
+  const [basicTab, setBasicTab] = useState<'sentences' | 'tests'>('sentences');
   const [timeLimit, setTimeLimit] = useState<number>(10);
   const [resultDisplayTime, setResultDisplayTime] = useState<number>(3);
   const [score, setScore] = useState(0);
@@ -302,12 +307,12 @@ export default function App() {
 
   // Save favorites to local storage
   useEffect(() => {
-    localStorage.setItem('flashcard-favorites', JSON.stringify(favorites));
+    localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favorites));
   }, [favorites]);
 
   // Save yetList to local storage
   useEffect(() => {
-    localStorage.setItem('flashcard-yet-list', JSON.stringify(yetList));
+    localStorage.setItem(YET_STORAGE_KEY, JSON.stringify(yetList));
   }, [yetList]);
 
   const toggleFavorite = (id: number) => {
@@ -695,139 +700,71 @@ export default function App() {
 
           {visionQuestTab === 'sentences' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
-              <button
-                onClick={() => {
-                  setCurrentDeck(decks.find(d => d.id === 'vq-lesson1') || decks[0]);
-                  setAppMode('menu');
-                }}
-                className="group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden"
-              >
-                <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                  Lesson 1
-                  <span className="block text-sm text-slate-500 dark:text-slate-400 mt-1 font-normal">主語</span>
-                </h2>
-                <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
-                  <span>学習を始める</span>
-                  <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                </div>
-              </button>
-              <button
-                onClick={() => {
-                  setCurrentDeck(decks.find(d => d.id === 'vq-lesson1-1') || decks[0]);
-                  setAppMode('menu');
-                }}
-                className="group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden"
-              >
-                <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                  Lesson 1-1
-                  <span className="block text-sm text-slate-500 dark:text-slate-400 mt-1 font-normal">主語①</span>
-                </h2>
-                <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
-                  <span>学習を始める</span>
-                  <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                </div>
-              </button>
-              <button
-                onClick={() => {
-                  setCurrentDeck(decks.find(d => d.id === 'vq-lesson1-2') || decks[0]);
-                  setAppMode('menu');
-                }}
-                className="group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden opacity-90"
-              >
-                 <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                  Lesson 1-2
-                  <span className="block text-sm text-slate-500 dark:text-slate-400 mt-1 font-normal">主語②</span>
-                </h2>
-                <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
-                  <span>学習を始める</span>
-                  <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                </div>
-              </button>
-              <button
-                 onClick={() => {
-                   setCurrentDeck(decks.find(d => d.id === 'vq-lesson2') || decks[0]);
-                   setAppMode('menu');
-                 }}
-                 className="group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden"
-               >
-                 <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                   Lesson 2
-                   <span className="block text-sm text-slate-500 dark:text-slate-400 mt-1 font-normal">動詞</span>
-                 </h2>
-                 <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
-                   <span>学習を始める</span>
-                   <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                 </div>
-               </button>
-              <button
-                 onClick={() => {
-                   setCurrentDeck(decks.find(d => d.id === 'vq-lesson2-1') || decks[0]);
-                   setAppMode('menu');
-                 }}
-                 className="group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden"
-               >
-                 <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                   Lesson 2-1
-                   <span className="block text-sm text-slate-500 dark:text-slate-400 mt-1 font-normal">動詞①</span>
-                 </h2>
-                 <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
-                   <span>学習を始める</span>
-                   <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                 </div>
-               </button>
+              {visionQuestSentenceDecks.map((deck) => (
+                <button
+                  key={deck.id}
+                  onClick={() => {
+                    setCurrentDeck(deck);
+                    setAppMode('menu');
+                  }}
+                  className={`group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden ${
+                    deck.id === 'vq-current-range'
+                      ? 'border-purple-400 dark:border-purple-500 ring-2 ring-purple-100 dark:ring-purple-900/40'
+                      : 'border-slate-200 dark:border-slate-700'
+                  }`}
+                >
+                  {deck.id === 'vq-current-range' && (
+                    <span className="inline-flex mb-3 px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-[10px] font-black tracking-wide">
+                      今回の試験範囲
+                    </span>
+                  )}
+                  <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                    {deck.title}
+                  </h2>
+                  <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                    {deck.description}
+                  </p>
+                  <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
+                    <span>学習を始める</span>
+                    <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </button>
+              ))}
             </div>
           )}
 
           {visionQuestTab === 'questions' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
-              <button
-                onClick={() => {
-                  setCurrentDeck(decks.find(d => d.id === 'vq-lesson1-1-q') || decks[0]);
-                  setAppMode('menu');
-                }}
-                className="group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden"
-              >
-                <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                  Lesson 1-1 問題
-                  <span className="block text-sm text-slate-500 dark:text-slate-400 mt-1 font-normal">主語①</span>
-                </h2>
-                <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
-                  <span>問題に挑戦する</span>
-                  <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                </div>
-              </button>
-              <button
-                onClick={() => {
-                  setCurrentDeck(decks.find(d => d.id === 'vq-lesson1-2-q') || decks[0]);
-                  setAppMode('menu');
-                }}
-                className="group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden opacity-90"
-              >
-                 <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                  Lesson 1-2 問題
-                  <span className="block text-sm text-slate-500 dark:text-slate-400 mt-1 font-normal">主語②</span>
-                </h2>
-                <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
-                  <span>問題に挑戦する</span>
-                  <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                </div>
-              </button>
-              <button
-                 onClick={() => {
-                   setCurrentDeck(decks.find(d => d.id === 'vq-lesson2-1-q') || decks[0]);
-                   setAppMode('menu');
-                 }}
-                 className="group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden"
-               >
-                 <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                   Lesson 2-1 問題
-                   <span className="block text-sm text-slate-500 dark:text-slate-400 mt-1 font-normal">動詞①</span>
-                 </h2>
-                 <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
-                   <span>問題に挑戦する</span>
-                   <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                 </div>
-               </button>
+              {visionQuestQuestionDecks.map((deck) => (
+                <button
+                  key={deck.id}
+                  onClick={() => {
+                    setCurrentDeck(deck);
+                    setAppMode('menu');
+                  }}
+                  className={`group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden ${
+                    deck.id === 'vq-current-range-q'
+                      ? 'border-purple-400 dark:border-purple-500 ring-2 ring-purple-100 dark:ring-purple-900/40'
+                      : 'border-slate-200 dark:border-slate-700'
+                  }`}
+                >
+                  {deck.id === 'vq-current-range-q' && (
+                    <span className="inline-flex mb-3 px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-[10px] font-black tracking-wide">
+                      今回の試験範囲
+                    </span>
+                  )}
+                  <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                    {deck.title}
+                  </h2>
+                  <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                    {deck.description}
+                  </p>
+                  <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
+                    <span>問題に挑戦する</span>
+                    <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </button>
+              ))}
             </div>
           )}
 
@@ -895,8 +832,33 @@ export default function App() {
             </button>
           </header>
 
+          <div className="flex justify-center mb-8 w-full">
+            <div className="flex bg-slate-200/50 dark:bg-slate-800/50 p-1 rounded-xl w-full max-w-md">
+              <button
+                onClick={() => setBasicTab('sentences')}
+                className={`flex-1 py-3 px-4 rounded-lg font-bold text-sm transition-all text-center ${
+                  basicTab === 'sentences'
+                    ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                }`}
+              >
+                例文（110）
+              </button>
+              <button
+                onClick={() => setBasicTab('tests')}
+                className={`flex-1 py-3 px-4 rounded-lg font-bold text-sm transition-all text-center ${
+                  basicTab === 'tests'
+                    ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                }`}
+              >
+                公式穴埋め（54）
+              </button>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            {decks.map((deck) => (
+            {(basicTab === 'sentences' ? basicExampleDecks : basicTestDecks).map((deck) => (
               <button
                 key={deck.id}
                 onClick={() => {
@@ -934,8 +896,13 @@ export default function App() {
               </p>
               <button 
                 onClick={() => {
-                  setCurrentDeck(decks[0]); // Default to first deck for now, or implement multi-deck favorite review
-                  setReviewFavoritesOnly(true);
+                  setCurrentDeck({
+                    id: 'favorite-deck',
+                    title: 'お気に入りの復習',
+                    description: '登録したカードを全教材からまとめて復習',
+                    cards: decks.flatMap(d => d.cards).filter(c => favorites.includes(c.id))
+                  });
+                  setReviewFavoritesOnly(false);
                   setAppMode('menu');
                 }}
                 className="w-full py-4 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl font-bold shadow-lg shadow-amber-200 dark:shadow-none transition-all active:scale-[0.98] cursor-pointer"

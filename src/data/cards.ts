@@ -9,6 +9,34 @@ export interface Card {
 
 import { vq1_1_QuestionsCards, vq1_2_QuestionsCards, vq2_1_QuestionsCards } from './questions';
 import { vq1_Cards, vq1_1_Cards, vq1_2_Cards, vq2_Cards, vq2_1_Cards } from './vision_quest_sentences';
+import {
+  hopeLesson1Cards,
+  hopeLesson2Cards,
+  hopeLesson3Cards,
+  hopeLesson4Cards,
+  hopeLesson5Cards,
+  hopeLesson6Cards,
+  hopeLesson7Cards,
+  hopeLesson8Cards,
+  hopeLesson9Cards,
+  hopeLesson10Cards,
+  hopeLesson11Cards,
+  hopeLesson12Cards,
+  hopeTest1Cards,
+  hopeTest2Cards,
+  hopeTest3Cards,
+  hopeTest4Cards,
+  hopeTest5Cards,
+  hopeTest6Cards,
+} from './hope_example_bank';
+import {
+  vq2_2_Cards,
+  vq3_1_Cards,
+  vq3_2_Cards,
+  vq2_2_QuestionsCards,
+  vq3_1_QuestionsCards,
+  vq3_2_QuestionsCards,
+} from './vision_quest_exam_2026';
 
 export interface Deck {
   id: string;
@@ -2224,7 +2252,7 @@ export const test19Cards: Card[] = [
   }
 ];
 
-export const decks: Deck[] = [
+export const legacyDecks: Deck[] = [
   {
     id: 'test1',
     title: 'Test 1 (文の種類)',
@@ -2334,3 +2362,94 @@ export const decks: Deck[] = [
     cards: vq2_1_QuestionsCards
   }
 ];
+
+const pickLegacyDecks = (ids: string[]): Deck[] =>
+  ids
+    .map((id) => legacyDecks.find((deck) => deck.id === id))
+    .filter((deck): deck is Deck => Boolean(deck));
+
+export const basicExampleDecks: Deck[] = [
+  { id: 'hope-lesson1', title: 'Lesson 1', description: 'Example Bank p.8', cards: hopeLesson1Cards },
+  { id: 'hope-lesson2', title: 'Lesson 2', description: 'Example Bank p.12', cards: hopeLesson2Cards },
+  { id: 'hope-lesson3', title: 'Lesson 3', description: 'Example Bank p.18', cards: hopeLesson3Cards },
+  { id: 'hope-lesson4', title: 'Lesson 4', description: 'Example Bank p.22', cards: hopeLesson4Cards },
+  { id: 'hope-lesson5', title: 'Lesson 5', description: 'Example Bank p.28', cards: hopeLesson5Cards },
+  { id: 'hope-lesson6', title: 'Lesson 6', description: 'Example Bank p.32', cards: hopeLesson6Cards },
+  { id: 'hope-lesson7', title: 'Lesson 7', description: 'Example Bank p.38', cards: hopeLesson7Cards },
+  { id: 'hope-lesson8', title: 'Lesson 8', description: 'Example Bank p.42', cards: hopeLesson8Cards },
+  { id: 'hope-lesson9', title: 'Lesson 9', description: 'Example Bank p.48', cards: hopeLesson9Cards },
+  { id: 'hope-lesson10', title: 'Lesson 10', description: 'Example Bank p.52', cards: hopeLesson10Cards },
+  { id: 'hope-lesson11', title: 'Lesson 11', description: 'Example Bank p.58', cards: hopeLesson11Cards },
+  { id: 'hope-lesson12', title: 'Lesson 12', description: 'Example Bank p.62', cards: hopeLesson12Cards },
+];
+
+export const basicTestDecks: Deck[] = [
+  { id: 'hope-test1', title: 'Test 1', description: '適切な主語を用いる', cards: hopeTest1Cards },
+  { id: 'hope-test2', title: 'Test 2', description: '適切な動詞を用いる', cards: hopeTest2Cards },
+  { id: 'hope-test3', title: 'Test 3', description: 'Hope公式穴埋め', cards: hopeTest3Cards },
+  { id: 'hope-test4', title: 'Test 4', description: 'Hope公式穴埋め', cards: hopeTest4Cards },
+  { id: 'hope-test5', title: 'Test 5', description: 'Hope公式穴埋め', cards: hopeTest5Cards },
+  { id: 'hope-test6', title: 'Test 6', description: 'Hope公式穴埋め', cards: hopeTest6Cards },
+];
+
+const existingVisionQuestSentenceDecks = pickLegacyDecks([
+  'vq-lesson1',
+  'vq-lesson1-1',
+  'vq-lesson1-2',
+  'vq-lesson2',
+  'vq-lesson2-1',
+]);
+
+const existingVisionQuestQuestionDecks = pickLegacyDecks([
+  'vq-lesson1-1-q',
+  'vq-lesson1-2-q',
+  'vq-lesson2-1-q',
+]);
+
+export const visionQuestSentenceBaseDecks: Deck[] = [
+  ...existingVisionQuestSentenceDecks,
+  { id: 'vq-lesson2-2', title: 'Lesson 2-2', description: '動詞②', cards: vq2_2_Cards },
+  { id: 'vq-lesson3-1', title: 'Lesson 3-1', description: '時制・完了形①', cards: vq3_1_Cards },
+  { id: 'vq-lesson3-2', title: 'Lesson 3-2', description: '時制・完了形②', cards: vq3_2_Cards },
+];
+
+export const visionQuestQuestionBaseDecks: Deck[] = [
+  ...existingVisionQuestQuestionDecks,
+  { id: 'vq-lesson2-2-q', title: 'Lesson 2-2 問題', description: '動詞②（画像依存3問は未収録）', cards: vq2_2_QuestionsCards },
+  { id: 'vq-lesson3-1-q', title: 'Lesson 3-1 問題', description: '時制・完了形①（画像依存3問は未収録）', cards: vq3_1_QuestionsCards },
+  { id: 'vq-lesson3-2-q', title: 'Lesson 3-2 問題', description: '時制・完了形②（画像依存3問は未収録）', cards: vq3_2_QuestionsCards },
+];
+
+const currentRangeSentenceDeck: Deck = {
+  id: 'vq-current-range',
+  title: '今回の試験範囲まとめ',
+  description: 'Lesson 2-2 / 3-1 / 3-2・基本例文45文',
+  cards: [...vq2_2_Cards, ...vq3_1_Cards, ...vq3_2_Cards],
+};
+
+const currentRangeQuestionDeck: Deck = {
+  id: 'vq-current-range-q',
+  title: '今回の試験範囲まとめ',
+  description: 'Lesson 2-2 / 3-1 / 3-2・出題可能66問',
+  cards: [...vq2_2_QuestionsCards, ...vq3_1_QuestionsCards, ...vq3_2_QuestionsCards],
+};
+
+export const visionQuestSentenceDecks: Deck[] = [
+  currentRangeSentenceDeck,
+  ...visionQuestSentenceBaseDecks,
+];
+
+export const visionQuestQuestionDecks: Deck[] = [
+  currentRangeQuestionDeck,
+  ...visionQuestQuestionBaseDecks,
+];
+
+// Active content registry. Combined “current range” decks are views only and are intentionally
+// excluded here so favorites / “まだ” lists do not duplicate the same card IDs.
+export const decks: Deck[] = [
+  ...basicExampleDecks,
+  ...basicTestDecks,
+  ...visionQuestSentenceBaseDecks,
+  ...visionQuestQuestionBaseDecks,
+];
+

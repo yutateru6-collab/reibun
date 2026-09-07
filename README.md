@@ -55,3 +55,14 @@ npm run preview:cloudflare
 現在のアプリは実行時シークレットを必要としていません。
 
 Vite の `VITE_*` 環境変数はブラウザ用 JavaScript に埋め込まれるため、API キーなどの秘密情報を入れないでください。秘密情報が必要になった場合は、Cloudflare Worker 側の Secret と API ルートへ移してください。
+
+## 2026 midterm content
+
+- Hope Example Bank: Lesson 1–12, 110 sentences
+- Hope official fill-in tests: Test 1–6, 54 questions
+- Vision Quest current range: Lesson 2-2 / 3-1 / 3-2
+- Vision Quest numbered core examples: 45
+- Vision Quest exercises available without missing illustrations: 66
+- Illustration-dependent exercises held out: 9 (recorded in `src/data/exam_source_ledger.ts`)
+
+Run `npx tsx scripts/validate-content.ts` to verify content counts, active card IDs, and range integrity.
