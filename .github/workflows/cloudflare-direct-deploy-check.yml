@@ -1,0 +1,84 @@
+name: Cloudflare direct deploy check
+
+on:
+  push:
+    branches: [exam-2026-midterm-qa]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check deploy credential availability
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          if [ -z "${CLOUDFLARE_API_TOKEN:-}" ]; then
+            echo "CLOUDFLARE_API_TOKEN is not configured in GitHub Actions secrets."
+            exit 2
+          fi
+          echo "CLOUDFLARE_API_TOKEN is configured."
+          if [ -n "${CLOUDFLARE_ACCOUNT_ID:-}" ]; then
+            echo "CLOUDFLARE_ACCOUNT_ID is configured."
+          else
+            echo "CLOUDFLARE_ACCOUNT_ID is not configured; Wrangler will attempt account discovery."
+          fi
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Validate source-derived content
+        run: npx tsx scripts/validate-content.ts
+
+      - name: Type-check
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify Cloudflare identity
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler whoami
+
+      - name: Deploy directly to Cloudflare Workers
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler deploy
+
+      - name: Verify exact production content
+        env:
+          PUBLIC_URL: https://reibun.itisnowornever271.workers.dev
+          EXPECTED_CONTENT_VERSION: 2026-midterm-v1
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 12); do
+            status=$(curl -L -sS -o /tmp/index.html -w '%{http_code}' "$PUBLIC_URL/" || true)
+            asset_path=$(grep -oE 'src="/assets/[^"]+\.js"' /tmp/index.html | head -1 | cut -d'"' -f2 || true)
+            if [ "$status" = "200" ] && [ -n "$asset_path" ]; then
+              js_status=$(curl -L -sS -o /tmp/app.js -w '%{http_code}' "$PUBLIC_URL$asset_path" || true)
+              if [ "$js_status" = "200" ] && grep -Fq "$EXPECTED_CONTENT_VERSION" /tmp/app.js; then
+                echo "Production serves $EXPECTED_CONTENT_VERSION."
+                exit 0
+              fi
+            fi
+            sleep 5
+          done
+          echo "Production did not serve expected content version after direct deploy."
+          exit 1
