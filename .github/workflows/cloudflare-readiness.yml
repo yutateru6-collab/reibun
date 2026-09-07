@@ -27,7 +27,7 @@ jobs:
         run: npm install
 
       - name: Validate source-derived content
-        run: npm run lint
+        run: npx tsx scripts/validate-content.ts
 
       - name: Validate Hope mini explanations
         run: npx tsx scripts/validate-hope-mini-explanations.ts
