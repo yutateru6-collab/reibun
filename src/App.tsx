@@ -510,149 +510,119 @@ export default function App() {
   // Top Screen (Course Selection)
   if (appMode === 'top') {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center py-8 md:py-12 px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
+      <div data-ui="compact-home-bento-v1" className="min-h-[100dvh] flex flex-col items-center px-3 py-3 sm:px-4 sm:py-6 bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
         <div className="w-full max-w-4xl flex flex-col items-center">
-          <div className="absolute top-4 right-4">
-            <button 
+          <div className="absolute top-3 right-3 sm:top-4 sm:right-4">
+            <button
               onClick={() => setIsDarkMode(!isDarkMode)}
               aria-label="テーマ切り替え"
-              className="min-w-11 min-h-11 p-2.5 md:p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+              className="min-w-11 min-h-11 p-2.5 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
               title="テーマ切り替え"
             >
-              {isDarkMode ? <Sun size={20} /> : <MoonStar size={20} />}
+              {isDarkMode ? <Sun size={19} /> : <MoonStar size={19} />}
             </button>
           </div>
-          
-          <div className="mb-12 text-center w-full max-w-2xl px-4">
-            <div className="flex items-center justify-center gap-2 sm:gap-3 mb-6 px-12 sm:px-0 whitespace-nowrap" aria-label="中間試験対策">
-              <span aria-hidden="true" className="text-2xl sm:text-3xl md:text-4xl">⚡️</span>
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">中間試験対策</h1>
-              <span aria-hidden="true" className="text-2xl sm:text-3xl md:text-4xl">⚡️</span>
+
+          <div className="text-center w-full max-w-2xl px-1 pt-1 sm:pt-2">
+            <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-3 pr-10 sm:pr-0 whitespace-nowrap" aria-label="中間試験対策">
+              <span aria-hidden="true" className="text-lg sm:text-2xl">⚡️</span>
+              <h1 className="text-xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">中間試験対策</h1>
+              <span aria-hidden="true" className="text-lg sm:text-2xl">⚡️</span>
             </div>
-            
-            {/* ランダム励ましメッセージ機能 */}
-            <div className="text-center py-6 px-4 bg-white/50 dark:bg-slate-800/40 rounded-[2rem] border border-slate-200/50 dark:border-slate-700/40 shadow-sm animate-fade-in backdrop-blur-md">
-              {/* Moodバッジ */}
-              <div className="inline-block mb-3 px-4 py-1 bg-yellow-100 dark:bg-yellow-950/30 text-yellow-700 dark:text-yellow-400 rounded-full text-xs font-black border-2 border-yellow-300 dark:border-yellow-800 tracking-wider">
+
+            <div className="mb-4 text-center py-2.5 sm:py-3 px-3 bg-white/60 dark:bg-slate-800/45 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 shadow-sm animate-fade-in backdrop-blur-md">
+              <div className="inline-block mb-1.5 px-2.5 py-0.5 bg-yellow-100 dark:bg-yellow-950/30 text-yellow-700 dark:text-yellow-400 rounded-full text-[9px] sm:text-[10px] font-black border border-yellow-300 dark:border-yellow-800 tracking-wider">
                 TODAY'S MOOD
               </div>
-              {/* メインメッセージ */}
-              <h2 className="text-2xl md:text-3.5xl font-black text-slate-800 dark:text-white mb-3 tracking-tight">
+              <h2 className="text-base sm:text-xl font-black text-slate-800 dark:text-white mb-1 tracking-tight leading-tight">
                 {greeting.main}
               </h2>
-              {/* サブメッセージ */}
-              <p className="text-indigo-600 dark:text-indigo-300 font-bold text-sm md:text-base bg-white/60 dark:bg-black/20 inline-block px-4 py-2 rounded-2xl shadow-xs leading-relaxed">
+              <p className="text-indigo-700 dark:text-indigo-300 font-semibold text-[11px] sm:text-xs leading-snug max-w-xl mx-auto">
                 {greeting.sub}
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-3xl">
+          <div className="grid grid-cols-2 gap-3 w-full max-w-3xl">
             <button
               onClick={() => setAppMode('home')}
-              className="group flex flex-col items-center justify-center p-8 md:p-12 bg-white dark:bg-slate-800 rounded-[2rem] shadow-md border-2 border-transparent hover:border-indigo-500 dark:hover:border-indigo-400 transition-all hover:-translate-y-2 hover:shadow-xl cursor-pointer"
+              className="group min-h-[148px] sm:min-h-[180px] flex flex-col items-center justify-center p-4 sm:p-6 bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl shadow-sm border-2 border-indigo-100 dark:border-indigo-900/40 hover:border-indigo-500 dark:hover:border-indigo-400 transition-all hover:-translate-y-1 hover:shadow-lg cursor-pointer"
             >
-              <div className="w-20 h-20 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <GraduationCap size={40} />
+              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center mb-2.5 group-hover:scale-105 transition-transform">
+                <GraduationCap size={26} />
               </div>
-              <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">基本例文マスター</h2>
-              <p className="text-slate-600 dark:text-slate-300 text-center text-sm">必ず役立つ基本セット</p>
+              <h2 className="text-sm sm:text-xl font-black text-slate-900 dark:text-white mb-1 leading-tight">基本例文<br className="sm:hidden" />マスター</h2>
+              <p className="text-slate-600 dark:text-slate-300 text-center text-[10px] sm:text-xs leading-snug">暗唱例文を反復</p>
             </button>
 
             <button
               onClick={() => setAppMode('vision_quest')}
-              className="group flex flex-col items-center justify-center p-8 md:p-12 bg-white dark:bg-slate-800 rounded-[2rem] shadow-md border-2 border-transparent hover:border-purple-500 dark:hover:border-purple-400 transition-all hover:-translate-y-2 hover:shadow-xl cursor-pointer"
+              className="group min-h-[148px] sm:min-h-[180px] flex flex-col items-center justify-center p-4 sm:p-6 bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl shadow-sm border-2 border-purple-100 dark:border-purple-900/40 hover:border-purple-500 dark:hover:border-purple-400 transition-all hover:-translate-y-1 hover:shadow-lg cursor-pointer"
             >
-              <div className="w-20 h-20 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Brain size={40} />
+              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-2xl flex items-center justify-center mb-2.5 group-hover:scale-105 transition-transform">
+                <Brain size={26} />
               </div>
-              <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2 tracking-wide font-sans text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-500 group-hover:from-purple-500 group-hover:to-indigo-400">VISION QUEST</h2>
-              <p className="text-slate-600 dark:text-slate-300 text-center text-sm">Next Level Training</p>
+              <h2 className="text-sm sm:text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-500 mb-1 leading-tight tracking-wide">VISION<br className="sm:hidden" /> QUEST</h2>
+              <p className="text-slate-600 dark:text-slate-300 text-center text-[10px] sm:text-xs leading-snug">今回範囲を集中</p>
             </button>
           </div>
 
           {yetList.length > 0 && (
-            <div className="w-full max-w-3xl mt-8 animate-in fade-in slide-in-from-bottom-4 duration-350">
-              <button
-                onClick={() => {
-                  setCurrentDeck({
-                    id: 'yet-deck',
-                    title: '「まだ」の集中復習',
-                    description: '自己申告テスト等で「まだ」を選んだカードの復習',
-                    cards: decks.flatMap(d => d.cards).filter(c => yetList.includes(c.id))
-                  });
-                  setAppMode('menu');
-                }}
-                className="w-full group flex flex-col sm:flex-row items-center justify-between p-6 md:p-8 bg-white dark:bg-slate-800 hover:bg-rose-50/10 dark:hover:bg-rose-950/15 rounded-[2rem] shadow-md border-2 border-rose-200 dark:border-rose-900/50 hover:border-rose-500 dark:hover:border-rose-400 transition-all hover:-translate-y-1 hover:shadow-xl text-left cursor-pointer"
-              >
-                <div className="flex items-center gap-4 text-left">
-                  <div className="w-14 h-14 bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
-                    <Brain size={28} />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">「まだ」の集中復習モード</h2>
-                    <p className="text-slate-600 dark:text-slate-300 text-sm">
-                      現在 <span className="font-bold text-rose-600 dark:text-rose-400">{yetList.length}</span> 個の暗記中カードがあります
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1 text-sm font-bold text-rose-600 dark:text-rose-400 mt-4 sm:mt-0 bg-rose-50 dark:bg-rose-950/40 px-4 py-2 rounded-xl group-hover:scale-105 transition-transform shrink-0">
-                  <span>復習する</span>
-                  <ChevronRight size={16} />
-                </div>
-              </button>
-            </div>
+            <button
+              onClick={() => {
+                setCurrentDeck({
+                  id: 'yet-deck',
+                  title: '「まだ」の集中復習',
+                  description: '自己申告テスト等で「まだ」を選んだカードの復習',
+                  cards: decks.flatMap(d => d.cards).filter(c => yetList.includes(c.id))
+                });
+                setAppMode('menu');
+              }}
+              className="w-full max-w-3xl mt-3 min-h-11 flex items-center justify-between gap-3 px-4 py-2.5 bg-rose-50 dark:bg-rose-950/20 rounded-2xl border border-rose-200 dark:border-rose-900/50 text-left"
+            >
+              <span className="flex items-center gap-2 text-sm font-bold text-rose-700 dark:text-rose-300"><Brain size={18} />「まだ」を集中復習</span>
+              <span className="text-xs font-black text-rose-600 dark:text-rose-400">{yetList.length}件 <ChevronRight size={14} className="inline" /></span>
+            </button>
           )}
 
-          {/* Local Storage Auto-Save Alert & Reset Info Panel */}
-          <div className="w-full max-w-3xl mt-12 p-6 bg-slate-100/60 dark:bg-slate-800/40 rounded-[2rem] border border-slate-200/50 dark:border-slate-700/40 text-left animate-in fade-in duration-350">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-sm mb-1">
-                  <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                  </span>
-                  <span>自動レジューム（スマホ自動セーブ中）</span>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  お気に入りリスト（{favorites.length}件）や、復習したい「まだ」カード（{yetList.length}件）、ダークモード等の個人設定データは、スマートフォンのブラウザ内（LocalStorage）に自動で即時同期保存されています。アプリを閉じたり本体を再起動しても、いつでも続きからリスタートできます。
-                </p>
+          <div className="w-full max-w-3xl mt-3 px-3 py-2 bg-slate-100/70 dark:bg-slate-800/45 rounded-2xl border border-slate-200/60 dark:border-slate-700/50">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 text-[11px] sm:text-xs font-bold text-slate-600 dark:text-slate-300 min-w-0">
+                <span className="relative flex h-2 w-2 shrink-0">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span className="truncate">学習データはこの端末に自動保存</span>
               </div>
 
               {(favorites.length > 0 || yetList.length > 0) && (
-                <div className="shrink-0 w-full md:w-auto text-right">
-                  {!showResetConfirm ? (
+                !showResetConfirm ? (
+                  <button
+                    onClick={() => setShowResetConfirm(true)}
+                    className="shrink-0 min-h-9 px-2.5 py-1.5 text-[10px] font-bold text-rose-600 dark:text-rose-400 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/30"
+                  >
+                    初期化
+                  </button>
+                ) : (
+                  <div className="shrink-0 flex items-center gap-1.5">
                     <button
-                      onClick={() => setShowResetConfirm(true)}
-                      className="w-full md:w-auto px-4 py-2 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/20 dark:hover:bg-rose-950/35 text-rose-600 dark:text-rose-400 rounded-xl text-xs font-bold transition-all border border-rose-200/50 dark:border-rose-900/30 cursor-pointer"
+                      onClick={() => {
+                        setFavorites([]);
+                        setYetList([]);
+                        setShowResetConfirm(false);
+                      }}
+                      className="min-h-9 px-2.5 py-1.5 bg-rose-600 text-white rounded-lg text-[10px] font-bold"
                     >
-                      記憶データを初期化
+                      消去
                     </button>
-                  ) : (
-                    <div className="flex flex-row md:flex-col gap-2 items-center md:items-end justify-end w-full md:w-auto">
-                      <span className="text-xs text-rose-500 font-bold mr-2 md:mr-0 shrink-0">本当に消去しますか？</span>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => {
-                            setFavorites([]);
-                            setYetList([]);
-                            setShowResetConfirm(false);
-                          }}
-                          className="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-extrabold transition-all cursor-pointer whitespace-nowrap"
-                        >
-                          はい、消去する
-                        </button>
-                        <button
-                          onClick={() => setShowResetConfirm(false)}
-                          className="px-3 py-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-extrabold transition-all cursor-pointer whitespace-nowrap"
-                        >
-                          戻る
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                    <button
+                      onClick={() => setShowResetConfirm(false)}
+                      className="min-h-9 px-2.5 py-1.5 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg text-[10px] font-bold"
+                    >
+                      戻る
+                    </button>
+                  </div>
+                )
               )}
             </div>
           </div>
@@ -968,152 +938,143 @@ export default function App() {
   // Menu Screen
   if (appMode === 'menu') {
     return (
-      <div className="min-h-screen flex flex-col items-center py-8 md:py-12 px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
+      <div className="min-h-[100dvh] flex flex-col items-center py-3 sm:py-5 md:py-8 px-3 sm:px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
         <div className="w-full max-w-2xl">
-          <header className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-4">
-              <button 
+          <header className="flex items-center justify-between mb-3 sm:mb-5">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <button
                 aria-label="教材一覧へ戻る"
-                onClick={() => { 
+                onClick={() => {
                   const isVisionQuest = currentDeck?.id.startsWith('vq-');
-                  setCurrentDeck(null); 
-                  setAppMode(isVisionQuest ? 'vision_quest' : 'home'); 
+                  setCurrentDeck(null);
+                  setAppMode(isVisionQuest ? 'vision_quest' : 'home');
                 }}
-                className="p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                className="shrink-0 min-w-11 min-h-11 p-2.5 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
               >
-                <ChevronLeft size={24} />
+                <ChevronLeft size={22} />
               </button>
-              <div>
-                <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">{currentDeck.title}</h1>
-                <p className="text-sm text-slate-600 dark:text-slate-300">学習モードを選択してください</p>
+              <div className="min-w-0">
+                <h1 className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white truncate">{currentDeck.title}</h1>
+                <p className="text-[11px] sm:text-xs text-slate-600 dark:text-slate-300">学習モードを選択</p>
               </div>
             </div>
-            <button 
+            <button
               onClick={() => setIsDarkMode(!isDarkMode)}
               aria-label="テーマ切り替え"
-              className="min-w-11 min-h-11 p-2.5 md:p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+              className="shrink-0 min-w-11 min-h-11 p-2.5 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
             >
-              {isDarkMode ? <Sun size={20} /> : <MoonStar size={20} />}
+              {isDarkMode ? <Sun size={19} /> : <MoonStar size={19} />}
             </button>
           </header>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <button 
-              onClick={() => { setAppMode('standard'); }}
-              className="flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:-translate-y-1 transition-all group cursor-pointer"
+
+          <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+            <button
+              onClick={() => setAppMode('standard')}
+              className="min-h-[132px] sm:min-h-[145px] flex flex-col items-start justify-between p-3 sm:p-4 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-blue-100 dark:border-blue-900/40 hover:border-blue-400 hover:shadow-md transition-all group cursor-pointer text-left"
             >
-              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                <BookOpen size={32} />
+              <div className="w-10 h-10 sm:w-11 sm:h-11 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
+                <BookOpen size={22} />
               </div>
-              <span className="text-xs font-extrabold px-2 py-0.5 bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 rounded-full mb-1">
-                基本学習・じっくり覚える
-              </span>
-              <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">単語カード</h2>
-              <p className="text-xs text-slate-600 dark:text-slate-300 text-center leading-relaxed">
-                通常のフラッシュカードでおもて裏を交互に確認し、自分の強みと弱みを分析しながら学習できます。
-              </p>
+              <div className="w-full">
+                <span className="inline-block text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300 rounded-full mb-1">じっくり</span>
+                <h2 className="text-sm sm:text-base font-black text-slate-800 dark:text-slate-100 leading-tight">単語カード</h2>
+                <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1">おもて↔裏で確認</p>
+              </div>
             </button>
 
-            <button 
+            <button
               onClick={() => { setAppMode('memorize'); setIsFlipped(false); }}
-              className="flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:-translate-y-1 transition-all group cursor-pointer"
+              className="min-h-[132px] sm:min-h-[145px] flex flex-col items-start justify-between p-3 sm:p-4 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-indigo-100 dark:border-indigo-900/40 hover:border-indigo-400 hover:shadow-md transition-all group cursor-pointer text-left"
             >
-              <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                <RotateCcw size={32} />
+              <div className="w-10 h-10 sm:w-11 sm:h-11 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
+                <RotateCcw size={22} />
               </div>
-              <span className="text-xs font-extrabold px-2 py-0.5 bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400 rounded-full mb-1">
-                インプット・英文から入る
-              </span>
-              <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">答えから覚える</h2>
-              <p className="text-xs text-slate-600 dark:text-slate-300 text-center leading-relaxed">
-                完成した英文を真っ先に見てイメージし、そこから和訳とポイントをインプットする暗記用モード。
-              </p>
+              <div className="w-full">
+                <span className="inline-block text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300 rounded-full mb-1">インプット</span>
+                <h2 className="text-sm sm:text-base font-black text-slate-800 dark:text-slate-100 leading-tight">答えから覚える</h2>
+                <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1">英文→和訳で定着</p>
+              </div>
             </button>
 
-            <button 
+            <button
               onClick={() => startQuiz('order')}
-              className="flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:-translate-y-1 transition-all group cursor-pointer"
+              className="min-h-[132px] sm:min-h-[145px] flex flex-col items-start justify-between p-3 sm:p-4 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-amber-100 dark:border-amber-900/40 hover:border-amber-400 hover:shadow-md transition-all group cursor-pointer text-left"
             >
-              <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                <Shuffle size={32} />
+              <div className="w-10 h-10 sm:w-11 sm:h-11 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Shuffle size={22} />
               </div>
-              <span className="text-xs font-extrabold px-2 py-0.5 bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400 rounded-full mb-1">
-                語順トレーニング・暗唱仕上げ
-              </span>
-              <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">並べ替えクイズ</h2>
-              <p className="text-xs text-slate-600 dark:text-slate-300 text-center leading-relaxed">
-                正解のパーツ（単語）をシャッフルした状態から、タップして正しい英文の並びを作ります。
-              </p>
+              <div className="w-full">
+                <span className="inline-block text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 rounded-full mb-1">語順</span>
+                <h2 className="text-sm sm:text-base font-black text-slate-800 dark:text-slate-100 leading-tight">並べ替えクイズ</h2>
+                <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1">単語を並べて仕上げ</p>
+              </div>
             </button>
 
-            <button 
+            <button
               onClick={() => startQuiz('self')}
-              className="flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md hover:-translate-y-1 transition-all group cursor-pointer"
+              className="min-h-[132px] sm:min-h-[145px] flex flex-col items-start justify-between p-3 sm:p-4 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-emerald-100 dark:border-emerald-900/40 hover:border-emerald-400 hover:shadow-md transition-all group cursor-pointer text-left"
             >
-              <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                <Brain size={32} />
+              <div className="w-10 h-10 sm:w-11 sm:h-11 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Brain size={22} />
               </div>
-              <span className="text-xs font-extrabold px-2 py-0.5 bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 rounded-full mb-1">
-                実力判定・高速アウトプット
-              </span>
-              <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">自己申告テスト</h2>
-              <p className="text-xs text-slate-600 dark:text-slate-300 text-center leading-relaxed">
-                表示された英語を見て頭の中で日本語の意味を思い出しながらめくり、判定する自己評価式テスト。
-              </p>
+              <div className="w-full">
+                <span className="inline-block text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 rounded-full mb-1">実力判定</span>
+                <h2 className="text-sm sm:text-base font-black text-slate-800 dark:text-slate-100 leading-tight">自己申告テスト</h2>
+                <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1">「まだ / わかった」で判定</p>
+              </div>
             </button>
 
-            <div className="flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 md:col-span-2">
-              <div className="flex flex-col items-center justify-center gap-2 mb-4 text-center">
-                <div className="w-16 h-16 bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-2xl flex items-center justify-center mb-1">
-                  <Timer size={32} />
+            <div className="col-span-2 p-3 sm:p-4 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-rose-100 dark:border-rose-900/40">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-xl flex items-center justify-center shrink-0">
+                  <Timer size={22} />
                 </div>
-                <span className="text-xs font-extrabold px-2 py-0.5 bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400 rounded-full">
-                  瞬発力強化・自動オート再生
-                </span>
-                <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">タイムアタック</h2>
-                <p className="text-xs text-slate-600 dark:text-slate-300 text-center max-w-md leading-relaxed">
-                  表示された英語を見て、設定した秒数以内に日本語の意味を瞬時に思い出すスピード学習モードです。
-                </p>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h2 className="text-sm sm:text-base font-black text-slate-800 dark:text-slate-100">タイムアタック</h2>
+                    <span className="text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 rounded-full">自動</span>
+                  </div>
+                  <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug">秒数を決めて高速反復</p>
+                </div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg mb-6">
-                <div className="flex flex-col gap-1.5">
-                  <span className="text-xs font-bold text-slate-600 dark:text-slate-300 ml-1">考える時間 (表面):</span>
-                  <select 
+
+              <div className="grid grid-cols-2 gap-2 mb-2.5">
+                <label className="flex flex-col gap-1 text-[9px] sm:text-[10px] font-bold text-slate-600 dark:text-slate-300">
+                  考える時間
+                  <select
                     aria-label="問題を考える時間"
-                    value={timeLimit} 
+                    value={timeLimit}
                     onChange={(e) => setTimeLimit(Number(e.target.value))}
-                    className="p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 font-bold outline-none focus:ring-2 focus:ring-rose-500/20 cursor-pointer"
+                    className="min-h-10 px-2 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-800 dark:text-slate-100 font-bold outline-none focus:ring-2 focus:ring-rose-500/20 cursor-pointer"
                   >
-                    <option value={3}>3秒 (神速)</option>
-                    <option value={5}>5秒 (超上級)</option>
-                    <option value={10}>10秒 (標準)</option>
-                    <option value={15}>15秒 (じっくり)</option>
+                    <option value={3}>3秒</option>
+                    <option value={5}>5秒</option>
+                    <option value={10}>10秒</option>
+                    <option value={15}>15秒</option>
                   </select>
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <span className="text-xs font-bold text-slate-600 dark:text-slate-300 ml-1">答えを表示する時間 (裏面):</span>
-                  <select 
+                </label>
+                <label className="flex flex-col gap-1 text-[9px] sm:text-[10px] font-bold text-slate-600 dark:text-slate-300">
+                  答え表示
+                  <select
                     aria-label="答えを表示する時間"
-                    value={resultDisplayTime} 
+                    value={resultDisplayTime}
                     onChange={(e) => setResultDisplayTime(Number(e.target.value))}
-                    className="p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 font-bold outline-none focus:ring-2 focus:ring-rose-500/20 cursor-pointer"
+                    className="min-h-10 px-2 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-800 dark:text-slate-100 font-bold outline-none focus:ring-2 focus:ring-rose-500/20 cursor-pointer"
                   >
-                    <option value={1}>1秒 (一瞬)</option>
-                    <option value={2}>2秒 (高速)</option>
-                    <option value={3}>3秒 (標準)</option>
-                    <option value={5}>5秒 (じっくり)</option>
+                    <option value={1}>1秒</option>
+                    <option value={2}>2秒</option>
+                    <option value={3}>3秒</option>
+                    <option value={5}>5秒</option>
                   </select>
-                </div>
+                </label>
               </div>
-              <button 
+
+              <button
                 onClick={() => startQuiz('time')}
-                className="w-full max-w-sm py-4 bg-rose-700 hover:bg-rose-800 text-white rounded-2xl font-bold shadow-md transition-all active:scale-[0.98] cursor-pointer"
+                className="w-full min-h-11 py-2 bg-rose-700 hover:bg-rose-800 text-white rounded-xl text-sm font-black shadow-sm transition-all active:scale-[0.99] cursor-pointer"
               >
-                タイムアタック開始！
+                タイムアタック開始
               </button>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 text-center">
-                ※ 画面に触らなくても、設定した秒数で自動的に「問題（表面）」➔「答え（裏面）」➔「次のカード」とテンポよく切り替わります。
-              </p>
             </div>
           </div>
         </div>
