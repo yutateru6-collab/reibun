@@ -14,11 +14,16 @@ const VISION_QUEST_QUESTION_CARD_IDS = new Set(
 const VISION_QUEST_CARD_IDS = new Set(
   [...visionQuestSentenceDecks, ...visionQuestQuestionDecks].flatMap(deck => deck.cards.map(card => card.id))
 );
+const OFFICIAL_QUESTION_CARD_IDS = new Set(
+  [...basicTestDecks, ...visionQuestQuestionDecks].flatMap(deck => deck.cards.map(card => card.id))
+);
 
 const isVisionQuestQuestionCard = (card?: Card) => Boolean(card && VISION_QUEST_QUESTION_CARD_IDS.has(card.id));
 const isVisionQuestCard = (card?: Card) => Boolean(card && VISION_QUEST_CARD_IDS.has(card.id));
+const isOfficialQuestionCard = (card?: Card) => Boolean(card && OFFICIAL_QUESTION_CARD_IDS.has(card.id));
 const sourcePromptOrTranslation = (card: Card) => isVisionQuestQuestionCard(card) ? card.front : card.translation;
-const answerMeaning = (card: Card) => isVisionQuestQuestionCard(card) ? highlightAnswers(card.front, card.back) : card.translation;
+const officialQuestionPrompt = (card: Card) => isVisionQuestQuestionCard(card) ? card.front : card.front + '\n' + card.translation;
+const answerMeaning = (card: Card) => isOfficialQuestionCard(card) ? highlightAnswers(card.front, card.back) : card.translation;
 
 function highlightAnswers(front: string, back: string): string {
   if (!front || !back) return back;
@@ -448,7 +453,7 @@ export default function App() {
   };
 
   const currentCard = activeCards[currentIndex];
-  const isCurrentDeckVqQuestion = currentDeck ? currentDeck.cards.length > 0 && currentDeck.cards.every(card => isVisionQuestQuestionCard(card)) : false;
+  const isCurrentDeckQuestion = currentDeck ? currentDeck.cards.length > 0 && currentDeck.cards.every(card => isOfficialQuestionCard(card)) : false;
 
   // --- Quiz Logic ---
   const generateWordPool = (card: Card) => {
@@ -1054,8 +1059,8 @@ export default function App() {
               </div>
               <div className="w-full">
                 <span className="inline-block text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300 rounded-full mb-1">じっくり</span>
-                <h2 className="text-sm sm:text-base font-black text-slate-800 dark:text-slate-100 leading-tight">{isCurrentDeckVqQuestion ? '問題カード' : '単語カード'}</h2>
-                <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1">{isCurrentDeckVqQuestion ? '問題→解答で確認' : 'おもて↔裏で確認'}</p>
+                <h2 className="text-sm sm:text-base font-black text-slate-800 dark:text-slate-100 leading-tight">{isCurrentDeckQuestion ? '問題カード' : '単語カード'}</h2>
+                <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1">{isCurrentDeckQuestion ? '問題→解答で確認' : 'おもて↔裏で確認'}</p>
               </div>
             </button>
 
@@ -1069,7 +1074,7 @@ export default function App() {
               <div className="w-full">
                 <span className="inline-block text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300 rounded-full mb-1">インプット</span>
                 <h2 className="text-sm sm:text-base font-black text-slate-800 dark:text-slate-100 leading-tight">答えから覚える</h2>
-                <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1">{isCurrentDeckVqQuestion ? '解答→元の問題で逆確認' : '英文→和訳で定着'}</p>
+                <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1">{isCurrentDeckQuestion ? '解答→元の問題で逆確認' : '英文→和訳で定着'}</p>
               </div>
             </button>
 
@@ -1465,24 +1470,24 @@ export default function App() {
           {!isFlipped ? (
             <div className="text-center animate-in fade-in zoom-in-95">
               <div className="text-indigo-500 dark:text-indigo-400 flex items-center justify-center gap-2 font-black tracking-wider uppercase text-xs mb-6">
-                <span className="text-lg">📢</span> {isVisionQuestQuestionCard(quizCard) ? '問題' : '英語'}
+                <span className="text-lg">📢</span> {isOfficialQuestionCard(quizCard) ? '問題' : '英語'}
               </div>
               <p className="text-xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 mb-8 leading-relaxed whitespace-pre-wrap">
-                {isVisionQuestQuestionCard(quizCard) ? quizCard.front : quizCard.back}
+                {isOfficialQuestionCard(quizCard) ? officialQuestionPrompt(quizCard) : quizCard.back}
               </p>
-              <p className="text-sm text-slate-400 mt-12 animate-pulse font-medium">タップして{isVisionQuestQuestionCard(quizCard) ? '解答' : '日本語訳'}を見る</p>
+              <p className="text-sm text-slate-400 mt-12 animate-pulse font-medium">タップして{isOfficialQuestionCard(quizCard) ? '解答' : '日本語訳'}を見る</p>
             </div>
           ) : (
             <div className="text-center animate-in fade-in zoom-in-95 w-full">
               <div className="text-emerald-700 dark:text-emerald-300 flex items-center justify-center gap-2 font-black tracking-wider uppercase text-xs mb-6">
-                <span className="text-lg">💡</span> {isVisionQuestQuestionCard(quizCard) ? '解答' : '日本語での意味'}
+                <span className="text-lg">💡</span> {isOfficialQuestionCard(quizCard) ? '解答' : '日本語での意味'}
               </div>
               <p className="text-2xl md:text-4xl font-bold text-emerald-600 dark:text-emerald-400 mb-8 leading-relaxed whitespace-pre-wrap">
                 {answerMeaning(quizCard)}
               </p>
               <div className="h-px w-24 bg-slate-100 dark:bg-slate-700/50 mx-auto mb-8"></div>
               <p className="text-lg text-slate-600 dark:text-slate-300 font-medium mb-12 whitespace-pre-wrap">
-                {isVisionQuestQuestionCard(quizCard) ? quizCard.front : quizCard.back}
+                {isOfficialQuestionCard(quizCard) ? officialQuestionPrompt(quizCard) : quizCard.back}
               </p>
                 
                 {((isVisionQuestCard(quizCard) || currentDeck.id.startsWith('hope-')) && quizCard.comment) && (
@@ -1554,24 +1559,24 @@ export default function App() {
           {!isFlipped ? (
             <div className="text-center animate-in fade-in zoom-in-95">
               <div className="text-rose-500 dark:text-rose-400 flex items-center justify-center gap-2 font-black tracking-wider uppercase text-xs mb-6">
-                <span className="text-lg">📢</span> {isVisionQuestQuestionCard(quizCard) ? '問題' : '英語'}
+                <span className="text-lg">📢</span> {isOfficialQuestionCard(quizCard) ? '問題' : '英語'}
               </div>
               <p className="text-xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 mb-8 leading-relaxed whitespace-pre-wrap">
-                {isVisionQuestQuestionCard(quizCard) ? quizCard.front : quizCard.back}
+                {isOfficialQuestionCard(quizCard) ? officialQuestionPrompt(quizCard) : quizCard.back}
               </p>
-              <p className="text-sm font-bold text-rose-500 mt-12 animate-pulse">時間内に{isVisionQuestQuestionCard(quizCard) ? '解答' : '日本語訳'}を思い出せ！</p>
+              <p className="text-sm font-bold text-rose-500 mt-12 animate-pulse">時間内に{isOfficialQuestionCard(quizCard) ? '解答' : '日本語訳'}を思い出せ！</p>
             </div>
           ) : (
             <div className="text-center animate-in fade-in zoom-in-95 w-full">
               <div className="text-emerald-700 dark:text-emerald-300 flex items-center justify-center gap-2 font-black tracking-wider uppercase text-xs mb-6">
-                <span className="text-lg">💡</span> {isVisionQuestQuestionCard(quizCard) ? '解答' : '日本語での意味'}
+                <span className="text-lg">💡</span> {isOfficialQuestionCard(quizCard) ? '解答' : '日本語での意味'}
               </div>
               <p className="text-2xl md:text-4xl font-bold text-emerald-600 dark:text-emerald-400 mb-8 leading-relaxed whitespace-pre-wrap">
                 {answerMeaning(quizCard)}
               </p>
               <div className="h-px w-24 bg-slate-100 dark:bg-slate-700/50 mx-auto mb-8"></div>
               <p className="text-lg text-slate-600 dark:text-slate-300 font-medium mb-8 whitespace-pre-wrap">
-                {isVisionQuestQuestionCard(quizCard) ? quizCard.front : quizCard.back}
+                {isOfficialQuestionCard(quizCard) ? officialQuestionPrompt(quizCard) : quizCard.back}
               </p>
               
               {((isVisionQuestCard(quizCard) || currentDeck.id.startsWith('hope-')) && quizCard.comment) && (
