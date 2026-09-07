@@ -64,5 +64,6 @@ Vite の `VITE_*` 環境変数はブラウザ用 JavaScript に埋め込まれ�
 - Vision Quest numbered core examples: 45
 - Vision Quest exercises available without missing illustrations: 66
 - Illustration-dependent exercises held out: 9 (recorded in `src/data/exam_source_ledger.ts`)
+- Known source inconsistencies are preserved and recorded instead of being silently corrected.
 
-Run `npx tsx scripts/validate-content.ts` to verify content counts, active card IDs, and range integrity.
+Run `npx tsx scripts/validate-content.ts` to verify source hashes, content counts, active card IDs, and range integrity.
