@@ -1308,7 +1308,7 @@ export default function App() {
                       >
                         <div className="flex items-center gap-2">
                           <MessageCircle size={18} className="text-purple-500 shrink-0" />
-                          <span>{currentDeck.id.startsWith('hope-lesson') ? '💡 ミニ解説' : '💡 ぽいんと'}</span>
+                          <span>{currentDeck.id.startsWith('hope-') ? '💡 ミニ解説' : '💡 ぽいんと'}</span>
                         </div>
                         <span className="text-xs text-purple-400 font-bold shrink-0">
                           {isCommentOpen ? "タップで折りたたむ ▲" : "タップで表示 ▼"}
@@ -1359,7 +1359,7 @@ export default function App() {
                         className="mx-auto flex items-center gap-2 px-5 py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:hover:bg-indigo-900/50 dark:text-indigo-400 rounded-xl md:rounded-2xl transition-colors text-sm md:text-base font-bold"
                       >
                         <Lightbulb size={18} />
-                        {currentDeck.id.startsWith('hope-lesson') ? 'ミニ解説を見る' : 'ヒント'}
+                        {currentDeck.id.startsWith('hope-') ? 'ミニ解説を見る' : 'ヒント'}
                       </button>
                     ) : (
                       <div 
@@ -1369,7 +1369,7 @@ export default function App() {
                         <div className="flex items-start gap-2 md:gap-3 mb-3 md:mb-4 text-slate-600 dark:text-slate-400">
                           <MessageCircle size={18} md:size={22} className="shrink-0 mt-1" />
                           <p className="text-sm md:text-base font-medium whitespace-pre-wrap leading-relaxed">
-                            {currentDeck.id.startsWith('hope-lesson')
+                            {currentDeck.id.startsWith('hope-')
                               ? currentCard.comment.replace(/^\(|\)$/g, '').replace(/\n([^\n]+)$/, '\n\n$1')
                               : currentCard.comment.replace(/^\(|\)$/g, '')}
                           </p>
@@ -1470,7 +1470,7 @@ export default function App() {
                 {quizCard.back}
               </p>
                 
-                {((currentDeck.id.startsWith('vq-') || currentDeck.id.startsWith('hope-lesson')) && quizCard.comment) && (
+                {((currentDeck.id.startsWith('vq-') || currentDeck.id.startsWith('hope-')) && quizCard.comment) && (
                   <div 
                     className="w-full text-left mb-8" 
                     onClick={(e) => e.stopPropagation()}
@@ -1481,7 +1481,7 @@ export default function App() {
                     >
                       <div className="flex items-center gap-2">
                         <MessageCircle size={18} className="text-purple-500 shrink-0" />
-                        <span>{currentDeck.id.startsWith('hope-lesson') ? '💡 ミニ解説' : '💡 ぽいんと'}</span>
+                        <span>{currentDeck.id.startsWith('hope-') ? '💡 ミニ解説' : '💡 ぽいんと'}</span>
                       </div>
                       <span className="text-xs text-purple-400 font-bold shrink-0">
                         {isQuizCommentOpen ? "タップで折りたたむ ▲" : "タップで表示 ▼"}
@@ -1559,7 +1559,7 @@ export default function App() {
                 {quizCard.back}
               </p>
               
-              {((currentDeck.id.startsWith('vq-') || currentDeck.id.startsWith('hope-lesson')) && quizCard.comment) && (
+              {((currentDeck.id.startsWith('vq-') || currentDeck.id.startsWith('hope-')) && quizCard.comment) && (
                 <div 
                   className="w-full text-left" 
                   onClick={(e) => e.stopPropagation()}
@@ -1570,7 +1570,7 @@ export default function App() {
                   >
                     <div className="flex items-center gap-2">
                       <MessageCircle size={18} className="text-purple-500 shrink-0" />
-                      <span>{currentDeck.id.startsWith('hope-lesson') ? '💡 ミニ解説' : '💡 ぽいんと'}</span>
+                      <span>{currentDeck.id.startsWith('hope-') ? '💡 ミニ解説' : '💡 ぽいんと'}</span>
                     </div>
                     <span className="text-xs text-purple-400 font-bold shrink-0">
                       {isQuizCommentOpen ? "タップで折りたたむ ▲" : "タップで表示 ▼"}
@@ -1674,7 +1674,7 @@ export default function App() {
               </div>
             )}
             
-            {((currentDeck.id.startsWith('vq-') || currentDeck.id.startsWith('hope-lesson')) && quizCard.comment) && (
+            {((currentDeck.id.startsWith('vq-') || currentDeck.id.startsWith('hope-')) && quizCard.comment) && (
               <div 
                 className="w-full text-left" 
                 onClick={(e) => e.stopPropagation()}
@@ -1685,7 +1685,7 @@ export default function App() {
                 >
                   <div className="flex items-center gap-2">
                     <MessageCircle size={18} className="text-purple-500 shrink-0" />
-                    <span>{currentDeck.id.startsWith('hope-lesson') ? '💡 ミニ解説' : '💡 ぽいんと'}</span>
+                    <span>{currentDeck.id.startsWith('hope-') ? '💡 ミニ解説' : '💡 ぽいんと'}</span>
                   </div>
                   <span className="text-xs text-purple-400 font-bold shrink-0">
                     {isQuizCommentOpen ? "タップで折りたたむ ▲" : "タップで表示 ▼"}

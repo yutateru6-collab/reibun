@@ -20,6 +20,13 @@ async function lesson1(page) {
   await page.getByRole('button', { name: /Lesson 1/ }).first().click();
   await page.getByText('学習モードを選択').waitFor();
 }
+async function hopeTest1(page) {
+  await page.goto(BASE, { waitUntil: 'networkidle' });
+  await page.getByRole('button', { name: /基本例文.*マスター/s }).click();
+  await page.getByRole('button', { name: /公式穴埋め/ }).click();
+  await page.getByRole('button', { name: /Test 1/ }).first().click();
+  await page.getByText('学習モードを選択').waitFor();
+}
 async function cardToBack(page) {
   const english = page.getByText('There are many books on the president’s life.', { exact: true }).first();
   await english.waitFor();
@@ -58,6 +65,24 @@ async function auditEngine(engine, browserType) {
     assert(await page.getByText('タップして閉じる').isVisible(), 'mini explanation did not remain open');
     assert(pageErrors.length===0, `page errors: ${pageErrors.join(' | ')}`);
     await page.screenshot({ path: `${OUT}/${engine}-standard-mini.png`, fullPage: true }); await context.close();
+  });
+
+  await run(engine, 'Hope official Test1 No.7 shows mini explanation instead of source panel', async () => {
+    const context = await newContext(); const page = await context.newPage();
+    await hopeTest1(page); await page.getByRole('button', { name: /単語カード/ }).click();
+    for (let i = 0; i < 6; i += 1) await page.getByRole('button', { name: '次のカードへ' }).click();
+    assert(await counter(page) === '7 / 9', `expected Test1 No.7, got ${await counter(page)}`);
+    const card = page.locator('div.cursor-pointer').filter({ hasText: /is to learn/ }).first();
+    await card.click();
+    await page.getByText('To live is to learn.', { exact: true }).waitFor();
+    const mini = page.getByRole('button', { name: /ミニ解説を見る/ }); await mini.waitFor();
+    await simulateResume(context, page); await mini.click();
+    await page.getByText(/To live と to learn/).waitFor();
+    assert(await counter(page) === '7 / 9', 'opening Test1 No.7 mini explanation changed card');
+    assert(!(await page.getByText(/【出典】/).isVisible().catch(() => false)), 'old source-only block is still visible');
+    assert(!(await page.getByText(/Hope Test1 No\.7/).isVisible().catch(() => false)), 'Hope Test1 source metadata is still visible');
+    await page.screenshot({ path: `${OUT}/${engine}-hope-test1-no7-mini.png`, fullPage: true });
+    await context.close();
   });
 
   await run(engine, 'memorize mini survives resume', async () => {
