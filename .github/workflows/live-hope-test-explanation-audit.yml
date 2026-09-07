@@ -1,0 +1,34 @@
+name: Live Hope explanation production audit
+
+on:
+  push:
+    branches: [live-hope-test-explanation-audit]
+
+permissions:
+  contents: read
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - name: Install Chromium and WebKit
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium webkit
+      - name: Exercise live Cloudflare interactions including Hope Test1 No.7
+        env:
+          APP_URL: https://reibun.itisnowornever271.workers.dev/?live_audit=ecad42e822cfe492
+        run: node scripts/postfix-interaction-regression.mjs
+      - name: Upload live screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-hope-test-explanation-audit
+          path: audit/postfix-interactions
+          retention-days: 7
