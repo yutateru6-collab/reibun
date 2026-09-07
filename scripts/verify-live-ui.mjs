@@ -7,22 +7,35 @@ fs.mkdirSync('audit/live-ui', { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
 const page = await context.newPage();
-await page.goto(url, { waitUntil: 'networkidle' });
+const response = await page.goto(url, { waitUntil: 'networkidle' });
+
+const diagnostics = {
+  status: response?.status() ?? null,
+  finalUrl: page.url(),
+  title: await page.title(),
+  text: (await page.locator('body').innerText()).slice(0, 2000),
+  html: (await page.content()).slice(0, 5000),
+};
+fs.writeFileSync('audit/live-ui/diagnostics.json', JSON.stringify(diagnostics, null, 2));
+await page.screenshot({ path: 'audit/live-ui/live-initial.png', fullPage: true });
+console.log(JSON.stringify(diagnostics, null, 2));
 
 const basic = page.getByRole('button', { name: /基本例文マスター/ });
 const vq = page.getByRole('button', { name: /VISION QUEST/ });
-await basic.waitFor();
-await vq.waitFor();
+const basicCount = await basic.count();
+const vqCount = await vq.count();
+if (!basicCount || !vqCount) {
+  throw new Error(`Top choices missing in live production: basic=${basicCount}, vq=${vqCount}`);
+}
 const [basicBox, vqBox] = await Promise.all([basic.boundingBox(), vq.boundingBox()]);
 if (!basicBox || !vqBox) throw new Error('Could not measure top choice cards.');
 
 const sameRow = Math.abs(basicBox.y - vqBox.y) < 12;
-const topScreenshot = 'audit/live-ui/live-top.png';
-await page.screenshot({ path: topScreenshot, fullPage: true });
+await page.screenshot({ path: 'audit/live-ui/live-top.png', fullPage: true });
 
 await basic.click();
 await page.getByRole('button').filter({ hasText: 'Lesson 1' }).first().click();
-await page.getByRole('button', { name: /単語カード/ }).waitFor();
+await page.getByRole('button', { name: /単語カード/ }).waitFor({ timeout: 10000 });
 const modeButtons = [
   page.getByRole('button', { name: /単語カード/ }),
   page.getByRole('button', { name: /答えから覚える/ }),
