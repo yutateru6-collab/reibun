@@ -37,3 +37,33 @@ jobs:
 
       - name: Validate Cloudflare deployment bundle
         run: npx wrangler deploy --dry-run --outdir .wrangler-dryrun
+
+      - name: Smoke-test live Cloudflare Worker
+        if: github.event_name != 'pull_request'
+        env:
+          PUBLIC_URL: https://reibun.itisnowornever271.workers.dev
+        run: |
+          set -euo pipefail
+          echo "Waiting for Cloudflare Git deployment: $PUBLIC_URL"
+
+          for attempt in $(seq 1 24); do
+            echo "Attempt $attempt/24"
+
+            status=$(curl -L -sS -o /tmp/reibun.html -w '%{http_code}' "$PUBLIC_URL/" || true)
+            if [ "$status" = "200" ] && grep -q 'id="root"' /tmp/reibun.html; then
+              manifest_status=$(curl -L -sS -o /tmp/manifest.json -w '%{http_code}' "$PUBLIC_URL/manifest.json" || true)
+              if [ "$manifest_status" = "200" ]; then
+                echo "Live Cloudflare Worker is healthy."
+                exit 0
+              fi
+            fi
+
+            sleep 10
+          done
+
+          echo "Cloudflare live smoke test failed after 4 minutes."
+          echo "Last HTTP status: ${status:-unknown}"
+          if [ -f /tmp/reibun.html ]; then
+            head -c 500 /tmp/reibun.html || true
+          fi
+          exit 1
