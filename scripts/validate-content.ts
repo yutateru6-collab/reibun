@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import {
   decks,
   basicExampleDecks,
@@ -22,8 +23,33 @@ function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
 }
 
+const normalizeSourceText = (value: string) => value.replace(/\s+/g, ' ').trim();
+const hashHopeLesson = (cards: { front: string; translation: string }[]) => {
+  const canonical = cards
+    .map((card) => `${normalizeSourceText(card.front)}\0${normalizeSourceText(card.translation)}`)
+    .join('\n');
+  return createHash('sha256').update(canonical, 'utf8').digest('hex');
+};
+
 const expectedHopeLessonCounts = [9, 8, 10, 11, 9, 7, 9, 9, 10, 9, 10, 9];
 const expectedHopeTestCounts = [9, 8, 10, 11, 9, 7];
+
+// Calculated directly from the attached Hope DOCX table (English + Japanese pairs),
+// after collapsing whitespace only. This catches line-wrap loss without silently correcting source text.
+const expectedHopeLessonHashes = [
+  '4893c28ce1649e5da496cccf2bb3634efcdb58be93dbe176235af8bfc22c448d',
+  'f2f62f9698cdcda680d51ae25e02b3c85f84ba9fe9ee883df13ed040c462d4c1',
+  'ff7bbd2a454498bd1838152189203ee73e776a1fd7c99e01656bf27e65af3247',
+  '2dee150a1a39a9dc907d910e43660d1e761488d3d35877eebab685c2ac584ab4',
+  'bbef834c8ac37904a9998369b04bb6bb2a99262c99a20f7faffbd6c6cffff754',
+  'e4bcfecd8a1bfdea2ee7bd4c2ae272736c18a2f23e54f957255b2b748d6bf754',
+  'f1727d46469efd67d2539bef75b3a4480c2fccefb1f43e0abcb81499cc51f674',
+  'd6a30cb93c18ef6dde81352a33d4ee85753a0243e227112e7aec284465b6ec85',
+  '0fcc66f64b8643b4dc09232909ab7cac37eefdca932639737f68493abbab43cd',
+  'c3fcb2b39b57a95f952dcf4b86c3a452d27c05f6e16e6d4100094bef91a02a0a',
+  '125260336993cb8688e9feb815b3ba408ccee4496e9a0a3d203d6d6253bd89e4',
+  'bcac43624d391ace04f811278307a25e9e3bf2732fc527ae6ef09e88127f63d4',
+];
 
 assert(CONTENT_VERSION === '2026-midterm-v1', 'Unexpected content version.');
 assert(basicExampleDecks.length === 12, `Hope lesson deck count: ${basicExampleDecks.length}`);
@@ -31,7 +57,16 @@ assert(basicTestDecks.length === 6, `Hope official test deck count: ${basicTestD
 
 basicExampleDecks.forEach((deck, index) => {
   assert(deck.cards.length === expectedHopeLessonCounts[index], `${deck.id}: expected ${expectedHopeLessonCounts[index]}, got ${deck.cards.length}`);
+  const actualHash = hashHopeLesson(deck.cards);
+  assert(
+    actualHash === expectedHopeLessonHashes[index],
+    `${deck.id}: attached Hope DOCX source hash mismatch (${actualHash})`
+  );
+  deck.cards.forEach((card) => {
+    assert(card.back === card.front, `${deck.id} card ${card.id}: Hope Example Bank back must exactly match front.`);
+  });
 });
+
 basicTestDecks.forEach((deck, index) => {
   assert(deck.cards.length === expectedHopeTestCounts[index], `${deck.id}: expected ${expectedHopeTestCounts[index]}, got ${deck.cards.length}`);
 });
@@ -75,8 +110,8 @@ for (const card of allCards) {
 
 const rangeSentenceDeck = visionQuestSentenceDecks.find((deck) => deck.id === 'vq-current-range');
 const rangeQuestionDeck = visionQuestQuestionDecks.find((deck) => deck.id === 'vq-current-range-q');
-assert(rangeSentenceDeck?.cards.length === 45, `Current-range sentence deck must contain 45 cards.`);
-assert(rangeQuestionDeck?.cards.length === 66, `Current-range question deck must contain 66 cards.`);
+assert(rangeSentenceDeck?.cards.length === 45, 'Current-range sentence deck must contain 45 cards.');
+assert(rangeQuestionDeck?.cards.length === 66, 'Current-range question deck must contain 66 cards.');
 
 assert(
   visionQuestSentenceBaseDecks.some((deck) => deck.id === 'vq-lesson2-2') &&
@@ -104,4 +139,5 @@ console.log(JSON.stringify({
   vqVisibleExercises: 66,
   vqBlockedDescriptions: examSourceLedger.blockedDescriptionItems.length,
   activeCards: allCards.length,
+  hopeSourceHashVerification: 'passed',
 }, null, 2));
