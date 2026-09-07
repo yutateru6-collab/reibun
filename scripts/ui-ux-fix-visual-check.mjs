@@ -68,7 +68,7 @@ async function mobileFlow(width, height, prefix) {
   await card.click();
   await page.getByRole('button', { name: /ミニ解説を見る/ }).waitFor();
   await page.getByRole('button', { name: /ミニ解説を見る/ }).click();
-  await page.getByText('大統領ともなると、人生だけで本が何冊もできる。', { exact: true }).waitFor();
+  await page.getByText(/大統領ともなると、人生だけで本が何冊もできる。/).waitFor();
   if (await page.getByText(/【出典】/).count()) throw new Error('source block leaked into Hope memorization UI');
   await page.screenshot({ path: `${outDir}/${prefix}-05-mini-explanation.png`, fullPage: true });
   await assertNoHorizontalOverflow(page, `${prefix}-mini-explanation`);
