@@ -1,0 +1,36 @@
+name: Interaction audit fast
+on:
+  push:
+    branches: [interaction-audit-fast]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: npx tsx scripts/validate-content.ts
+      - run: npx tsx scripts/validate-hope-mini-explanations.ts
+      - run: npm run lint
+      - run: npm run build
+      - run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/preview.log 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173 >/dev/null && exit 0; sleep 1; done
+          cat /tmp/preview.log; exit 1
+      - name: Run interaction audit
+        run: node scripts/interaction-audit-fast.mjs
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: interaction-audit-fast
+          path: audit/interaction-fast
+          retention-days: 7
