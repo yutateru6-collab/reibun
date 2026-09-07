@@ -88,6 +88,13 @@ function highlightAnswers(front: string, back: string): string {
   return back;
 }
 
+function canonicalQuizAnswer(answer: string): string {
+  return answer
+    .replace(/\s*\[[^\]]+\]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 const GREETING_MESSAGES = [
   { main: "生きててエライ！", sub: "勉強しようとアプリを開いただけで、今日の徳は積まれました。" },
   { main: "伝説の勇者、現る。", sub: "睡魔という魔王を倒して、レベル上げを始めましょう。" },
@@ -179,6 +186,7 @@ export default function App() {
   const [appMode, setAppMode] = useState<AppMode>('top');
   const [visionQuestTab, setVisionQuestTab] = useState<'sentences' | 'questions'>('sentences');
   const [basicTab, setBasicTab] = useState<'sentences' | 'tests'>('sentences');
+  const [showOlderVisionQuest, setShowOlderVisionQuest] = useState(false);
   const [timeLimit, setTimeLimit] = useState<number>(10);
   const [resultDisplayTime, setResultDisplayTime] = useState<number>(3);
   const [score, setScore] = useState(0);
@@ -387,7 +395,7 @@ export default function App() {
   // --- Quiz Logic ---
   const generateWordPool = (card: Card) => {
     // Split by spaces, keep punctuation attached for simplicity
-    const words = card.back.split(' ').map((word, index) => ({ id: index, word }));
+    const words = canonicalQuizAnswer(card.back).split(' ').map((word, index) => ({ id: index, word }));
     setWordPool(words.sort(() => Math.random() - 0.5));
     setSelectedWords([]);
     setIsCorrect(null);
@@ -465,7 +473,7 @@ export default function App() {
   };
 
   const checkWordOrder = () => {
-    const currentSentence = quizCards[quizIndex].back;
+    const currentSentence = canonicalQuizAnswer(quizCards[quizIndex].back);
     const userSentence = selectedWords.map(w => w.word).join(' ');
     const correct = currentSentence === userSentence;
     setIsCorrect(correct);
@@ -507,7 +515,8 @@ export default function App() {
           <div className="absolute top-4 right-4">
             <button 
               onClick={() => setIsDarkMode(!isDarkMode)}
-              className="p-2 md:p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+              aria-label="テーマ切り替え"
+              className="min-w-11 min-h-11 p-2.5 md:p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
               title="テーマ切り替え"
             >
               {isDarkMode ? <Sun size={20} /> : <MoonStar size={20} />}
@@ -515,7 +524,11 @@ export default function App() {
           </div>
           
           <div className="mb-12 text-center w-full max-w-2xl px-4">
-            <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-6">⚡️期末試験対策⚡️</h1>
+            <div className="flex items-center justify-center gap-2 sm:gap-3 mb-6 px-12 sm:px-0 whitespace-nowrap" aria-label="中間試験対策">
+              <span aria-hidden="true" className="text-2xl sm:text-3xl md:text-4xl">⚡️</span>
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">中間試験対策</h1>
+              <span aria-hidden="true" className="text-2xl sm:text-3xl md:text-4xl">⚡️</span>
+            </div>
             
             {/* ランダム励ましメッセージ機能 */}
             <div className="text-center py-6 px-4 bg-white/50 dark:bg-slate-800/40 rounded-[2rem] border border-slate-200/50 dark:border-slate-700/40 shadow-sm animate-fade-in backdrop-blur-md">
@@ -543,7 +556,7 @@ export default function App() {
                 <GraduationCap size={40} />
               </div>
               <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">基本例文マスター</h2>
-              <p className="text-slate-500 dark:text-slate-400 text-center text-sm">必ず役立つ基本セット</p>
+              <p className="text-slate-600 dark:text-slate-300 text-center text-sm">必ず役立つ基本セット</p>
             </button>
 
             <button
@@ -554,7 +567,7 @@ export default function App() {
                 <Brain size={40} />
               </div>
               <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2 tracking-wide font-sans text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-500 group-hover:from-purple-500 group-hover:to-indigo-400">VISION QUEST</h2>
-              <p className="text-slate-500 dark:text-slate-400 text-center text-sm">Next Level Training</p>
+              <p className="text-slate-600 dark:text-slate-300 text-center text-sm">Next Level Training</p>
             </button>
           </div>
 
@@ -578,7 +591,7 @@ export default function App() {
                   </div>
                   <div>
                     <h2 className="text-xl font-bold text-slate-900 dark:text-white">「まだ」の集中復習モード</h2>
-                    <p className="text-slate-500 dark:text-slate-400 text-sm">
+                    <p className="text-slate-600 dark:text-slate-300 text-sm">
                       現在 <span className="font-bold text-rose-600 dark:text-rose-400">{yetList.length}</span> 個の暗記中カードがあります
                     </p>
                   </div>
@@ -602,7 +615,7 @@ export default function App() {
                   </span>
                   <span>自動レジューム（スマホ自動セーブ中）</span>
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                   お気に入りリスト（{favorites.length}件）や、復習したい「まだ」カード（{yetList.length}件）、ダークモード等の個人設定データは、スマートフォンのブラウザ内（LocalStorage）に自動で即時同期保存されています。アプリを閉じたり本体を再起動しても、いつでも続きからリスタートできます。
                 </p>
               </div>
@@ -618,7 +631,7 @@ export default function App() {
                     </button>
                   ) : (
                     <div className="flex flex-row md:flex-col gap-2 items-center md:items-end justify-end w-full md:w-auto">
-                      <span className="text-[10px] text-rose-500 font-bold mr-2 md:mr-0 shrink-0">本当に消去しますか？</span>
+                      <span className="text-xs text-rose-500 font-bold mr-2 md:mr-0 shrink-0">本当に消去しますか？</span>
                       <div className="flex gap-2">
                         <button
                           onClick={() => {
@@ -626,13 +639,13 @@ export default function App() {
                             setYetList([]);
                             setShowResetConfirm(false);
                           }}
-                          className="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[10px] font-extrabold transition-all cursor-pointer whitespace-nowrap"
+                          className="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-extrabold transition-all cursor-pointer whitespace-nowrap"
                         >
                           はい、消去する
                         </button>
                         <button
                           onClick={() => setShowResetConfirm(false)}
-                          className="px-3 py-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-[10px] font-extrabold transition-all cursor-pointer whitespace-nowrap"
+                          className="px-3 py-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-extrabold transition-all cursor-pointer whitespace-nowrap"
                         >
                           戻る
                         </button>
@@ -657,7 +670,7 @@ export default function App() {
             <div className="flex items-center gap-4">
               <button 
                 onClick={() => setAppMode('top')}
-                className="shrink-0 p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                className="shrink-0 min-w-11 min-h-11 p-2.5 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                 title="トップへ戻る"
               >
                 <ChevronLeft size={24} />
@@ -668,13 +681,14 @@ export default function App() {
                 </div>
                 <div>
                   <h1 className="text-xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-500 tracking-wide font-sans">VISION QUEST</h1>
-                  <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400">Next Level Training</p>
+                  <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300">Next Level Training</p>
                 </div>
               </div>
             </div>
             <button 
               onClick={() => setIsDarkMode(!isDarkMode)}
-              className="p-2 md:p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+              aria-label="テーマ切り替え"
+              className="min-w-11 min-h-11 p-2.5 md:p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
               title="テーマ切り替え"
             >
               {isDarkMode ? <Sun size={20} /> : <MoonStar size={20} />}
@@ -685,22 +699,32 @@ export default function App() {
             <div className="flex bg-slate-200/50 dark:bg-slate-800/50 p-1 rounded-xl w-full">
               <button 
                 onClick={() => setVisionQuestTab('sentences')}
-                className={`flex-1 py-3 px-4 rounded-lg font-bold text-sm transition-all text-center ${visionQuestTab === 'sentences' ? 'bg-white dark:bg-slate-700 text-purple-600 dark:text-purple-400 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}
+                className={`flex-1 py-3 px-4 rounded-lg font-bold text-sm transition-all text-center ${visionQuestTab === 'sentences' ? 'bg-white dark:bg-slate-700 text-purple-600 dark:text-purple-400 shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:text-slate-700 dark:hover:text-slate-200'}`}
               >
                 例文
               </button>
               <button 
                 onClick={() => setVisionQuestTab('questions')}
-                className={`flex-1 py-3 px-4 rounded-lg font-bold text-sm transition-all text-center ${visionQuestTab === 'questions' ? 'bg-white dark:bg-slate-700 text-purple-600 dark:text-purple-400 shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}
+                className={`flex-1 py-3 px-4 rounded-lg font-bold text-sm transition-all text-center ${visionQuestTab === 'questions' ? 'bg-white dark:bg-slate-700 text-purple-600 dark:text-purple-400 shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:text-slate-700 dark:hover:text-slate-200'}`}
               >
                 問題
               </button>
             </div>
           </div>
 
+          <div className="flex justify-center mb-6">
+            <button
+              onClick={() => setShowOlderVisionQuest((prev) => !prev)}
+              aria-expanded={showOlderVisionQuest}
+              className="min-h-11 px-5 py-2.5 rounded-xl border border-purple-200 dark:border-purple-800 bg-white dark:bg-slate-800 text-sm font-bold text-purple-700 dark:text-purple-300 shadow-sm hover:bg-purple-50 dark:hover:bg-purple-950/30 transition-colors"
+            >
+              {showOlderVisionQuest ? '以前の範囲を閉じる ▲' : '以前の範囲を見る ▼'}
+            </button>
+          </div>
+
           {visionQuestTab === 'sentences' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
-              {visionQuestSentenceDecks.map((deck) => (
+              {visionQuestSentenceDecks.slice(0, showOlderVisionQuest ? undefined : 1).map((deck) => (
                 <button
                   key={deck.id}
                   onClick={() => {
@@ -714,14 +738,14 @@ export default function App() {
                   }`}
                 >
                   {deck.id === 'vq-current-range' && (
-                    <span className="inline-flex mb-3 px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-[10px] font-black tracking-wide">
+                    <span className="inline-flex mb-3 px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-black tracking-wide">
                       今回の試験範囲
                     </span>
                   )}
                   <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                     {deck.title}
                   </h2>
-                  <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                  <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                     {deck.description}
                   </p>
                   <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
@@ -735,7 +759,7 @@ export default function App() {
 
           {visionQuestTab === 'questions' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
-              {visionQuestQuestionDecks.map((deck) => (
+              {visionQuestQuestionDecks.slice(0, showOlderVisionQuest ? undefined : 1).map((deck) => (
                 <button
                   key={deck.id}
                   onClick={() => {
@@ -749,14 +773,14 @@ export default function App() {
                   }`}
                 >
                   {deck.id === 'vq-current-range-q' && (
-                    <span className="inline-flex mb-3 px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-[10px] font-black tracking-wide">
+                    <span className="inline-flex mb-3 px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-black tracking-wide">
                       今回の試験範囲
                     </span>
                   )}
                   <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                     {deck.title}
                   </h2>
-                  <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                  <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                     {deck.description}
                   </p>
                   <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-purple-600 dark:text-purple-400 mt-4">
@@ -788,7 +812,7 @@ export default function App() {
                   });
                   setAppMode('menu');
                 }}
-                className="w-full py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-2xl font-bold shadow-lg shadow-rose-200 dark:shadow-none transition-all active:scale-[0.98] cursor-pointer"
+                className="w-full py-4 bg-rose-700 hover:bg-rose-800 text-white rounded-2xl font-bold shadow-lg shadow-rose-200 dark:shadow-none transition-all active:scale-[0.98] cursor-pointer"
               >
                 「まだ」のカードを復習する
               </button>
@@ -808,7 +832,7 @@ export default function App() {
             <div className="flex items-center gap-4">
               <button 
                 onClick={() => setAppMode('top')}
-                className="shrink-0 p-2 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                className="shrink-0 min-w-11 min-h-11 p-2.5 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                 title="トップへ戻る"
               >
                 <ChevronLeft size={24} />
@@ -819,13 +843,14 @@ export default function App() {
                 </div>
                 <div>
                   <h1 className="text-xl md:text-3xl font-bold text-slate-900 dark:text-white">基本例文マスター</h1>
-                  <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400">必ず役立つ基本セット</p>
+                  <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300">必ず役立つ基本セット</p>
                 </div>
               </div>
             </div>
             <button 
               onClick={() => setIsDarkMode(!isDarkMode)}
-              className="p-2 md:p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+              aria-label="テーマ切り替え"
+              className="min-w-11 min-h-11 p-2.5 md:p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
               title="テーマ切り替え"
             >
               {isDarkMode ? <Sun size={20} /> : <MoonStar size={20} />}
@@ -839,7 +864,7 @@ export default function App() {
                 className={`flex-1 py-3 px-4 rounded-lg font-bold text-sm transition-all text-center ${
                   basicTab === 'sentences'
                     ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-700 dark:hover:text-slate-200'
                 }`}
               >
                 例文（110）
@@ -849,7 +874,7 @@ export default function App() {
                 className={`flex-1 py-3 px-4 rounded-lg font-bold text-sm transition-all text-center ${
                   basicTab === 'tests'
                     ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-700 dark:hover:text-slate-200'
                 }`}
               >
                 公式穴埋め（54）
@@ -865,24 +890,21 @@ export default function App() {
                   setCurrentDeck(deck);
                   setAppMode('menu');
                 }}
-                className="group relative bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden"
+                className="group relative bg-white dark:bg-slate-800 p-5 md:p-6 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-lg hover:-translate-y-0.5 overflow-hidden"
               >
-                <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-1.5 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                   {deck.title}
                 </h2>
-                <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-indigo-600 dark:text-indigo-400">
+                <p className="text-sm text-slate-600 dark:text-slate-300 mb-3">
+                  {deck.description} ・ {deck.cards.length}{basicTab === 'sentences' ? '文' : '問'}
+                </p>
+                <div className="flex items-center gap-2 text-sm font-bold text-indigo-700 dark:text-indigo-300">
                   <span>学習を始める</span>
                   <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
                 </div>
               </button>
             ))}
-            
-            {/* Placeholder for future decks */}
-            <div className="bg-slate-100 dark:bg-slate-800/50 p-8 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center text-center opacity-60">
-              <p className="text-slate-400 dark:text-slate-500 font-medium italic">
-                新しいデッキを準備中...
-              </p>
-            </div>
+
           </div>
 
           {favorites.length > 0 && (
@@ -892,7 +914,7 @@ export default function App() {
                 <h3 className="text-lg font-bold text-amber-900 dark:text-amber-100">お気に入りの復習</h3>
               </div>
               <p className="text-amber-800/70 dark:text-amber-200/60 text-sm mb-6">
-                現在 {favorites.length} 個 of カードがお気に入りに登録されています。
+                現在 {favorites.length} 個のカードがお気に入りに登録されています。
               </p>
               <button 
                 onClick={() => {
@@ -932,7 +954,7 @@ export default function App() {
                   });
                   setAppMode('menu');
                 }}
-                className="w-full py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-2xl font-bold shadow-lg shadow-rose-200 dark:shadow-none transition-all active:scale-[0.98] cursor-pointer"
+                className="w-full py-4 bg-rose-700 hover:bg-rose-800 text-white rounded-2xl font-bold shadow-lg shadow-rose-200 dark:shadow-none transition-all active:scale-[0.98] cursor-pointer"
               >
                 「まだ」のカードを復習する
               </button>
@@ -951,6 +973,7 @@ export default function App() {
           <header className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-4">
               <button 
+                aria-label="教材一覧へ戻る"
                 onClick={() => { 
                   const isVisionQuest = currentDeck?.id.startsWith('vq-');
                   setCurrentDeck(null); 
@@ -962,12 +985,13 @@ export default function App() {
               </button>
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">{currentDeck.title}</h1>
-                <p className="text-sm text-slate-500 dark:text-slate-400">学習モードを選択してください</p>
+                <p className="text-sm text-slate-600 dark:text-slate-300">学習モードを選択してください</p>
               </div>
             </div>
             <button 
               onClick={() => setIsDarkMode(!isDarkMode)}
-              className="p-2 md:p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+              aria-label="テーマ切り替え"
+              className="min-w-11 min-h-11 p-2.5 md:p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
             >
               {isDarkMode ? <Sun size={20} /> : <MoonStar size={20} />}
             </button>
@@ -981,11 +1005,11 @@ export default function App() {
               <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                 <BookOpen size={32} />
               </div>
-              <span className="text-[10px] font-extrabold px-2 py-0.5 bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 rounded-full mb-1">
+              <span className="text-xs font-extrabold px-2 py-0.5 bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 rounded-full mb-1">
                 基本学習・じっくり覚える
               </span>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">単語カード</h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 text-center leading-relaxed">
+              <p className="text-xs text-slate-600 dark:text-slate-300 text-center leading-relaxed">
                 通常のフラッシュカードでおもて裏を交互に確認し、自分の強みと弱みを分析しながら学習できます。
               </p>
             </button>
@@ -997,11 +1021,11 @@ export default function App() {
               <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                 <RotateCcw size={32} />
               </div>
-              <span className="text-[10px] font-extrabold px-2 py-0.5 bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400 rounded-full mb-1">
+              <span className="text-xs font-extrabold px-2 py-0.5 bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400 rounded-full mb-1">
                 インプット・英文から入る
               </span>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">答えから覚える</h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 text-center leading-relaxed">
+              <p className="text-xs text-slate-600 dark:text-slate-300 text-center leading-relaxed">
                 完成した英文を真っ先に見てイメージし、そこから和訳とポイントをインプットする暗記用モード。
               </p>
             </button>
@@ -1013,11 +1037,11 @@ export default function App() {
               <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                 <Shuffle size={32} />
               </div>
-              <span className="text-[10px] font-extrabold px-2 py-0.5 bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400 rounded-full mb-1">
+              <span className="text-xs font-extrabold px-2 py-0.5 bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400 rounded-full mb-1">
                 語順トレーニング・暗唱仕上げ
               </span>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">並べ替えクイズ</h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 text-center leading-relaxed">
+              <p className="text-xs text-slate-600 dark:text-slate-300 text-center leading-relaxed">
                 正解のパーツ（単語）をシャッフルした状態から、タップして正しい英文の並びを作ります。
               </p>
             </button>
@@ -1029,11 +1053,11 @@ export default function App() {
               <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                 <Brain size={32} />
               </div>
-              <span className="text-[10px] font-extrabold px-2 py-0.5 bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 rounded-full mb-1">
+              <span className="text-xs font-extrabold px-2 py-0.5 bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 rounded-full mb-1">
                 実力判定・高速アウトプット
               </span>
               <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1">自己申告テスト</h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 text-center leading-relaxed">
+              <p className="text-xs text-slate-600 dark:text-slate-300 text-center leading-relaxed">
                 表示された英語を見て頭の中で日本語の意味を思い出しながらめくり、判定する自己評価式テスト。
               </p>
             </button>
@@ -1043,18 +1067,19 @@ export default function App() {
                 <div className="w-16 h-16 bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-2xl flex items-center justify-center mb-1">
                   <Timer size={32} />
                 </div>
-                <span className="text-[10px] font-extrabold px-2 py-0.5 bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400 rounded-full">
+                <span className="text-xs font-extrabold px-2 py-0.5 bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400 rounded-full">
                   瞬発力強化・自動オート再生
                 </span>
                 <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">タイムアタック</h2>
-                <p className="text-xs text-slate-500 dark:text-slate-400 text-center max-w-md leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-slate-300 text-center max-w-md leading-relaxed">
                   表示された英語を見て、設定した秒数以内に日本語の意味を瞬時に思い出すスピード学習モードです。
                 </p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg mb-6">
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400 ml-1">考える時間 (表面):</span>
+                  <span className="text-xs font-bold text-slate-600 dark:text-slate-300 ml-1">考える時間 (表面):</span>
                   <select 
+                    aria-label="問題を考える時間"
                     value={timeLimit} 
                     onChange={(e) => setTimeLimit(Number(e.target.value))}
                     className="p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 font-bold outline-none focus:ring-2 focus:ring-rose-500/20 cursor-pointer"
@@ -1066,8 +1091,9 @@ export default function App() {
                   </select>
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400 ml-1">答えを表示する時間 (裏面):</span>
+                  <span className="text-xs font-bold text-slate-600 dark:text-slate-300 ml-1">答えを表示する時間 (裏面):</span>
                   <select 
+                    aria-label="答えを表示する時間"
                     value={resultDisplayTime} 
                     onChange={(e) => setResultDisplayTime(Number(e.target.value))}
                     className="p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 font-bold outline-none focus:ring-2 focus:ring-rose-500/20 cursor-pointer"
@@ -1081,11 +1107,11 @@ export default function App() {
               </div>
               <button 
                 onClick={() => startQuiz('time')}
-                className="w-full max-w-sm py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-2xl font-bold shadow-md transition-all active:scale-[0.98] cursor-pointer"
+                className="w-full max-w-sm py-4 bg-rose-700 hover:bg-rose-800 text-white rounded-2xl font-bold shadow-md transition-all active:scale-[0.98] cursor-pointer"
               >
                 タイムアタック開始！
               </button>
-              <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-2 text-center">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 text-center">
                 ※ 画面に触らなくても、設定した秒数で自動的に「問題（表面）」➔「答え（裏面）」➔「次のカード」とテンポよく切り替わります。
               </p>
             </div>
@@ -1104,8 +1130,9 @@ export default function App() {
       <div className="w-full max-w-2xl flex flex-wrap justify-between items-center mb-6 md:mb-8 gap-3">
         <div className="flex items-center gap-2 md:gap-3">
           <button 
+            aria-label="学習モード選択へ戻る"
             onClick={() => { setAppMode('menu'); }}
-            className="p-2 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-400 transition-colors"
+            className="min-w-11 min-h-11 p-2.5 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 transition-colors"
           >
             <ChevronLeft size={24} />
           </button>
@@ -1117,20 +1144,21 @@ export default function App() {
         <div className="flex items-center gap-1 md:gap-1.5 bg-white dark:bg-slate-800 p-1 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
           <button 
             onClick={() => setIsDarkMode(!isDarkMode)}
-            className={`p-1 md:p-1.5 rounded-xl transition-colors flex flex-col items-center justify-center min-w-[46px] md:min-w-[52px] ${isDarkMode ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400' : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
+              aria-label="テーマ切り替え"
+            className={`p-1.5 md:p-2 rounded-xl transition-colors flex flex-col items-center justify-center min-w-[48px] min-h-11 md:min-w-[54px] ${isDarkMode ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400' : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
           >
             {isDarkMode ? <Sun size={16} /> : <MoonStar size={16} />}
-            <span className="text-[9px] font-extrabold mt-0.5 tracking-tighter opacity-80">
+            <span className="text-[11px] font-extrabold mt-0.5 tracking-tighter opacity-80">
               {isDarkMode ? 'ライト' : 'ダーク'}
             </span>
           </button>
           
           <button 
             onClick={() => setIsShuffle(!isShuffle)}
-            className={`p-1 md:p-1.5 rounded-xl transition-colors flex flex-col items-center justify-center min-w-[46px] md:min-w-[52px] ${isShuffle ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400' : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
+            className={`p-1.5 md:p-2 rounded-xl transition-colors flex flex-col items-center justify-center min-w-[48px] min-h-11 md:min-w-[54px] ${isShuffle ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400' : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
           >
             <Shuffle size={16} />
-            <span className="text-[9px] font-extrabold mt-0.5 tracking-tighter opacity-80">
+            <span className="text-[11px] font-extrabold mt-0.5 tracking-tighter opacity-80">
               {isShuffle ? 'シャッフル' : '順序'}
             </span>
           </button>
@@ -1138,10 +1166,10 @@ export default function App() {
           {!isMemorize && (
             <button 
               onClick={() => setIsBackDefault(!isBackDefault)}
-              className={`p-1 md:p-1.5 rounded-xl transition-colors flex flex-col items-center justify-center min-w-[46px] md:min-w-[52px] ${isBackDefault ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400' : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
+              className={`p-1.5 md:p-2 rounded-xl transition-colors flex flex-col items-center justify-center min-w-[48px] min-h-11 md:min-w-[54px] ${isBackDefault ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400' : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
             >
               <RotateCcw size={16} />
-              <span className="text-[9px] font-extrabold mt-0.5 tracking-tighter opacity-80 whitespace-nowrap">
+              <span className="text-[11px] font-extrabold mt-0.5 tracking-tighter opacity-80 whitespace-nowrap">
                 {isBackDefault ? '裏から' : '表から'}
               </span>
             </button>
@@ -1149,11 +1177,11 @@ export default function App() {
 
           <button 
             onClick={() => setReviewFavoritesOnly(!reviewFavoritesOnly)}
-            className={`p-1 md:p-1.5 rounded-xl transition-colors flex flex-col items-center justify-center min-w-[46px] md:min-w-[52px] ${reviewFavoritesOnly ? 'bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400' : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
+            className={`p-1.5 md:p-2 rounded-xl transition-colors flex flex-col items-center justify-center min-w-[48px] min-h-11 md:min-w-[54px] ${reviewFavoritesOnly ? 'bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400' : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
             title="お気に入りカードのみを絞り込んで学習"
           >
             <Star size={16} className={reviewFavoritesOnly ? "fill-current text-amber-500" : ""} />
-            <span className="text-[9px] font-extrabold mt-0.5 tracking-tighter opacity-80 whitespace-nowrap">
+            <span className="text-[11px] font-extrabold mt-0.5 tracking-tighter opacity-80 whitespace-nowrap">
               {reviewFavoritesOnly ? '★限定' : 'すべて'}
             </span>
           </button>
@@ -1164,7 +1192,7 @@ export default function App() {
       {activeCards.length > 0 ? (
         <div className="w-full max-w-2xl flex flex-col items-center">
           <div className="w-full flex justify-between items-center mb-4 px-1 md:px-2">
-            <span className="text-xs md:text-sm font-bold text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm">
+            <span className="text-xs md:text-sm font-bold text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm">
               {currentIndex + 1} / {activeCards.length}
             </span>
             <div className="flex gap-2">
@@ -1173,11 +1201,11 @@ export default function App() {
                   e.stopPropagation();
                   toggleFavorite(currentCard.id);
                 }}
-                className={`flex items-center gap-1 px-3 py-1.5 rounded-xl border transition-all active:scale-95 ${favorites.includes(currentCard.id) ? 'text-amber-500 border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/20 font-extrabold' : 'text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-700 hover:text-slate-600 bg-white dark:bg-slate-800'}`}
+                className={`flex items-center gap-1.5 px-3 py-2 min-h-11 rounded-xl border transition-all active:scale-95 ${favorites.includes(currentCard.id) ? 'text-amber-500 border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/20 font-extrabold' : 'text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:text-slate-600 bg-white dark:bg-slate-800'}`}
                 title="このカードをお気に入りに登録・解除"
               >
                 <Star size={14} className={favorites.includes(currentCard.id) ? "fill-current" : ""} />
-                <span className="text-[10px] font-extrabold tracking-wider">
+                <span className="text-xs font-extrabold tracking-wider">
                   {favorites.includes(currentCard.id) ? 'お気に入り登録中' : 'お気に入り登録'}
                 </span>
               </button>
@@ -1191,11 +1219,11 @@ export default function App() {
                     addYet(currentCard.id);
                   }
                 }}
-                className={`flex items-center gap-1 px-3 py-1.5 rounded-xl border transition-all active:scale-95 ${yetList.includes(currentCard.id) ? 'text-rose-600 border-rose-200 dark:border-rose-900 bg-rose-50/80 dark:bg-rose-950/20 font-extrabold' : 'text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-700 hover:text-rose-600 dark:hover:text-rose-400 bg-white dark:bg-slate-800'}`}
+                className={`flex items-center gap-1.5 px-3 py-2 min-h-11 rounded-xl border transition-all active:scale-95 ${yetList.includes(currentCard.id) ? 'text-rose-600 border-rose-200 dark:border-rose-900 bg-rose-50/80 dark:bg-rose-950/20 font-extrabold' : 'text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:text-rose-600 dark:hover:text-rose-400 bg-white dark:bg-slate-800'}`}
                 title="このカードを「まだ」リストに登録・解除"
               >
                 <div className={`w-2 h-2 rounded-full ${yetList.includes(currentCard.id) ? 'bg-rose-500 animate-pulse' : 'bg-slate-300 dark:bg-slate-600'}`}></div>
-                <span className="text-[10px] font-extrabold tracking-wider">
+                <span className="text-xs font-extrabold tracking-wider">
                   {yetList.includes(currentCard.id) ? '「まだ」登録中' : '「まだ」リスト追加'}
                 </span>
               </button>
@@ -1226,21 +1254,21 @@ export default function App() {
                       {currentCard.translation}
                     </p>
                   )}
-                  <p className="text-xs text-slate-400 dark:text-slate-500 mt-6 md:mt-10 animate-pulse">
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-6 md:mt-10 animate-pulse">
                     タップして{isMemorize ? "日本語訳" : "完成文"}を見る
                   </p>
                 </div>
               ) : (
                 // 裏面（めくった後：回答とコメント）
                 <div className="flex flex-col items-center text-center w-full animate-in fade-in zoom-in-95 duration-200">
-                  <div className="absolute top-6 md:top-8 left-6 md:left-8 text-emerald-500 dark:text-emerald-400 flex items-center gap-2 font-black tracking-wider uppercase text-xs md:text-sm">
+                  <div className="absolute top-6 md:top-8 left-6 md:left-8 text-emerald-700 dark:text-emerald-300 flex items-center gap-2 font-black tracking-wider uppercase text-xs md:text-sm">
                     <span className="text-xl md:text-2xl">✅</span> 完成文
                   </div>
                   <p className="text-2xl md:text-5xl font-bold text-emerald-600 dark:text-emerald-400 leading-tight mt-10 md:mt-12 mb-6 md:mb-8">
                     {highlightAnswers(currentCard.front, currentCard.back)}
                   </p>
                   <div className="h-1 w-16 md:w-24 bg-emerald-100 dark:bg-emerald-900/30 rounded-full mb-6 md:mb-8"></div>
-                  <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 font-medium mb-8">
+                  <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 font-medium mb-8">
                     {currentCard.translation}
                   </p>
 
@@ -1255,7 +1283,7 @@ export default function App() {
                       >
                         <div className="flex items-center gap-2">
                           <MessageCircle size={18} className="text-purple-500 shrink-0" />
-                          <span>💡 ぽいんと</span>
+                          <span>{currentDeck.id.startsWith('hope-lesson') ? '💡 ミニ解説' : '💡 ぽいんと'}</span>
                         </div>
                         <span className="text-xs text-purple-400 font-bold shrink-0">
                           {isCommentOpen ? "タップで折りたたむ ▲" : "タップで表示 ▼"}
@@ -1288,14 +1316,14 @@ export default function App() {
                 </div>
               ) : (
                 <div className="flex flex-col items-center text-center w-full animate-in fade-in zoom-in-95 duration-200">
-                  <div className="absolute top-6 md:top-8 left-6 md:left-8 text-emerald-500 dark:text-emerald-400 flex items-center gap-2 font-black tracking-wider uppercase text-xs md:text-sm">
+                  <div className="absolute top-6 md:top-8 left-6 md:left-8 text-emerald-700 dark:text-emerald-300 flex items-center gap-2 font-black tracking-wider uppercase text-xs md:text-sm">
                     <span className="text-xl md:text-2xl">✅</span> 完成文
                   </div>
                   <p className="text-2xl md:text-5xl font-bold text-emerald-600 dark:text-emerald-400 leading-tight mt-10 md:mt-12 mb-6 md:mb-8">
                     {currentCard.back}
                   </p>
                   <div className="h-1 w-16 md:w-24 bg-emerald-100 dark:bg-emerald-900/30 rounded-full mb-6 md:mb-8"></div>
-                  <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 font-medium mb-8">
+                  <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 font-medium mb-8">
                     {currentCard.translation}
                   </p>
 
@@ -1306,7 +1334,7 @@ export default function App() {
                         className="mx-auto flex items-center gap-2 px-5 py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:hover:bg-indigo-900/50 dark:text-indigo-400 rounded-xl md:rounded-2xl transition-colors text-sm md:text-base font-bold"
                       >
                         <Lightbulb size={18} />
-                        ヒント
+                        {currentDeck.id.startsWith('hope-lesson') ? 'ミニ解説を見る' : 'ヒント'}
                       </button>
                     ) : (
                       <div 
@@ -1315,8 +1343,10 @@ export default function App() {
                       >
                         <div className="flex items-start gap-2 md:gap-3 mb-3 md:mb-4 text-slate-600 dark:text-slate-400">
                           <MessageCircle size={18} md:size={22} className="shrink-0 mt-1" />
-                          <p className="text-sm md:text-base font-bold italic whitespace-pre-wrap">
-                            {currentCard.comment.replace(/^\(|\)$/g, '')}
+                          <p className="text-sm md:text-base font-medium whitespace-pre-wrap leading-relaxed">
+                            {currentDeck.id.startsWith('hope-lesson')
+                              ? currentCard.comment.replace(/^\(|\)$/g, '').replace(/\n([^\n]+)$/, '\n\n$1')
+                              : currentCard.comment.replace(/^\(|\)$/g, '')}
                           </p>
                         </div>
                         {currentCard.hint && (
@@ -1325,7 +1355,7 @@ export default function App() {
                             <p className="text-sm md:text-base leading-relaxed font-medium whitespace-pre-wrap">{currentCard.hint}</p>
                           </div>
                         )}
-                        <p className="text-[10px] text-center text-slate-300 dark:text-slate-600 mt-2 font-medium">タップして閉じる</p>
+                        <p className="text-xs text-center text-slate-500 dark:text-slate-400 mt-2 font-medium">タップして閉じる</p>
                       </div>
                     )}
                   </div>
@@ -1337,6 +1367,7 @@ export default function App() {
           {/* Navigation */}
           <div className="flex items-center justify-center gap-4 md:gap-6 mt-8 md:mt-10 w-full">
             <button 
+              aria-label="前のカードへ"
               onClick={handlePrev}
               className="p-4 md:p-5 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-2xl md:rounded-3xl shadow-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all active:scale-90"
             >
@@ -1344,6 +1375,7 @@ export default function App() {
             </button>
             
             <button 
+              aria-label="次のカードへ"
               onClick={handleNext}
               className="p-4 md:p-5 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-2xl md:rounded-3xl shadow-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all active:scale-90"
             >
@@ -1354,10 +1386,10 @@ export default function App() {
       ) : (
         <div className="flex flex-col items-center justify-center flex-1 text-center py-20">
           <div className="w-24 h-24 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-6">
-            <Star size={48} className="text-slate-300 dark:text-slate-600" />
+            <Star size={48} className="text-slate-500 dark:text-slate-400" />
           </div>
           <h2 className="text-2xl font-bold text-slate-700 dark:text-slate-300 mb-3">お気に入りがありません</h2>
-          <p className="text-slate-500 dark:text-slate-400 max-w-xs mx-auto mb-8">
+          <p className="text-slate-600 dark:text-slate-300 max-w-xs mx-auto mb-8">
             星マークをクリックして、復習したいカードを追加してください。
           </p>
           <button 
@@ -1379,7 +1411,7 @@ export default function App() {
     return (
       <div className="min-h-screen flex flex-col items-center py-6 md:py-8 px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
         <div className="w-full max-w-2xl flex items-center justify-between mb-8">
-          <button onClick={() => setAppMode('menu')} className="p-2 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg">
+          <button aria-label="学習モード選択へ戻る" onClick={() => setAppMode('menu')} className="min-w-11 min-h-11 p-2.5 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-xl">
             <ChevronLeft size={24} />
           </button>
           <div className="font-bold text-slate-500">{quizIndex + 1} / {quizCards.length}</div>
@@ -1402,18 +1434,18 @@ export default function App() {
             </div>
           ) : (
             <div className="text-center animate-in fade-in zoom-in-95 w-full">
-              <div className="text-emerald-500 dark:text-emerald-400 flex items-center justify-center gap-2 font-black tracking-wider uppercase text-xs mb-6">
+              <div className="text-emerald-700 dark:text-emerald-300 flex items-center justify-center gap-2 font-black tracking-wider uppercase text-xs mb-6">
                 <span className="text-lg">💡</span> 日本語での意味
               </div>
               <p className="text-2xl md:text-4xl font-bold text-emerald-600 dark:text-emerald-400 mb-8 leading-relaxed">
                 {quizCard.translation}
               </p>
               <div className="h-px w-24 bg-slate-100 dark:bg-slate-700/50 mx-auto mb-8"></div>
-              <p className="text-lg text-slate-500 dark:text-slate-400 font-medium mb-12">
+              <p className="text-lg text-slate-600 dark:text-slate-300 font-medium mb-12">
                 {quizCard.back}
               </p>
                 
-                {(currentDeck.id.startsWith('vq-') && quizCard.comment) && (
+                {((currentDeck.id.startsWith('vq-') || currentDeck.id.startsWith('hope-lesson')) && quizCard.comment) && (
                   <div 
                     className="w-full text-left mb-8" 
                     onClick={(e) => e.stopPropagation()}
@@ -1424,7 +1456,7 @@ export default function App() {
                     >
                       <div className="flex items-center gap-2">
                         <MessageCircle size={18} className="text-purple-500 shrink-0" />
-                        <span>💡 ぽいんと</span>
+                        <span>{currentDeck.id.startsWith('hope-lesson') ? '💡 ミニ解説' : '💡 ぽいんと'}</span>
                       </div>
                       <span className="text-xs text-purple-400 font-bold shrink-0">
                         {isQuizCommentOpen ? "タップで折りたたむ ▲" : "タップで表示 ▼"}
@@ -1468,7 +1500,7 @@ export default function App() {
     return (
       <div className="min-h-screen flex flex-col items-center py-6 md:py-8 px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
         <div className="w-full max-w-2xl flex items-center justify-between mb-4">
-          <button onClick={() => setAppMode('menu')} className="p-2 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg">
+          <button aria-label="学習モード選択へ戻る" onClick={() => setAppMode('menu')} className="min-w-11 min-h-11 p-2.5 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-xl">
             <ChevronLeft size={24} />
           </button>
           <div className={`flex items-center gap-2 px-4 py-1.5 rounded-full font-black text-lg ${isFlipped ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400' : (timeLeft <= 3 ? 'bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400 animate-pulse' : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 shadow-sm border border-slate-200 dark:border-slate-700')}`}>
@@ -1491,18 +1523,18 @@ export default function App() {
             </div>
           ) : (
             <div className="text-center animate-in fade-in zoom-in-95 w-full">
-              <div className="text-emerald-500 dark:text-emerald-400 flex items-center justify-center gap-2 font-black tracking-wider uppercase text-xs mb-6">
+              <div className="text-emerald-700 dark:text-emerald-300 flex items-center justify-center gap-2 font-black tracking-wider uppercase text-xs mb-6">
                 <span className="text-lg">💡</span> 日本語での意味
               </div>
               <p className="text-2xl md:text-4xl font-bold text-emerald-600 dark:text-emerald-400 mb-8 leading-relaxed">
                 {quizCard.translation}
               </p>
               <div className="h-px w-24 bg-slate-100 dark:bg-slate-700/50 mx-auto mb-8"></div>
-              <p className="text-lg text-slate-500 dark:text-slate-400 font-medium mb-8">
+              <p className="text-lg text-slate-600 dark:text-slate-300 font-medium mb-8">
                 {quizCard.back}
               </p>
               
-              {(currentDeck.id.startsWith('vq-') && quizCard.comment) && (
+              {((currentDeck.id.startsWith('vq-') || currentDeck.id.startsWith('hope-lesson')) && quizCard.comment) && (
                 <div 
                   className="w-full text-left" 
                   onClick={(e) => e.stopPropagation()}
@@ -1513,7 +1545,7 @@ export default function App() {
                   >
                     <div className="flex items-center gap-2">
                       <MessageCircle size={18} className="text-purple-500 shrink-0" />
-                      <span>💡 ぽいんと</span>
+                      <span>{currentDeck.id.startsWith('hope-lesson') ? '💡 ミニ解説' : '💡 ぽいんと'}</span>
                     </div>
                     <span className="text-xs text-purple-400 font-bold shrink-0">
                       {isQuizCommentOpen ? "タップで折りたたむ ▲" : "タップで表示 ▼"}
@@ -1542,7 +1574,7 @@ export default function App() {
     return (
       <div className="min-h-screen flex flex-col items-center py-6 md:py-8 px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
         <div className="w-full max-w-2xl flex items-center justify-between mb-4">
-          <button onClick={() => setAppMode('menu')} className="p-2 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg">
+          <button aria-label="学習モード選択へ戻る" onClick={() => setAppMode('menu')} className="min-w-11 min-h-11 p-2.5 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-xl">
             <ChevronLeft size={24} />
           </button>
           <div className="font-bold text-slate-500">{quizIndex + 1} / {quizCards.length}</div>
@@ -1617,7 +1649,7 @@ export default function App() {
               </div>
             )}
             
-            {(currentDeck.id.startsWith('vq-') && quizCard.comment) && (
+            {((currentDeck.id.startsWith('vq-') || currentDeck.id.startsWith('hope-lesson')) && quizCard.comment) && (
               <div 
                 className="w-full text-left" 
                 onClick={(e) => e.stopPropagation()}
@@ -1628,7 +1660,7 @@ export default function App() {
                 >
                   <div className="flex items-center gap-2">
                     <MessageCircle size={18} className="text-purple-500 shrink-0" />
-                    <span>💡 ぽいんと</span>
+                    <span>{currentDeck.id.startsWith('hope-lesson') ? '💡 ミニ解説' : '💡 ぽいんと'}</span>
                   </div>
                   <span className="text-xs text-purple-400 font-bold shrink-0">
                     {isQuizCommentOpen ? "タップで折りたたむ ▲" : "タップで表示 ▼"}
@@ -1660,10 +1692,10 @@ export default function App() {
             <GraduationCap size={40} />
           </div>
           <h2 className="text-3xl font-black text-slate-800 dark:text-slate-100 mb-2">テスト完了！</h2>
-          <p className="text-slate-500 dark:text-slate-400 mb-8">お疲れ様でした！</p>
+          <p className="text-slate-600 dark:text-slate-300 mb-8">お疲れ様でした！</p>
           
           <div className="bg-slate-50 dark:bg-slate-900 rounded-3xl p-6 mb-8">
-            <p className="text-sm font-bold text-slate-500 dark:text-slate-400 mb-2">正答率</p>
+            <p className="text-sm font-bold text-slate-600 dark:text-slate-300 mb-2">正答率</p>
             <div className="text-5xl font-black text-indigo-600 dark:text-indigo-400 mb-2">
               {Math.round((score / quizCards.length) * 100)}<span className="text-2xl">%</span>
             </div>

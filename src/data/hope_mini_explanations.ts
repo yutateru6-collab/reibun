@@ -88,7 +88,7 @@ export const hopeMiniExplanations: Record<number, string> = {
   4079: `💡ミニ解説\nI wish I could ～ =「～できたらいいのに」。現実とは違う願い。\n願いは大きいほど、could がしっくりくる時もある。`,
   4080: `💡ミニ解説\nIf you were to do =「もし仮に～することになれば」。少し可能性の低い仮定。\n海外生活を想像するだけなら、パスポートはいらない。`,
   4081: `💡ミニ解説\nas if + 過去完了で「まるで～していたかのように」。had been が現実との距離を出す。\n長年住んでいた風。演技力が高い。`,
-  4082: `💡ミニ解説\nWithout ～ =「～がなければ」。couldn’t have studied で「勉強できなかっただろう」。\n家族の支え、文では短いけど中身は大きい。`,
+  4082: `💡ミニ解説\nWithout ～ =「～がなければ」。couldn’t have studied abroad で「留学できなかっただろう」。\n家族の支え、文では短いけど中身は大きい。`,
 
   4083: `💡ミニ解説\ncan + 動詞原形 =「～できる」。speak three languages で「3か国語を話す」。\nロボット、普通に語学強者。`,
   4084: `💡ミニ解説\nlarge amounts of + 不可算名詞 =「大量の～」。information は不可算名詞。\n情報は数えにくいけど、量はすごい。`,

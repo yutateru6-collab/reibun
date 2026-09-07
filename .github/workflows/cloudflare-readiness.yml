@@ -50,6 +50,8 @@ jobs:
           PUBLIC_URL: https://reibun.itisnowornever271.workers.dev
           EXPECTED_CONTENT_VERSION: 2026-midterm-v1
           EXPECTED_MINI_MARKER: 投稿は一瞬、スクショは長生き。
+          EXPECTED_UI_MARKER: 以前の範囲を見る
+          EXPECTED_EXAM_MARKER: 中間試験対策
         run: |
           set -euo pipefail
           echo "Waiting for Cloudflare Git deployment: $PUBLIC_URL"
@@ -71,8 +73,10 @@ jobs:
 
               if [ "$manifest_status" = "200" ] && [ "$js_status" = "200" ] \
                 && grep -Fq "$EXPECTED_CONTENT_VERSION" /tmp/reibun.js \
-                && grep -Fq "$EXPECTED_MINI_MARKER" /tmp/reibun.js; then
-                echo "Live Cloudflare Worker serves the expected content and Hope mini explanations."
+                && grep -Fq "$EXPECTED_MINI_MARKER" /tmp/reibun.js \
+                && grep -Fq "$EXPECTED_UI_MARKER" /tmp/reibun.js \
+                && grep -Fq "$EXPECTED_EXAM_MARKER" /tmp/reibun.js; then
+                echo "Live Cloudflare Worker serves the expected content and audited UI UX revision."
                 exit 0
               fi
             fi
