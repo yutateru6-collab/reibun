@@ -1,0 +1,43 @@
+name: Full app production audit
+
+on:
+  push:
+    branches: [full-app-qa-20260908]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm install
+      - name: Source and build validation
+        run: |
+          npx tsx scripts/validate-content.ts
+          npx tsx scripts/validate-hope-mini-explanations.ts
+          npx tsx scripts/validate-vq-exercises.ts
+          npm run lint
+          npm run build
+      - name: Install Playwright browsers
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium webkit
+      - name: Audit every live app page and study deck
+        env:
+          APP_URL: https://reibun.itisnowornever271.workers.dev/?full_audit=20260908
+        run: npx tsx scripts/full-app-production-audit.ts
+      - name: Upload exhaustive QA report and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: full-app-production-audit
+          path: audit/full-app-production
+          retention-days: 14
