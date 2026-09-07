@@ -41,13 +41,15 @@ jobs:
       - name: Validate Cloudflare deployment bundle
         run: npx wrangler deploy --dry-run --outdir .wrangler-dryrun
 
-      - name: Smoke-test live Cloudflare Worker
+      - name: Smoke-test exact live Cloudflare content
         if: github.event_name != 'pull_request'
         env:
           PUBLIC_URL: https://reibun.itisnowornever271.workers.dev
+          EXPECTED_CONTENT_VERSION: 2026-midterm-v1
         run: |
           set -euo pipefail
           echo "Waiting for Cloudflare Git deployment: $PUBLIC_URL"
+          echo "Expected content version: $EXPECTED_CONTENT_VERSION"
 
           for attempt in $(seq 1 24); do
             echo "Attempt $attempt/24"
@@ -55,8 +57,16 @@ jobs:
             status=$(curl -L -sS -o /tmp/reibun.html -w '%{http_code}' "$PUBLIC_URL/" || true)
             if [ "$status" = "200" ] && grep -q 'id="root"' /tmp/reibun.html; then
               manifest_status=$(curl -L -sS -o /tmp/manifest.json -w '%{http_code}' "$PUBLIC_URL/manifest.json" || true)
-              if [ "$manifest_status" = "200" ]; then
-                echo "Live Cloudflare Worker is healthy."
+              asset_path=$(grep -oE 'src="/assets/[^"]+\.js"' /tmp/reibun.html | head -1 | cut -d'"' -f2 || true)
+
+              if [ -n "$asset_path" ]; then
+                js_status=$(curl -L -sS -o /tmp/reibun.js -w '%{http_code}' "$PUBLIC_URL$asset_path" || true)
+              else
+                js_status=000
+              fi
+
+              if [ "$manifest_status" = "200" ] && [ "$js_status" = "200" ] && grep -Fq "$EXPECTED_CONTENT_VERSION" /tmp/reibun.js; then
+                echo "Live Cloudflare Worker is healthy and serves the expected content version."
                 exit 0
               fi
             fi
@@ -64,9 +74,8 @@ jobs:
             sleep 10
           done
 
-          echo "Cloudflare live smoke test failed after 4 minutes."
-          echo "Last HTTP status: ${status:-unknown}"
-          if [ -f /tmp/reibun.html ]; then
-            head -c 500 /tmp/reibun.html || true
-          fi
+          echo "Cloudflare exact-content smoke test failed after 4 minutes."
+          echo "Last page HTTP status: ${status:-unknown}"
+          echo "Last JS HTTP status: ${js_status:-unknown}"
+          echo "Last asset path: ${asset_path:-unknown}"
           exit 1
