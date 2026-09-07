@@ -18,61 +18,48 @@ jobs:
         with:
           ref: exam-2026-midterm-v1
           fetch-depth: 0
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-
       - name: Apply only source-grounded repairs
         run: |
           python - <<'PY'
           from pathlib import Path
           import re
-
-          # 1) Match the six attached Hope Test PDFs: their Japanese glosses have no final Japanese full stop.
           hp = Path('src/data/hope_example_bank.ts')
           text = hp.read_text(encoding='utf-8')
           marker = 'export const hopeTest1Cards: Card[] = ['
           before, sep, tests = text.partition(marker)
-          if not sep:
-              raise SystemExit('Hope Test section marker not found')
+          if not sep: raise SystemExit('Hope Test section marker not found')
           tests, count = re.subn(r'translation: "([^"]*)。"', r'translation: "\1"', tests)
-          if count not in (0, 54):
-              raise SystemExit(f'Unexpected Hope Test punctuation repair count: {count}')
+          if count not in (0, 54): raise SystemExit(f'Unexpected punctuation repair count: {count}')
+          old_front = 'Global warming is a serious problem (　　)(　　)(　　)(　　).'
+          new_front = 'Global warming is a serious problem(　　)(　　)(　　)(　　).'
+          if old_front in tests: tests = tests.replace(old_front, new_front, 1)
+          elif new_front not in tests: raise SystemExit('Test5 No.4 source line not found')
           hp.write_text(before + sep + tests, encoding='utf-8')
-
-          # 2) Test3 No.6 is an explicit source exception: the attached Test3 English prompt stops after
-          #    "last Sunday", while its Japanese gloss and Example Bank sentence continue. The answer
-          #    therefore must match the printed Test3 prompt, not the longer Example Bank sentence.
           vp = Path('scripts/validate-content.ts')
           v = vp.read_text(encoding='utf-8')
           old = '''    assert(\n      card.back === example.front,\n      `${deck.id} card ${card.id}: answer must match the corresponding Hope Example Bank sentence.`\n    );'''
           new = '''    const isTest3No6SourceException = card.id === 4223;\n    if (isTest3No6SourceException) {\n      assert(\n        card.back === 'He had been the world record holder until last Sunday',\n        `${deck.id} card ${card.id}: Test3 No.6 must preserve the shorter printed English prompt.`\n      );\n    } else {\n      assert(\n        card.back === example.front,\n        `${deck.id} card ${card.id}: answer must match the corresponding Hope Example Bank sentence.`\n      );\n    }'''
-          if old not in v:
-              raise SystemExit('Validator target block not found')
-          v = v.replace(old, new, 1)
+          if old in v: v = v.replace(old, new, 1)
+          elif 'isTest3No6SourceException' not in v: raise SystemExit('Validator target block not found')
           vp.write_text(v, encoding='utf-8')
           PY
-
       - name: Install dependencies
         run: npm install
-
       - name: Validate exact source content
         run: npx tsx scripts/validate-content.ts
-
       - name: Type-check
         run: npm run lint
-
       - name: Production build
         run: npm run build
-
       - name: Wrangler dry-run
         run: npx wrangler deploy --dry-run --outdir .wrangler-dryrun
-
       - name: Commit verified repairs
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add src/data/hope_example_bank.ts scripts/validate-content.ts
-          git commit -m "fix: preserve attached Test3 source exception"
+          git commit -m "fix: preserve exact attached Hope Test sources"
           git push origin HEAD:exam-2026-midterm-v1
