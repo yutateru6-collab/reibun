@@ -1,20 +1,57 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# reibun
 
-# Run and deploy your AI Studio app
+高校英語の例文・問題を学習する React + Vite アプリです。
 
-This contains everything you need to run your app locally.
+このリポジトリは **Vercel ではなく Cloudflare Workers Static Assets** で配信できる構成にしています。
 
-View your app in AI Studio: https://ai.studio/apps/1c99341b-3aad-4569-8241-4d6fa2c6e9ea
+## Local development
 
-## Run Locally
+**Prerequisites:** Node.js 22 以上を推奨
 
-**Prerequisites:**  Node.js
+```bash
+npm install
+npm run dev
+```
 
+## Build
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+```bash
+npm run build
+```
+
+Vite のビルド成果物は `dist/` に出力されます。
+
+## Cloudflare Workers にデプロイ
+
+Cloudflare 用設定は `wrangler.jsonc` にあります。
+
+```bash
+npm install
+npm run deploy:cloudflare
+```
+
+現在の構成は静的な React SPA なので、Worker のサーバーコードは不要です。`dist/` を Workers Static Assets として配信し、SPA の未一致パスは `index.html` にフォールバックします。
+
+### Cloudflare の Git 連携を使う場合
+
+Cloudflare Dashboard の **Workers & Pages → Create application → Import a repository** から、このリポジトリを接続してください。
+
+- Repository: `yutateru6-collab/reibun`
+- Production branch: `main`
+- Build command: `npm run build`
+- Deploy command: `npx wrangler deploy`
+- Root directory: `/`
+
+接続後は `main` への push で Cloudflare 側が自動ビルド・自動デプロイできます。
+
+## Cloudflare-compatible preview
+
+```bash
+npm run preview:cloudflare
+```
+
+## Environment variables / secrets
+
+現在のアプリは実行時シークレットを必要としていません。
+
+Vite の `VITE_*` 環境変数はブラウザ用 JavaScript に埋め込まれるため、API キーなどの秘密情報を入れないでください。秘密情報が必要になった場合は、Cloudflare Worker 側の Secret と API ルートへ移してください。
