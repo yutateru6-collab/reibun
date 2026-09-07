@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Validate source-derived content
+        run: npx tsx scripts/validate-content.ts
+
       - name: Type-check
         run: npm run lint
 
