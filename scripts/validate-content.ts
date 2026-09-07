@@ -110,10 +110,18 @@ basicTestDecks.forEach((deck, index) => {
   );
   deck.cards.forEach((card, cardIndex) => {
     const example = basicExampleDecks[index].cards[cardIndex];
-    assert(
-      card.back === example.front,
-      `${deck.id} card ${card.id}: answer must match the corresponding Hope Example Bank sentence.`
-    );
+    const isTest3No6SourceException = card.id === 4223;
+    if (isTest3No6SourceException) {
+      assert(
+        card.back === 'He had been the world record holder until last Sunday',
+        `${deck.id} card ${card.id}: Test3 No.6 must preserve the shorter printed English prompt.`
+      );
+    } else {
+      assert(
+        card.back === example.front,
+        `${deck.id} card ${card.id}: answer must match the corresponding Hope Example Bank sentence.`
+      );
+    }
   });
 });
 
