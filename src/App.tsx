@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { decks, Card, Deck, basicExampleDecks, basicTestDecks, visionQuestSentenceDecks, visionQuestQuestionDecks } from './data/cards';
 import { CONTENT_VERSION } from './data/exam_source_ledger';
 import { Moon, Sun, MoonStar, Shuffle, Star, ChevronLeft, ChevronRight, RotateCcw, Lightbulb, MessageCircle, Home, BookOpen, GraduationCap, Brain, List, Timer, CheckCircle, XCircle, Settings } from 'lucide-react';
@@ -199,6 +199,7 @@ export default function App() {
   const [wordPool, setWordPool] = useState<{id: number, word: string}[]>([]);
   const [selectedWords, setSelectedWords] = useState<{id: number, word: string}[]>([]);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const orderAdvanceTimerRef = useRef<number | null>(null);
 
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [isQuizCommentOpen, setIsQuizCommentOpen] = useState(false);
@@ -296,6 +297,7 @@ export default function App() {
   }, [quizIndex, isFlipped, appMode]);
 
   // Keep long-lived mobile/in-app browser tabs in sync with the latest deployed Vite bundle.
+  // Never force a reload while the learner is inside a study/test screen; defer it until top.
   useEffect(() => {
     let checking = false;
 
@@ -310,7 +312,7 @@ export default function App() {
         const currentScript = document.querySelector<HTMLScriptElement>('script[type="module"][src]')?.getAttribute('src');
         const latestScript = latestMatch?.[1];
 
-        if (latestScript && currentScript && latestScript !== currentScript) {
+        if (latestScript && currentScript && latestScript !== currentScript && appMode === 'top') {
           const freshUrl = new URL(window.location.href);
           freshUrl.searchParams.set('__ui_v', latestScript);
           window.location.replace(freshUrl.toString());
@@ -336,7 +338,7 @@ export default function App() {
       document.removeEventListener('visibilitychange', handleVisibility);
       window.clearInterval(timer);
     };
-  }, []);
+  }, [appMode]);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -527,13 +529,32 @@ export default function App() {
       setMistakes(prev => [...prev, quizCards[quizIndex]]);
     }
     
-    setTimeout(() => {
+    if (orderAdvanceTimerRef.current !== null) {
+      window.clearTimeout(orderAdvanceTimerRef.current);
+    }
+    orderAdvanceTimerRef.current = window.setTimeout(() => {
+      orderAdvanceTimerRef.current = null;
       nextQuizCard();
     }, 2000);
   };
 
-  // Time Attack Timer
+  // Prevent a delayed word-order result from navigating after the learner has left that mode.
   useEffect(() => {
+    if (appMode !== 'order' && orderAdvanceTimerRef.current !== null) {
+      window.clearTimeout(orderAdvanceTimerRef.current);
+      orderAdvanceTimerRef.current = null;
+    }
+  }, [appMode]);
+
+  useEffect(() => () => {
+    if (orderAdvanceTimerRef.current !== null) {
+      window.clearTimeout(orderAdvanceTimerRef.current);
+    }
+  }, []);
+
+  // Time Attack Timer. Opening the explanation pauses the countdown/auto-advance.
+  useEffect(() => {
+    if (appMode === 'time' && isQuizCommentOpen) return;
     if (appMode === 'time' && timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft(prev => prev - 1), 1000);
       return () => clearTimeout(timer);
@@ -547,7 +568,7 @@ export default function App() {
         nextQuizCard();
       }
     }
-  }, [appMode, timeLeft, isFlipped, resultDisplayTime]);
+  }, [appMode, timeLeft, isFlipped, resultDisplayTime, isQuizCommentOpen]);
 
 
   // Top Screen (Course Selection)
@@ -1282,7 +1303,7 @@ export default function App() {
                       onClick={(e) => e.stopPropagation()}
                     >
                       <button
-                        onClick={() => setIsCommentOpen(!isCommentOpen)}
+                        onClick={(e) => { e.stopPropagation(); setIsCommentOpen(!isCommentOpen); }}
                         className="w-full flex items-center justify-between px-5 py-3.5 bg-purple-50/80 hover:bg-purple-100/80 text-purple-600 dark:bg-purple-950/40 dark:hover:bg-purple-900/50 dark:text-purple-400 rounded-xl md:rounded-2xl transition-all duration-200 text-sm md:text-base font-bold shadow-sm border border-purple-100/50 dark:border-purple-900/30 cursor-pointer"
                       >
                         <div className="flex items-center gap-2">
@@ -1334,7 +1355,7 @@ export default function App() {
                   <div className="w-full" onClick={(e) => e.stopPropagation()}>
                     {!showHint ? (
                       <button 
-                        onClick={() => setShowHint(true)}
+                        onClick={(e) => { e.stopPropagation(); setShowHint(true); }}
                         className="mx-auto flex items-center gap-2 px-5 py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:hover:bg-indigo-900/50 dark:text-indigo-400 rounded-xl md:rounded-2xl transition-colors text-sm md:text-base font-bold"
                       >
                         <Lightbulb size={18} />
@@ -1342,7 +1363,7 @@ export default function App() {
                       </button>
                     ) : (
                       <div 
-                        onClick={() => setShowHint(false)}
+                        onClick={(e) => { e.stopPropagation(); setShowHint(false); }}
                         className="w-full bg-slate-50 dark:bg-slate-900/30 rounded-2xl md:rounded-3xl p-4 md:p-6 text-left border border-slate-100 dark:border-slate-800/50 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-900/50 transition-colors"
                       >
                         <div className="flex items-start gap-2 md:gap-3 mb-3 md:mb-4 text-slate-600 dark:text-slate-400">
@@ -1455,7 +1476,7 @@ export default function App() {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <button
-                      onClick={() => setIsQuizCommentOpen(!isQuizCommentOpen)}
+                      onClick={(e) => { e.stopPropagation(); setIsQuizCommentOpen(!isQuizCommentOpen); }}
                       className="w-full flex items-center justify-between px-5 py-3.5 bg-purple-50/80 hover:bg-purple-100/80 text-purple-600 dark:bg-purple-950/40 dark:hover:bg-purple-900/50 dark:text-purple-400 rounded-xl md:rounded-2xl transition-all duration-200 text-sm md:text-base font-bold shadow-sm border border-purple-100/50 dark:border-purple-900/30 cursor-pointer"
                     >
                       <div className="flex items-center gap-2">
@@ -1509,7 +1530,7 @@ export default function App() {
           </button>
           <div className={`flex items-center gap-2 px-4 py-1.5 rounded-full font-black text-lg ${isFlipped ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400' : (timeLeft <= 3 ? 'bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400 animate-pulse' : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 shadow-sm border border-slate-200 dark:border-slate-700')}`}>
             <Timer size={20} />
-            <span>{isFlipped ? "答え確認中: " : ""}{timeLeft}秒</span>
+            <span>{isQuizCommentOpen ? '解説確認中（停止）' : `${isFlipped ? '答え確認中: ' : ''}${timeLeft}秒`}</span>
           </div>
           <div className="font-bold text-slate-500">{quizIndex + 1} / {quizCards.length}</div>
         </div>
@@ -1544,7 +1565,7 @@ export default function App() {
                   onClick={(e) => e.stopPropagation()}
                 >
                   <button
-                    onClick={() => setIsQuizCommentOpen(!isQuizCommentOpen)}
+                    onClick={(e) => { e.stopPropagation(); setIsQuizCommentOpen(!isQuizCommentOpen); }}
                     className="w-full flex items-center justify-between px-5 py-3.5 bg-purple-50/80 hover:bg-purple-100/80 text-purple-600 dark:bg-purple-950/40 dark:hover:bg-purple-900/50 dark:text-purple-400 rounded-xl md:rounded-2xl transition-all duration-200 text-sm md:text-base font-bold shadow-sm border border-purple-100/50 dark:border-purple-900/30 cursor-pointer"
                   >
                     <div className="flex items-center gap-2">
@@ -1659,7 +1680,7 @@ export default function App() {
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
-                  onClick={() => setIsQuizCommentOpen(!isQuizCommentOpen)}
+                  onClick={(e) => { e.stopPropagation(); setIsQuizCommentOpen(!isQuizCommentOpen); }}
                   className="w-full flex items-center justify-between px-5 py-3.5 bg-purple-50/80 hover:bg-purple-100/80 text-purple-600 dark:bg-purple-950/40 dark:hover:bg-purple-900/50 dark:text-purple-400 rounded-xl md:rounded-2xl transition-all duration-200 text-sm md:text-base font-bold shadow-sm border border-purple-100/50 dark:border-purple-900/30 cursor-pointer"
                 >
                   <div className="flex items-center gap-2">
