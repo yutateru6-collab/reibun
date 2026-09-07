@@ -15,11 +15,15 @@ once(
   'make yet review dynamic for basic and VQ review decks'
 );
 
-once(
-  "                    id: 'yet-deck',\n                    title: '「まだ」の復習デッキ',\n                    description: '「まだ」と評価した例文の集中復習',\n                    cards: decks.flatMap(d => d.cards).filter(c => yetList.includes(c.id))",
-  "                    id: 'vq-yet-deck',\n                    title: '「まだ」の復習デッキ',\n                    description: '「まだ」と評価した例文の集中復習',\n                    cards: decks.flatMap(d => d.cards).filter(c => yetList.includes(c.id))",
-  'keep VQ yet review navigation inside VQ'
-);
+const vqStart = s.indexOf("  if (appMode === 'vision_quest') {");
+const homeStart = s.indexOf("  if (appMode === 'home') {", vqStart);
+if (vqStart < 0 || homeStart < 0) throw new Error('VQ/Home screen boundaries not found');
+let vqBlock = s.slice(vqStart, homeStart);
+const vqOld = "                    id: 'yet-deck',\n                    title: '「まだ」の復習デッキ',\n                    description: '「まだ」と評価した例文の集中復習',\n                    cards: decks.flatMap(d => d.cards).filter(c => yetList.includes(c.id))";
+const vqNew = "                    id: 'vq-yet-deck',\n                    title: '「まだ」の復習デッキ',\n                    description: '「まだ」と評価した例文の集中復習',\n                    cards: decks.flatMap(d => d.cards).filter(c => yetList.includes(c.id))";
+if ((vqBlock.split(vqOld).length - 1) !== 1) throw new Error(`VQ yet deck: expected exactly 1 match inside VQ block`);
+vqBlock = vqBlock.replace(vqOld, vqNew);
+s = s.slice(0, vqStart) + vqBlock + s.slice(homeStart);
 
 once(
   '      <div className="w-full max-w-2xl flex flex-wrap justify-between items-center mb-6 md:mb-8 gap-3">\n        <div className="flex items-center gap-2 md:gap-3">',
