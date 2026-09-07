@@ -1,0 +1,67 @@
+name: Fix Hope Test source punctuation
+
+on:
+  push:
+    branches: [exam-2026-midterm-v1]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix-and-verify:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: exam-2026-midterm-v1
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Match Japanese Test wording to the six attached PDFs
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('src/data/hope_example_bank.ts')
+          text = path.read_text(encoding='utf-8')
+          marker = 'export const hopeTest1Cards: Card[] = ['
+          before, sep, tests = text.partition(marker)
+          if not sep:
+              raise SystemExit('Hope Test section marker not found')
+
+          # The attached Test PDFs print the Japanese glosses inside parentheses without a final Japanese full stop.
+          # Remove only that terminal punctuation from translation fields in the Hope Test section.
+          tests, count = re.subn(r'translation: "([^"]*)。"', r'translation: "\1"', tests)
+          if count != 54:
+              raise SystemExit(f'Expected 54 Hope Test translations to update, got {count}')
+
+          path.write_text(before + sep + tests, encoding='utf-8')
+          PY
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Validate attached-source fidelity
+        run: npx tsx scripts/validate-content.ts
+
+      - name: Type-check
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Commit verified source-fidelity repair
+        run: |
+          git checkout HEAD -- .github/workflows/fix-hope-test-punctuation.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/hope_example_bank.ts
+          git commit -m "fix: match Hope Test Japanese wording to attached PDFs"
+          git push origin HEAD:exam-2026-midterm-v1
