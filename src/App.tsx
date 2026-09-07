@@ -524,7 +524,11 @@ export default function App() {
           </div>
           
           <div className="mb-12 text-center w-full max-w-2xl px-4">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-6 px-10 sm:px-0">⚡️中間試験対策⚡️</h1>
+            <div className="flex items-center justify-center gap-2 sm:gap-3 mb-6 px-12 sm:px-0 whitespace-nowrap" aria-label="中間試験対策">
+              <span aria-hidden="true" className="text-2xl sm:text-3xl md:text-4xl">⚡️</span>
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">中間試験対策</h1>
+              <span aria-hidden="true" className="text-2xl sm:text-3xl md:text-4xl">⚡️</span>
+            </div>
             
             {/* ランダム励ましメッセージ機能 */}
             <div className="text-center py-6 px-4 bg-white/50 dark:bg-slate-800/40 rounded-[2rem] border border-slate-200/50 dark:border-slate-700/40 shadow-sm animate-fade-in backdrop-blur-md">
