@@ -1,0 +1,218 @@
+[
+  {
+    "viewport": "mobile390",
+    "state": "top",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 1,
+    "unnamedInteractive": 0,
+    "tinyText": 0,
+    "axeViolations": 2
+  },
+  {
+    "viewport": "mobile390",
+    "state": "basic-example-list",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 2,
+    "unnamedInteractive": 0,
+    "tinyText": 0,
+    "axeViolations": 2
+  },
+  {
+    "viewport": "mobile390",
+    "state": "basic-official-tests",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 2,
+    "unnamedInteractive": 0,
+    "tinyText": 0,
+    "axeViolations": 2
+  },
+  {
+    "viewport": "mobile390",
+    "state": "lesson1-mode-menu",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 2,
+    "unnamedInteractive": 2,
+    "tinyText": 6,
+    "axeViolations": 4
+  },
+  {
+    "viewport": "mobile390",
+    "state": "lesson1-card-front",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 7,
+    "unnamedInteractive": 3,
+    "tinyText": 6,
+    "axeViolations": 3
+  },
+  {
+    "viewport": "mobile390",
+    "state": "lesson1-card-back",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 8,
+    "unnamedInteractive": 3,
+    "tinyText": 6,
+    "axeViolations": 3
+  },
+  {
+    "viewport": "mobile390",
+    "state": "lesson1-mini-explanation-open",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 7,
+    "unnamedInteractive": 3,
+    "tinyText": 7,
+    "axeViolations": 3
+  },
+  {
+    "viewport": "mobile390",
+    "state": "vision-quest-list",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 2,
+    "unnamedInteractive": 0,
+    "tinyText": 1,
+    "axeViolations": 2
+  },
+  {
+    "viewport": "small320",
+    "state": "top",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 1,
+    "unnamedInteractive": 0,
+    "tinyText": 0,
+    "axeViolations": 2
+  },
+  {
+    "viewport": "small320",
+    "state": "basic-example-list",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 2,
+    "unnamedInteractive": 0,
+    "tinyText": 0,
+    "axeViolations": 2
+  },
+  {
+    "viewport": "small320",
+    "state": "basic-official-tests",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 2,
+    "unnamedInteractive": 0,
+    "tinyText": 0,
+    "axeViolations": 2
+  },
+  {
+    "viewport": "small320",
+    "state": "lesson1-mode-menu",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 2,
+    "unnamedInteractive": 2,
+    "tinyText": 6,
+    "axeViolations": 4
+  },
+  {
+    "viewport": "small320",
+    "state": "lesson1-card-front",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 5,
+    "unnamedInteractive": 3,
+    "tinyText": 6,
+    "axeViolations": 3
+  },
+  {
+    "viewport": "small320",
+    "state": "lesson1-card-back",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 6,
+    "unnamedInteractive": 3,
+    "tinyText": 6,
+    "axeViolations": 3
+  },
+  {
+    "viewport": "small320",
+    "state": "lesson1-mini-explanation-open",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 5,
+    "unnamedInteractive": 3,
+    "tinyText": 7,
+    "axeViolations": 3
+  },
+  {
+    "viewport": "small320",
+    "state": "vision-quest-list",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 2,
+    "unnamedInteractive": 0,
+    "tinyText": 1,
+    "axeViolations": 2
+  },
+  {
+    "viewport": "desktop1440",
+    "state": "top",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 0,
+    "unnamedInteractive": 0,
+    "tinyText": 0,
+    "axeViolations": 2
+  },
+  {
+    "viewport": "desktop1440",
+    "state": "basic-example-list",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 1,
+    "unnamedInteractive": 0,
+    "tinyText": 0,
+    "axeViolations": 2
+  },
+  {
+    "viewport": "desktop1440",
+    "state": "basic-official-tests",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 1,
+    "unnamedInteractive": 0,
+    "tinyText": 0,
+    "axeViolations": 2
+  },
+  {
+    "viewport": "desktop1440",
+    "state": "lesson1-mode-menu",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 1,
+    "unnamedInteractive": 2,
+    "tinyText": 6,
+    "axeViolations": 4
+  },
+  {
+    "viewport": "desktop1440",
+    "state": "lesson1-card-front",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 3,
+    "unnamedInteractive": 3,
+    "tinyText": 6,
+    "axeViolations": 3
+  },
+  {
+    "viewport": "desktop1440",
+    "state": "lesson1-card-back",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 3,
+    "unnamedInteractive": 3,
+    "tinyText": 6,
+    "axeViolations": 3
+  },
+  {
+    "viewport": "desktop1440",
+    "state": "lesson1-mini-explanation-open",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 3,
+    "unnamedInteractive": 3,
+    "tinyText": 7,
+    "axeViolations": 3
+  },
+  {
+    "viewport": "desktop1440",
+    "state": "vision-quest-list",
+    "horizontalOverflowPx": 0,
+    "smallTapTargets": 1,
+    "unnamedInteractive": 0,
+    "tinyText": 1,
+    "axeViolations": 2
+  }
+]

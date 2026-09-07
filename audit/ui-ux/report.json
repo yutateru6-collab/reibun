@@ -1,0 +1,3592 @@
+{
+  "generatedAt": "2026-09-07T14:20:30.438Z",
+  "publicUrl": "https://reibun.itisnowornever271.workers.dev",
+  "states": [
+    {
+      "viewportName": "mobile390",
+      "stateName": "top",
+      "screenshot": "mobile390-01-top.png",
+      "dom": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "document": {
+          "scrollWidth": 390,
+          "scrollHeight": 1079,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 3,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.p-2.md:p-3.bg-white",
+            "label": "テーマ切り替え",
+            "width": 38,
+            "height": 38,
+            "x": 336,
+            "y": 16
+          }
+        ],
+        "unnamedInteractive": [],
+        "tinyText": []
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 1,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".gap-2 > span:nth-child(2)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #009966, background color: #f4f7fa, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".text-xs.leading-relaxed.text-slate-500"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.43 (foreground color: #62748e, background color: #f4f7fa, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "mobile390",
+      "stateName": "basic-example-list",
+      "screenshot": "mobile390-02-basic-list.png",
+      "dom": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "document": {
+          "scrollWidth": 390,
+          "scrollHeight": 1732,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 16,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.shrink-0.p-2.bg-white",
+            "label": "トップへ戻る",
+            "width": 42,
+            "height": 42,
+            "x": 16,
+            "y": 33
+          },
+          {
+            "selector": "button.p-2.md:p-3.bg-white",
+            "label": "テーマ切り替え",
+            "width": 38,
+            "height": 38,
+            "x": 336,
+            "y": 35
+          }
+        ],
+        "unnamedInteractive": [],
+        "tinyText": []
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 0,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".hover\\:text-slate-700"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.19 (foreground color: #62748e, background color: #edf1f6, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".text-slate-400"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 1.62 (foreground color: #bac5d4, background color: #f4f7fa, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "mobile390",
+      "stateName": "basic-official-tests",
+      "screenshot": "mobile390-03-official-tests.png",
+      "dom": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "document": {
+          "scrollWidth": 390,
+          "scrollHeight": 1024,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 10,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.shrink-0.p-2.bg-white",
+            "label": "トップへ戻る",
+            "width": 42,
+            "height": 42,
+            "x": 16,
+            "y": 33
+          },
+          {
+            "selector": "button.p-2.md:p-3.bg-white",
+            "label": "テーマ切り替え",
+            "width": 38,
+            "height": 38,
+            "x": 336,
+            "y": 35
+          }
+        ],
+        "unnamedInteractive": [],
+        "tinyText": []
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 0,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".hover\\:text-slate-700"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.19 (foreground color: #62748e, background color: #edf1f6, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".text-slate-400"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 1.62 (foreground color: #bac5d4, background color: #f4f7fa, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "mobile390",
+      "stateName": "lesson1-mode-menu",
+      "screenshot": "mobile390-04-lesson1-menu.png",
+      "dom": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "document": {
+          "scrollWidth": 390,
+          "scrollHeight": 1606,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 9,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.p-2.bg-white.dark:bg-slate-800",
+            "label": "",
+            "width": 42,
+            "height": 42,
+            "x": 16,
+            "y": 37
+          },
+          {
+            "selector": "button.p-2.md:p-3.bg-white",
+            "label": "",
+            "width": 38,
+            "height": 38,
+            "x": 336,
+            "y": 39
+          }
+        ],
+        "unnamedInteractive": [
+          {
+            "selector": "button.p-2.bg-white.dark:bg-slate-800",
+            "label": "",
+            "width": 42,
+            "height": 42,
+            "x": 16,
+            "y": 37
+          },
+          {
+            "selector": "button.p-2.md:p-3.bg-white",
+            "label": "",
+            "width": 38,
+            "height": 38,
+            "x": 336,
+            "y": 39
+          }
+        ],
+        "tinyText": [
+          {
+            "selector": "span.text-[10px].font-extrabold.px-2",
+            "text": "基本学習・じっくり覚える",
+            "fontSize": 10,
+            "x": 127,
+            "y": 213
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.px-2",
+            "text": "インプット・英文から入る",
+            "fontSize": 10,
+            "x": 127,
+            "y": 453
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.px-2",
+            "text": "語順トレーニング・暗唱仕上げ",
+            "fontSize": 10,
+            "x": 117,
+            "y": 689
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.px-2",
+            "text": "実力判定・高速アウトプット",
+            "fontSize": 10,
+            "x": 122,
+            "y": 925
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.px-2",
+            "text": "瞬発力強化・自動オート再生",
+            "fontSize": 10,
+            "x": 122,
+            "y": 1161
+          },
+          {
+            "selector": "p.text-[10px].text-slate-400.dark:text-slate-500",
+            "text": "※ 画面に触らなくても、設定した秒数で自動的に「問題（表面）」➔「答え（裏面）」➔「次のカード」とテンポよく切り替わります。",
+            "fontSize": 10,
+            "x": 41,
+            "y": 1519
+          }
+        ]
+      },
+      "axe": {
+        "passes": 9,
+        "incomplete": 0,
+        "violations": [
+          {
+            "id": "button-name",
+            "impact": "critical",
+            "help": "Buttons must have discernible text",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/button-name?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".gap-4.items-center > .p-2.text-slate-600.dark\\:text-slate-300"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".md\\:p-3"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".bg-amber-50"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.08 (foreground color: #e17100, background color: #fffbeb, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".bg-emerald-50"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.46 (foreground color: #009966, background color: #ecfdf5, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".bg-rose-50"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.12 (foreground color: #ec003f, background color: #fff1f2, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".max-w-sm"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.75 (foreground color: #ffffff, background color: #ff2056, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".text-slate-400"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          },
+          {
+            "id": "select-name",
+            "impact": "critical",
+            "help": "Select element must have an accessible name",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/select-name?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".gap-1\\.5.flex-col:nth-child(1) > select"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".gap-1\\.5.flex-col:nth-child(2) > select"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "mobile390",
+      "stateName": "lesson1-card-front",
+      "screenshot": "mobile390-05-card-front.png",
+      "dom": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "document": {
+          "scrollWidth": 390,
+          "scrollHeight": 844,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 9,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.p-2.hover:bg-slate-200.dark:hover:bg-slate-800",
+            "label": "",
+            "width": 40,
+            "height": 40,
+            "x": 16,
+            "y": 29
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "ダーク",
+            "width": 46,
+            "height": 40,
+            "x": 173,
+            "y": 29
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "順序",
+            "width": 46,
+            "height": 40,
+            "x": 223,
+            "y": 29
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "表から",
+            "width": 46,
+            "height": 40,
+            "x": 273,
+            "y": 29
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "お気に入りカードのみを絞り込んで学習",
+            "width": 46,
+            "height": 40,
+            "x": 323,
+            "y": 29
+          },
+          {
+            "selector": "button.flex.items-center.gap-1",
+            "label": "このカードをお気に入りに登録・解除",
+            "width": 118,
+            "height": 29,
+            "x": 112,
+            "y": 98
+          },
+          {
+            "selector": "button.flex.items-center.gap-1",
+            "label": "このカードを「まだ」リストに登録・解除",
+            "width": 133,
+            "height": 29,
+            "x": 238,
+            "y": 98
+          }
+        ],
+        "unnamedInteractive": [
+          {
+            "selector": "button.p-2.hover:bg-slate-200.dark:hover:bg-slate-800",
+            "label": "",
+            "width": 40,
+            "height": 40,
+            "x": 16,
+            "y": 29
+          },
+          {
+            "selector": "button.p-4.md:p-5.bg-white",
+            "label": "",
+            "width": 58,
+            "height": 58,
+            "x": 129,
+            "y": 525
+          },
+          {
+            "selector": "button.p-4.md:p-5.bg-white",
+            "label": "",
+            "width": 58,
+            "height": 58,
+            "x": 203,
+            "y": 525
+          }
+        ],
+        "tinyText": [
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "ダーク",
+            "fontSize": 9,
+            "x": 183,
+            "y": 51
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "順序",
+            "fontSize": 9,
+            "x": 237,
+            "y": 51
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "表から",
+            "fontSize": 9,
+            "x": 283,
+            "y": 51
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "すべて",
+            "fontSize": 9,
+            "x": 333,
+            "y": 51
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.tracking-wider",
+            "text": "お気に入り登録",
+            "fontSize": 10,
+            "x": 143,
+            "y": 105
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.tracking-wider",
+            "text": "「まだ」リスト追加",
+            "fontSize": 10,
+            "x": 263,
+            "y": 105
+          }
+        ]
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 0,
+        "violations": [
+          {
+            "id": "button-name",
+            "impact": "critical",
+            "help": "Buttons must have discernible text",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/button-name?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".p-2"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".p-4.md\\:p-5.text-slate-700:nth-child(1)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".p-4.md\\:p-5.text-slate-700:nth-child(2)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".hover\\:text-slate-600 > .text-\\[10px\\].tracking-wider.font-extrabold"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".hover\\:text-rose-600 > .text-\\[10px\\].tracking-wider.font-extrabold"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "mobile390",
+      "stateName": "lesson1-card-back",
+      "screenshot": "mobile390-06-card-back.png",
+      "dom": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "document": {
+          "scrollWidth": 390,
+          "scrollHeight": 844,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 10,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.p-2.hover:bg-slate-200.dark:hover:bg-slate-800",
+            "label": "",
+            "width": 40,
+            "height": 40,
+            "x": 16,
+            "y": 29
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "ダーク",
+            "width": 46,
+            "height": 40,
+            "x": 173,
+            "y": 29
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "順序",
+            "width": 46,
+            "height": 40,
+            "x": 223,
+            "y": 29
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "表から",
+            "width": 46,
+            "height": 40,
+            "x": 273,
+            "y": 29
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "お気に入りカードのみを絞り込んで学習",
+            "width": 46,
+            "height": 40,
+            "x": 323,
+            "y": 29
+          },
+          {
+            "selector": "button.flex.items-center.gap-1",
+            "label": "このカードをお気に入りに登録・解除",
+            "width": 118,
+            "height": 29,
+            "x": 112,
+            "y": 98
+          },
+          {
+            "selector": "button.flex.items-center.gap-1",
+            "label": "このカードを「まだ」リストに登録・解除",
+            "width": 133,
+            "height": 29,
+            "x": 238,
+            "y": 98
+          },
+          {
+            "selector": "button.mx-auto.flex.items-center",
+            "label": "ヒント",
+            "width": 108,
+            "height": 40,
+            "x": 141,
+            "y": 418
+          }
+        ],
+        "unnamedInteractive": [
+          {
+            "selector": "button.p-2.hover:bg-slate-200.dark:hover:bg-slate-800",
+            "label": "",
+            "width": 40,
+            "height": 40,
+            "x": 16,
+            "y": 29
+          },
+          {
+            "selector": "button.p-4.md:p-5.bg-white",
+            "label": "",
+            "width": 58,
+            "height": 58,
+            "x": 129,
+            "y": 525
+          },
+          {
+            "selector": "button.p-4.md:p-5.bg-white",
+            "label": "",
+            "width": 58,
+            "height": 58,
+            "x": 203,
+            "y": 525
+          }
+        ],
+        "tinyText": [
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "ダーク",
+            "fontSize": 9,
+            "x": 183,
+            "y": 51
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "順序",
+            "fontSize": 9,
+            "x": 237,
+            "y": 51
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "表から",
+            "fontSize": 9,
+            "x": 283,
+            "y": 51
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "すべて",
+            "fontSize": 9,
+            "x": 333,
+            "y": 51
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.tracking-wider",
+            "text": "お気に入り登録",
+            "fontSize": 10,
+            "x": 143,
+            "y": 105
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.tracking-wider",
+            "text": "「まだ」リスト追加",
+            "fontSize": 10,
+            "x": 263,
+            "y": 105
+          }
+        ]
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 0,
+        "violations": [
+          {
+            "id": "button-name",
+            "impact": "critical",
+            "help": "Buttons must have discernible text",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/button-name?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".p-2"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".p-4.md\\:p-5.text-slate-700:nth-child(1)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".p-4.md\\:p-5.text-slate-700:nth-child(2)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".hover\\:text-slate-600 > .text-\\[10px\\].tracking-wider.font-extrabold"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".hover\\:text-rose-600 > .text-\\[10px\\].tracking-wider.font-extrabold"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".absolute"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.47 (foreground color: #00bc7d, background color: #ffffff, font size: 9.0pt (12px), font weight: bold). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "mobile390",
+      "stateName": "lesson1-mini-explanation-open",
+      "screenshot": "mobile390-07-mini-explanation.png",
+      "dom": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "document": {
+          "scrollWidth": 390,
+          "scrollHeight": 844,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 9,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.p-2.hover:bg-slate-200.dark:hover:bg-slate-800",
+            "label": "",
+            "width": 40,
+            "height": 40,
+            "x": 16,
+            "y": 29
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "ダーク",
+            "width": 46,
+            "height": 40,
+            "x": 173,
+            "y": 29
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "順序",
+            "width": 46,
+            "height": 40,
+            "x": 223,
+            "y": 29
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "表から",
+            "width": 46,
+            "height": 40,
+            "x": 273,
+            "y": 29
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "お気に入りカードのみを絞り込んで学習",
+            "width": 46,
+            "height": 40,
+            "x": 323,
+            "y": 29
+          },
+          {
+            "selector": "button.flex.items-center.gap-1",
+            "label": "このカードをお気に入りに登録・解除",
+            "width": 118,
+            "height": 29,
+            "x": 112,
+            "y": 98
+          },
+          {
+            "selector": "button.flex.items-center.gap-1",
+            "label": "このカードを「まだ」リストに登録・解除",
+            "width": 133,
+            "height": 29,
+            "x": 238,
+            "y": 98
+          }
+        ],
+        "unnamedInteractive": [
+          {
+            "selector": "button.p-2.hover:bg-slate-200.dark:hover:bg-slate-800",
+            "label": "",
+            "width": 40,
+            "height": 40,
+            "x": 16,
+            "y": 29
+          },
+          {
+            "selector": "button.p-4.md:p-5.bg-white",
+            "label": "",
+            "width": 58,
+            "height": 58,
+            "x": 129,
+            "y": 646
+          },
+          {
+            "selector": "button.p-4.md:p-5.bg-white",
+            "label": "",
+            "width": 58,
+            "height": 58,
+            "x": 203,
+            "y": 646
+          }
+        ],
+        "tinyText": [
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "ダーク",
+            "fontSize": 9,
+            "x": 183,
+            "y": 51
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "順序",
+            "fontSize": 9,
+            "x": 237,
+            "y": 51
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "表から",
+            "fontSize": 9,
+            "x": 283,
+            "y": 51
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "すべて",
+            "fontSize": 9,
+            "x": 333,
+            "y": 51
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.tracking-wider",
+            "text": "お気に入り登録",
+            "fontSize": 10,
+            "x": 143,
+            "y": 105
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.tracking-wider",
+            "text": "「まだ」リスト追加",
+            "fontSize": 10,
+            "x": 263,
+            "y": 105
+          },
+          {
+            "selector": "p.text-[10px].text-center.text-slate-300",
+            "text": "タップして閉じる",
+            "fontSize": 10,
+            "x": 58,
+            "y": 557
+          }
+        ]
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 0,
+        "violations": [
+          {
+            "id": "button-name",
+            "impact": "critical",
+            "help": "Buttons must have discernible text",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/button-name?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".p-2"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".md\\:p-5.text-slate-700.dark\\:text-slate-200:nth-child(1)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".md\\:p-5.text-slate-700.dark\\:text-slate-200:nth-child(2)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".hover\\:text-slate-600 > .text-\\[10px\\].tracking-wider.font-extrabold"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".hover\\:text-rose-600 > .text-\\[10px\\].tracking-wider.font-extrabold"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".absolute"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.47 (foreground color: #00bc7d, background color: #ffffff, font size: 9.0pt (12px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".text-slate-300"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 1.35 (foreground color: #cad5e2, background color: #f1f5f9, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "mobile390",
+      "stateName": "vision-quest-list",
+      "screenshot": "mobile390-08-vision-quest.png",
+      "dom": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "document": {
+          "scrollWidth": 390,
+          "scrollHeight": 1628,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 13,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.shrink-0.p-2.bg-white",
+            "label": "トップへ戻る",
+            "width": 42,
+            "height": 42,
+            "x": 16,
+            "y": 33
+          },
+          {
+            "selector": "button.p-2.md:p-3.bg-white",
+            "label": "テーマ切り替え",
+            "width": 38,
+            "height": 38,
+            "x": 336,
+            "y": 35
+          }
+        ],
+        "unnamedInteractive": [],
+        "tinyText": [
+          {
+            "selector": "span.inline-flex.mb-3.px-3",
+            "text": "今回の試験範囲",
+            "fontSize": 10,
+            "x": 41,
+            "y": 220
+          }
+        ]
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 1,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".hover\\:text-slate-700"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.19 (foreground color: #62748e, background color: #edf1f6, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "small320",
+      "stateName": "top",
+      "screenshot": "small320-01-top.png",
+      "dom": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "document": {
+          "scrollWidth": 320,
+          "scrollHeight": 1233,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 3,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.p-2.md:p-3.bg-white",
+            "label": "テーマ切り替え",
+            "width": 38,
+            "height": 38,
+            "x": 266,
+            "y": 16
+          }
+        ],
+        "unnamedInteractive": [],
+        "tinyText": []
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 1,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".gap-2 > span:nth-child(2)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #009966, background color: #f4f7fa, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".text-xs.leading-relaxed.text-slate-500"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.43 (foreground color: #62748e, background color: #f4f7fa, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "small320",
+      "stateName": "basic-example-list",
+      "screenshot": "small320-02-basic-list.png",
+      "dom": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "document": {
+          "scrollWidth": 320,
+          "scrollHeight": 1752,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 16,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.shrink-0.p-2.bg-white",
+            "label": "トップへ戻る",
+            "width": 42,
+            "height": 42,
+            "x": 16,
+            "y": 33
+          },
+          {
+            "selector": "button.p-2.md:p-3.bg-white",
+            "label": "テーマ切り替え",
+            "width": 38,
+            "height": 38,
+            "x": 266,
+            "y": 35
+          }
+        ],
+        "unnamedInteractive": [],
+        "tinyText": []
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 0,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".hover\\:text-slate-700"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.19 (foreground color: #62748e, background color: #edf1f6, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".text-slate-400"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 1.62 (foreground color: #bac5d4, background color: #f4f7fa, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "small320",
+      "stateName": "basic-official-tests",
+      "screenshot": "small320-03-official-tests.png",
+      "dom": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "document": {
+          "scrollWidth": 320,
+          "scrollHeight": 1044,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 10,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.shrink-0.p-2.bg-white",
+            "label": "トップへ戻る",
+            "width": 42,
+            "height": 42,
+            "x": 16,
+            "y": 33
+          },
+          {
+            "selector": "button.p-2.md:p-3.bg-white",
+            "label": "テーマ切り替え",
+            "width": 38,
+            "height": 38,
+            "x": 266,
+            "y": 35
+          }
+        ],
+        "unnamedInteractive": [],
+        "tinyText": []
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 0,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".hover\\:text-slate-700"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.19 (foreground color: #62748e, background color: #edf1f6, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".text-slate-400"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 1.62 (foreground color: #bac5d4, background color: #f4f7fa, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "small320",
+      "stateName": "lesson1-mode-menu",
+      "screenshot": "small320-04-lesson1-menu.png",
+      "dom": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "document": {
+          "scrollWidth": 320,
+          "scrollHeight": 1739,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 9,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.p-2.bg-white.dark:bg-slate-800",
+            "label": "",
+            "width": 42,
+            "height": 42,
+            "x": 16,
+            "y": 47
+          },
+          {
+            "selector": "button.p-2.md:p-3.bg-white",
+            "label": "",
+            "width": 38,
+            "height": 38,
+            "x": 266,
+            "y": 49
+          }
+        ],
+        "unnamedInteractive": [
+          {
+            "selector": "button.p-2.bg-white.dark:bg-slate-800",
+            "label": "",
+            "width": 42,
+            "height": 42,
+            "x": 16,
+            "y": 47
+          },
+          {
+            "selector": "button.p-2.md:p-3.bg-white",
+            "label": "",
+            "width": 38,
+            "height": 38,
+            "x": 266,
+            "y": 49
+          }
+        ],
+        "tinyText": [
+          {
+            "selector": "span.text-[10px].font-extrabold.px-2",
+            "text": "基本学習・じっくり覚える",
+            "fontSize": 10,
+            "x": 92,
+            "y": 233
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.px-2",
+            "text": "インプット・英文から入る",
+            "fontSize": 10,
+            "x": 92,
+            "y": 493
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.px-2",
+            "text": "語順トレーニング・暗唱仕上げ",
+            "fontSize": 10,
+            "x": 82,
+            "y": 748
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.px-2",
+            "text": "実力判定・高速アウトプット",
+            "fontSize": 10,
+            "x": 87,
+            "y": 1004
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.px-2",
+            "text": "瞬発力強化・自動オート再生",
+            "fontSize": 10,
+            "x": 87,
+            "y": 1259
+          },
+          {
+            "selector": "p.text-[10px].text-slate-400.dark:text-slate-500",
+            "text": "※ 画面に触らなくても、設定した秒数で自動的に「問題（表面）」➔「答え（裏面）」➔「次のカード」とテンポよく切り替わります。",
+            "fontSize": 10,
+            "x": 41,
+            "y": 1637
+          }
+        ]
+      },
+      "axe": {
+        "passes": 9,
+        "incomplete": 0,
+        "violations": [
+          {
+            "id": "button-name",
+            "impact": "critical",
+            "help": "Buttons must have discernible text",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/button-name?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".gap-4.items-center > .p-2.text-slate-600.dark\\:text-slate-300"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".md\\:p-3"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".bg-amber-50"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.08 (foreground color: #e17100, background color: #fffbeb, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".bg-emerald-50"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.46 (foreground color: #009966, background color: #ecfdf5, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".bg-rose-50"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.12 (foreground color: #ec003f, background color: #fff1f2, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".max-w-sm"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.75 (foreground color: #ffffff, background color: #ff2056, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".text-slate-400"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          },
+          {
+            "id": "select-name",
+            "impact": "critical",
+            "help": "Select element must have an accessible name",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/select-name?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".gap-1\\.5.flex-col:nth-child(1) > select"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".gap-1\\.5.flex-col:nth-child(2) > select"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "small320",
+      "stateName": "lesson1-card-front",
+      "screenshot": "small320-05-card-front.png",
+      "dom": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "document": {
+          "scrollWidth": 320,
+          "scrollHeight": 674,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 9,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.p-2.hover:bg-slate-200.dark:hover:bg-slate-800",
+            "label": "",
+            "width": 40,
+            "height": 40,
+            "x": 16,
+            "y": 24
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "ダーク",
+            "width": 46,
+            "height": 40,
+            "x": 21,
+            "y": 81
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "順序",
+            "width": 46,
+            "height": 40,
+            "x": 71,
+            "y": 81
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "表から",
+            "width": 46,
+            "height": 40,
+            "x": 121,
+            "y": 81
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "お気に入りカードのみを絞り込んで学習",
+            "width": 46,
+            "height": 40,
+            "x": 171,
+            "y": 81
+          }
+        ],
+        "unnamedInteractive": [
+          {
+            "selector": "button.p-2.hover:bg-slate-200.dark:hover:bg-slate-800",
+            "label": "",
+            "width": 40,
+            "height": 40,
+            "x": 16,
+            "y": 24
+          },
+          {
+            "selector": "button.p-4.md:p-5.bg-white",
+            "label": "",
+            "width": 58,
+            "height": 58,
+            "x": 94,
+            "y": 592
+          },
+          {
+            "selector": "button.p-4.md:p-5.bg-white",
+            "label": "",
+            "width": 58,
+            "height": 58,
+            "x": 168,
+            "y": 592
+          }
+        ],
+        "tinyText": [
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "ダーク",
+            "fontSize": 9,
+            "x": 31,
+            "y": 103
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "順序",
+            "fontSize": 9,
+            "x": 85,
+            "y": 103
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "表から",
+            "fontSize": 9,
+            "x": 131,
+            "y": 103
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "すべて",
+            "fontSize": 9,
+            "x": 181,
+            "y": 103
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.tracking-wider",
+            "text": "お気に入り登録",
+            "fontSize": 10,
+            "x": 97,
+            "y": 157
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.tracking-wider",
+            "text": "「まだ」リスト追加",
+            "fontSize": 10,
+            "x": 205,
+            "y": 157
+          }
+        ]
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 0,
+        "violations": [
+          {
+            "id": "button-name",
+            "impact": "critical",
+            "help": "Buttons must have discernible text",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/button-name?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".p-2"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".p-4.md\\:p-5.text-slate-700:nth-child(1)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".p-4.md\\:p-5.text-slate-700:nth-child(2)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".hover\\:text-slate-600 > .text-\\[10px\\].tracking-wider.font-extrabold"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".hover\\:text-rose-600 > .text-\\[10px\\].tracking-wider.font-extrabold"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "small320",
+      "stateName": "lesson1-card-back",
+      "screenshot": "small320-06-card-back.png",
+      "dom": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "document": {
+          "scrollWidth": 320,
+          "scrollHeight": 684,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 10,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.p-2.hover:bg-slate-200.dark:hover:bg-slate-800",
+            "label": "",
+            "width": 40,
+            "height": 40,
+            "x": 16,
+            "y": 24
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "ダーク",
+            "width": 46,
+            "height": 40,
+            "x": 21,
+            "y": 81
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "順序",
+            "width": 46,
+            "height": 40,
+            "x": 71,
+            "y": 81
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "表から",
+            "width": 46,
+            "height": 40,
+            "x": 121,
+            "y": 81
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "お気に入りカードのみを絞り込んで学習",
+            "width": 46,
+            "height": 40,
+            "x": 171,
+            "y": 81
+          },
+          {
+            "selector": "button.mx-auto.flex.items-center",
+            "label": "ヒント",
+            "width": 108,
+            "height": 40,
+            "x": 106,
+            "y": 505
+          }
+        ],
+        "unnamedInteractive": [
+          {
+            "selector": "button.p-2.hover:bg-slate-200.dark:hover:bg-slate-800",
+            "label": "",
+            "width": 40,
+            "height": 40,
+            "x": 16,
+            "y": 24
+          },
+          {
+            "selector": "button.p-4.md:p-5.bg-white",
+            "label": "",
+            "width": 58,
+            "height": 58,
+            "x": 94,
+            "y": 602
+          },
+          {
+            "selector": "button.p-4.md:p-5.bg-white",
+            "label": "",
+            "width": 58,
+            "height": 58,
+            "x": 168,
+            "y": 602
+          }
+        ],
+        "tinyText": [
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "ダーク",
+            "fontSize": 9,
+            "x": 31,
+            "y": 103
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "順序",
+            "fontSize": 9,
+            "x": 85,
+            "y": 103
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "表から",
+            "fontSize": 9,
+            "x": 131,
+            "y": 103
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "すべて",
+            "fontSize": 9,
+            "x": 181,
+            "y": 103
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.tracking-wider",
+            "text": "お気に入り登録",
+            "fontSize": 10,
+            "x": 97,
+            "y": 157
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.tracking-wider",
+            "text": "「まだ」リスト追加",
+            "fontSize": 10,
+            "x": 205,
+            "y": 157
+          }
+        ]
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 0,
+        "violations": [
+          {
+            "id": "button-name",
+            "impact": "critical",
+            "help": "Buttons must have discernible text",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/button-name?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".p-2"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".p-4.md\\:p-5.text-slate-700:nth-child(1)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".p-4.md\\:p-5.text-slate-700:nth-child(2)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".hover\\:text-slate-600 > .text-\\[10px\\].tracking-wider.font-extrabold"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".hover\\:text-rose-600 > .text-\\[10px\\].tracking-wider.font-extrabold"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".absolute"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.47 (foreground color: #00bc7d, background color: #ffffff, font size: 9.0pt (12px), font weight: bold). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "small320",
+      "stateName": "lesson1-mini-explanation-open",
+      "screenshot": "small320-07-mini-explanation.png",
+      "dom": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "document": {
+          "scrollWidth": 320,
+          "scrollHeight": 845,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 9,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.p-2.hover:bg-slate-200.dark:hover:bg-slate-800",
+            "label": "",
+            "width": 40,
+            "height": 40,
+            "x": 16,
+            "y": 24
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "ダーク",
+            "width": 46,
+            "height": 40,
+            "x": 21,
+            "y": 81
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "順序",
+            "width": 46,
+            "height": 40,
+            "x": 71,
+            "y": 81
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "表から",
+            "width": 46,
+            "height": 40,
+            "x": 121,
+            "y": 81
+          },
+          {
+            "selector": "button.p-1.md:p-1.5.rounded-xl",
+            "label": "お気に入りカードのみを絞り込んで学習",
+            "width": 46,
+            "height": 40,
+            "x": 171,
+            "y": 81
+          }
+        ],
+        "unnamedInteractive": [
+          {
+            "selector": "button.p-2.hover:bg-slate-200.dark:hover:bg-slate-800",
+            "label": "",
+            "width": 40,
+            "height": 40,
+            "x": 16,
+            "y": 24
+          },
+          {
+            "selector": "button.p-4.md:p-5.bg-white",
+            "label": "",
+            "width": 58,
+            "height": 58,
+            "x": 94,
+            "y": 763
+          },
+          {
+            "selector": "button.p-4.md:p-5.bg-white",
+            "label": "",
+            "width": 58,
+            "height": 58,
+            "x": 168,
+            "y": 763
+          }
+        ],
+        "tinyText": [
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "ダーク",
+            "fontSize": 9,
+            "x": 31,
+            "y": 103
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "順序",
+            "fontSize": 9,
+            "x": 85,
+            "y": 103
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "表から",
+            "fontSize": 9,
+            "x": 131,
+            "y": 103
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "すべて",
+            "fontSize": 9,
+            "x": 181,
+            "y": 103
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.tracking-wider",
+            "text": "お気に入り登録",
+            "fontSize": 10,
+            "x": 97,
+            "y": 157
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.tracking-wider",
+            "text": "「まだ」リスト追加",
+            "fontSize": 10,
+            "x": 205,
+            "y": 157
+          },
+          {
+            "selector": "p.text-[10px].text-center.text-slate-300",
+            "text": "タップして閉じる",
+            "fontSize": 10,
+            "x": 58,
+            "y": 674
+          }
+        ]
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 0,
+        "violations": [
+          {
+            "id": "button-name",
+            "impact": "critical",
+            "help": "Buttons must have discernible text",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/button-name?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".p-2"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".md\\:p-5.text-slate-700.dark\\:text-slate-200:nth-child(1)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".md\\:p-5.text-slate-700.dark\\:text-slate-200:nth-child(2)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".hover\\:text-slate-600 > .text-\\[10px\\].tracking-wider.font-extrabold"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".hover\\:text-rose-600 > .text-\\[10px\\].tracking-wider.font-extrabold"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".absolute"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.47 (foreground color: #00bc7d, background color: #ffffff, font size: 9.0pt (12px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".text-slate-300"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 1.35 (foreground color: #cad5e2, background color: #f1f5f9, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "small320",
+      "stateName": "vision-quest-list",
+      "screenshot": "small320-08-vision-quest.png",
+      "dom": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "document": {
+          "scrollWidth": 320,
+          "scrollHeight": 1628,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 13,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.shrink-0.p-2.bg-white",
+            "label": "トップへ戻る",
+            "width": 42,
+            "height": 42,
+            "x": 16,
+            "y": 33
+          },
+          {
+            "selector": "button.p-2.md:p-3.bg-white",
+            "label": "テーマ切り替え",
+            "width": 38,
+            "height": 38,
+            "x": 266,
+            "y": 35
+          }
+        ],
+        "unnamedInteractive": [],
+        "tinyText": [
+          {
+            "selector": "span.inline-flex.mb-3.px-3",
+            "text": "今回の試験範囲",
+            "fontSize": 10,
+            "x": 41,
+            "y": 216
+          }
+        ]
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 1,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".hover\\:text-slate-700"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.19 (foreground color: #62748e, background color: #edf1f6, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "desktop1440",
+      "stateName": "top",
+      "screenshot": "desktop1440-01-top.png",
+      "dom": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "document": {
+          "scrollWidth": 1440,
+          "scrollHeight": 1000,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 3,
+        "overflow": [],
+        "smallTapTargets": [],
+        "unnamedInteractive": [],
+        "tinyText": []
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 1,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".gap-2 > span:nth-child(2)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.39 (foreground color: #009966, background color: #f4f7fa, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".text-xs.leading-relaxed.text-slate-500"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.43 (foreground color: #62748e, background color: #f4f7fa, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "desktop1440",
+      "stateName": "basic-example-list",
+      "screenshot": "desktop1440-02-basic-list.png",
+      "dom": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "document": {
+          "scrollWidth": 1440,
+          "scrollHeight": 1276,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 16,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.shrink-0.p-2.bg-white",
+            "label": "トップへ戻る",
+            "width": 42,
+            "height": 42,
+            "x": 272,
+            "y": 55
+          }
+        ],
+        "unnamedInteractive": [],
+        "tinyText": []
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 0,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".hover\\:text-slate-700"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.19 (foreground color: #62748e, background color: #edf1f6, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".text-slate-400"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 1.62 (foreground color: #bac5d4, background color: #f4f7fa, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "desktop1440",
+      "stateName": "basic-official-tests",
+      "screenshot": "desktop1440-03-official-tests.png",
+      "dom": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "document": {
+          "scrollWidth": 1440,
+          "scrollHeight": 1000,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 10,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.shrink-0.p-2.bg-white",
+            "label": "トップへ戻る",
+            "width": 42,
+            "height": 42,
+            "x": 272,
+            "y": 55
+          }
+        ],
+        "unnamedInteractive": [],
+        "tinyText": []
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 0,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".hover\\:text-slate-700"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.19 (foreground color: #62748e, background color: #edf1f6, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".text-slate-400"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 1.62 (foreground color: #bac5d4, background color: #f4f7fa, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "desktop1440",
+      "stateName": "lesson1-mode-menu",
+      "screenshot": "desktop1440-04-lesson1-menu.png",
+      "dom": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "document": {
+          "scrollWidth": 1440,
+          "scrollHeight": 1091,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 9,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.p-2.bg-white.dark:bg-slate-800",
+            "label": "",
+            "width": 42,
+            "height": 42,
+            "x": 384,
+            "y": 55
+          }
+        ],
+        "unnamedInteractive": [
+          {
+            "selector": "button.p-2.bg-white.dark:bg-slate-800",
+            "label": "",
+            "width": 42,
+            "height": 42,
+            "x": 384,
+            "y": 55
+          },
+          {
+            "selector": "button.p-2.md:p-3.bg-white",
+            "label": "",
+            "width": 46,
+            "height": 46,
+            "x": 1010,
+            "y": 53
+          }
+        ],
+        "tinyText": [
+          {
+            "selector": "span.text-[10px].font-extrabold.px-2",
+            "text": "基本学習・じっくり覚える",
+            "fontSize": 10,
+            "x": 480,
+            "y": 233
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.px-2",
+            "text": "インプット・英文から入る",
+            "fontSize": 10,
+            "x": 824,
+            "y": 247
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.px-2",
+            "text": "語順トレーニング・暗唱仕上げ",
+            "fontSize": 10,
+            "x": 470,
+            "y": 493
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.px-2",
+            "text": "実力判定・高速アウトプット",
+            "fontSize": 10,
+            "x": 819,
+            "y": 493
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.px-2",
+            "text": "瞬発力強化・自動オート再生",
+            "fontSize": 10,
+            "x": 647,
+            "y": 729
+          },
+          {
+            "selector": "p.text-[10px].text-slate-400.dark:text-slate-500",
+            "text": "※ 画面に触らなくても、設定した秒数で自動的に「問題（表面）」➔「答え（裏面）」➔「次のカード」とテンポよく切り替わります。",
+            "fontSize": 10,
+            "x": 415,
+            "y": 1003
+          }
+        ]
+      },
+      "axe": {
+        "passes": 9,
+        "incomplete": 0,
+        "violations": [
+          {
+            "id": "button-name",
+            "impact": "critical",
+            "help": "Buttons must have discernible text",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/button-name?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".gap-4.items-center > .p-2.text-slate-600.dark\\:text-slate-300"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".md\\:p-3"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".bg-amber-50"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.08 (foreground color: #e17100, background color: #fffbeb, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".bg-emerald-50"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.46 (foreground color: #009966, background color: #ecfdf5, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".bg-rose-50"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.12 (foreground color: #ec003f, background color: #fff1f2, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".max-w-sm"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.75 (foreground color: #ffffff, background color: #ff2056, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".text-slate-400"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          },
+          {
+            "id": "select-name",
+            "impact": "critical",
+            "help": "Select element must have an accessible name",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/select-name?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".gap-1\\.5.flex-col:nth-child(1) > select"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".gap-1\\.5.flex-col:nth-child(2) > select"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "desktop1440",
+      "stateName": "lesson1-card-front",
+      "screenshot": "desktop1440-05-card-front.png",
+      "dom": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "document": {
+          "scrollWidth": 1440,
+          "scrollHeight": 1000,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 9,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.p-2.hover:bg-slate-200.dark:hover:bg-slate-800",
+            "label": "",
+            "width": 40,
+            "height": 40,
+            "x": 384,
+            "y": 39
+          },
+          {
+            "selector": "button.flex.items-center.gap-1",
+            "label": "このカードをお気に入りに登録・解除",
+            "width": 118,
+            "height": 29,
+            "x": 790,
+            "y": 118
+          },
+          {
+            "selector": "button.flex.items-center.gap-1",
+            "label": "このカードを「まだ」リストに登録・解除",
+            "width": 133,
+            "height": 29,
+            "x": 916,
+            "y": 118
+          }
+        ],
+        "unnamedInteractive": [
+          {
+            "selector": "button.p-2.hover:bg-slate-200.dark:hover:bg-slate-800",
+            "label": "",
+            "width": 40,
+            "height": 40,
+            "x": 384,
+            "y": 39
+          },
+          {
+            "selector": "button.p-4.md:p-5.bg-white",
+            "label": "",
+            "width": 66,
+            "height": 66,
+            "x": 642,
+            "y": 654
+          },
+          {
+            "selector": "button.p-4.md:p-5.bg-white",
+            "label": "",
+            "width": 66,
+            "height": 66,
+            "x": 732,
+            "y": 654
+          }
+        ],
+        "tinyText": [
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "ダーク",
+            "fontSize": 9,
+            "x": 838,
+            "y": 61
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "順序",
+            "fontSize": 9,
+            "x": 900,
+            "y": 61
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "表から",
+            "fontSize": 9,
+            "x": 954,
+            "y": 61
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "すべて",
+            "fontSize": 9,
+            "x": 1012,
+            "y": 61
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.tracking-wider",
+            "text": "お気に入り登録",
+            "fontSize": 10,
+            "x": 821,
+            "y": 125
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.tracking-wider",
+            "text": "「まだ」リスト追加",
+            "fontSize": 10,
+            "x": 941,
+            "y": 125
+          }
+        ]
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 0,
+        "violations": [
+          {
+            "id": "button-name",
+            "impact": "critical",
+            "help": "Buttons must have discernible text",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/button-name?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".p-2"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".p-4.md\\:p-5.text-slate-700:nth-child(1)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".p-4.md\\:p-5.text-slate-700:nth-child(2)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".hover\\:text-slate-600 > .text-\\[10px\\].tracking-wider.font-extrabold"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".hover\\:text-rose-600 > .text-\\[10px\\].tracking-wider.font-extrabold"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "desktop1440",
+      "stateName": "lesson1-card-back",
+      "screenshot": "desktop1440-06-card-back.png",
+      "dom": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "document": {
+          "scrollWidth": 1440,
+          "scrollHeight": 1000,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 10,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.p-2.hover:bg-slate-200.dark:hover:bg-slate-800",
+            "label": "",
+            "width": 40,
+            "height": 40,
+            "x": 384,
+            "y": 39
+          },
+          {
+            "selector": "button.flex.items-center.gap-1",
+            "label": "このカードをお気に入りに登録・解除",
+            "width": 118,
+            "height": 29,
+            "x": 790,
+            "y": 118
+          },
+          {
+            "selector": "button.flex.items-center.gap-1",
+            "label": "このカードを「まだ」リストに登録・解除",
+            "width": 133,
+            "height": 29,
+            "x": 916,
+            "y": 118
+          }
+        ],
+        "unnamedInteractive": [
+          {
+            "selector": "button.p-2.hover:bg-slate-200.dark:hover:bg-slate-800",
+            "label": "",
+            "width": 40,
+            "height": 40,
+            "x": 384,
+            "y": 39
+          },
+          {
+            "selector": "button.p-4.md:p-5.bg-white",
+            "label": "",
+            "width": 66,
+            "height": 66,
+            "x": 642,
+            "y": 654
+          },
+          {
+            "selector": "button.p-4.md:p-5.bg-white",
+            "label": "",
+            "width": 66,
+            "height": 66,
+            "x": 732,
+            "y": 654
+          }
+        ],
+        "tinyText": [
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "ダーク",
+            "fontSize": 9,
+            "x": 838,
+            "y": 61
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "順序",
+            "fontSize": 9,
+            "x": 900,
+            "y": 61
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "表から",
+            "fontSize": 9,
+            "x": 954,
+            "y": 61
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "すべて",
+            "fontSize": 9,
+            "x": 1012,
+            "y": 61
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.tracking-wider",
+            "text": "お気に入り登録",
+            "fontSize": 10,
+            "x": 821,
+            "y": 125
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.tracking-wider",
+            "text": "「まだ」リスト追加",
+            "fontSize": 10,
+            "x": 941,
+            "y": 125
+          }
+        ]
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 0,
+        "violations": [
+          {
+            "id": "button-name",
+            "impact": "critical",
+            "help": "Buttons must have discernible text",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/button-name?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".p-2"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".p-4.md\\:p-5.text-slate-700:nth-child(1)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".p-4.md\\:p-5.text-slate-700:nth-child(2)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".hover\\:text-slate-600 > .text-\\[10px\\].tracking-wider.font-extrabold"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".hover\\:text-rose-600 > .text-\\[10px\\].tracking-wider.font-extrabold"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".absolute"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.47 (foreground color: #00bc7d, background color: #ffffff, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "desktop1440",
+      "stateName": "lesson1-mini-explanation-open",
+      "screenshot": "desktop1440-07-mini-explanation.png",
+      "dom": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "document": {
+          "scrollWidth": 1440,
+          "scrollHeight": 1000,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 9,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.p-2.hover:bg-slate-200.dark:hover:bg-slate-800",
+            "label": "",
+            "width": 40,
+            "height": 40,
+            "x": 384,
+            "y": 39
+          },
+          {
+            "selector": "button.flex.items-center.gap-1",
+            "label": "このカードをお気に入りに登録・解除",
+            "width": 118,
+            "height": 29,
+            "x": 790,
+            "y": 118
+          },
+          {
+            "selector": "button.flex.items-center.gap-1",
+            "label": "このカードを「まだ」リストに登録・解除",
+            "width": 133,
+            "height": 29,
+            "x": 916,
+            "y": 118
+          }
+        ],
+        "unnamedInteractive": [
+          {
+            "selector": "button.p-2.hover:bg-slate-200.dark:hover:bg-slate-800",
+            "label": "",
+            "width": 40,
+            "height": 40,
+            "x": 384,
+            "y": 39
+          },
+          {
+            "selector": "button.p-4.md:p-5.bg-white",
+            "label": "",
+            "width": 66,
+            "height": 66,
+            "x": 642,
+            "y": 775
+          },
+          {
+            "selector": "button.p-4.md:p-5.bg-white",
+            "label": "",
+            "width": 66,
+            "height": 66,
+            "x": 732,
+            "y": 775
+          }
+        ],
+        "tinyText": [
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "ダーク",
+            "fontSize": 9,
+            "x": 838,
+            "y": 61
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "順序",
+            "fontSize": 9,
+            "x": 900,
+            "y": 61
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "表から",
+            "fontSize": 9,
+            "x": 954,
+            "y": 61
+          },
+          {
+            "selector": "span.text-[9px].font-extrabold.mt-0.5",
+            "text": "すべて",
+            "fontSize": 9,
+            "x": 1012,
+            "y": 61
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.tracking-wider",
+            "text": "お気に入り登録",
+            "fontSize": 10,
+            "x": 821,
+            "y": 125
+          },
+          {
+            "selector": "span.text-[10px].font-extrabold.tracking-wider",
+            "text": "「まだ」リスト追加",
+            "fontSize": 10,
+            "x": 941,
+            "y": 125
+          },
+          {
+            "selector": "p.text-[10px].text-center.text-slate-300",
+            "text": "タップして閉じる",
+            "fontSize": 10,
+            "x": 458,
+            "y": 646
+          }
+        ]
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 1,
+        "violations": [
+          {
+            "id": "button-name",
+            "impact": "critical",
+            "help": "Buttons must have discernible text",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/button-name?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".p-2"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".md\\:p-5.text-slate-700.dark\\:text-slate-200:nth-child(1)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              },
+              {
+                "target": [
+                  ".md\\:p-5.text-slate-700.dark\\:text-slate-200:nth-child(2)"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\""
+              }
+            ]
+          },
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".hover\\:text-slate-600 > .text-\\[10px\\].tracking-wider.font-extrabold"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".hover\\:text-rose-600 > .text-\\[10px\\].tracking-wider.font-extrabold"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.63 (foreground color: #90a1b9, background color: #ffffff, font size: 7.5pt (10px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".absolute"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.47 (foreground color: #00bc7d, background color: #ffffff, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+              },
+              {
+                "target": [
+                  ".text-slate-300"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 1.35 (foreground color: #cad5e2, background color: #f1f5f9, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "viewportName": "desktop1440",
+      "stateName": "vision-quest-list",
+      "screenshot": "desktop1440-08-vision-quest.png",
+      "dom": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "document": {
+          "scrollWidth": 1440,
+          "scrollHeight": 1242,
+          "horizontalOverflowPx": 0,
+          "bodyFontFamily": "Nunito, \"M PLUS Rounded 1c\", ui-sans-serif, system-ui, sans-serif",
+          "bodyFontSize": "16px"
+        },
+        "interactiveCount": 13,
+        "overflow": [],
+        "smallTapTargets": [
+          {
+            "selector": "button.shrink-0.p-2.bg-white",
+            "label": "トップへ戻る",
+            "width": 42,
+            "height": 42,
+            "x": 272,
+            "y": 55
+          }
+        ],
+        "unnamedInteractive": [],
+        "tinyText": [
+          {
+            "selector": "span.inline-flex.mb-3.px-3",
+            "text": "今回の試験範囲",
+            "fontSize": 10,
+            "x": 305,
+            "y": 272
+          }
+        ]
+      },
+      "axe": {
+        "passes": 8,
+        "incomplete": 1,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/color-contrast?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  ".hover\\:text-slate-700"
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.19 (foreground color: #62748e, background color: #edf1f6, font size: 10.5pt (14px), font weight: bold). Expected contrast ratio of 4.5:1"
+              }
+            ]
+          },
+          {
+            "id": "meta-viewport",
+            "impact": "moderate",
+            "help": "Zooming and scaling must not be disabled",
+            "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/meta-viewport?application=playwright",
+            "nodes": [
+              {
+                "target": [
+                  "meta[name=\"viewport\"]"
+                ],
+                "failureSummary": "Fix any of the following:\n  user-scalable=no on <meta> tag disables zooming on mobile devices"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "summary": [
+    {
+      "viewport": "mobile390",
+      "state": "top",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 1,
+      "unnamedInteractive": 0,
+      "tinyText": 0,
+      "axeViolations": 2
+    },
+    {
+      "viewport": "mobile390",
+      "state": "basic-example-list",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 2,
+      "unnamedInteractive": 0,
+      "tinyText": 0,
+      "axeViolations": 2
+    },
+    {
+      "viewport": "mobile390",
+      "state": "basic-official-tests",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 2,
+      "unnamedInteractive": 0,
+      "tinyText": 0,
+      "axeViolations": 2
+    },
+    {
+      "viewport": "mobile390",
+      "state": "lesson1-mode-menu",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 2,
+      "unnamedInteractive": 2,
+      "tinyText": 6,
+      "axeViolations": 4
+    },
+    {
+      "viewport": "mobile390",
+      "state": "lesson1-card-front",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 7,
+      "unnamedInteractive": 3,
+      "tinyText": 6,
+      "axeViolations": 3
+    },
+    {
+      "viewport": "mobile390",
+      "state": "lesson1-card-back",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 8,
+      "unnamedInteractive": 3,
+      "tinyText": 6,
+      "axeViolations": 3
+    },
+    {
+      "viewport": "mobile390",
+      "state": "lesson1-mini-explanation-open",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 7,
+      "unnamedInteractive": 3,
+      "tinyText": 7,
+      "axeViolations": 3
+    },
+    {
+      "viewport": "mobile390",
+      "state": "vision-quest-list",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 2,
+      "unnamedInteractive": 0,
+      "tinyText": 1,
+      "axeViolations": 2
+    },
+    {
+      "viewport": "small320",
+      "state": "top",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 1,
+      "unnamedInteractive": 0,
+      "tinyText": 0,
+      "axeViolations": 2
+    },
+    {
+      "viewport": "small320",
+      "state": "basic-example-list",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 2,
+      "unnamedInteractive": 0,
+      "tinyText": 0,
+      "axeViolations": 2
+    },
+    {
+      "viewport": "small320",
+      "state": "basic-official-tests",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 2,
+      "unnamedInteractive": 0,
+      "tinyText": 0,
+      "axeViolations": 2
+    },
+    {
+      "viewport": "small320",
+      "state": "lesson1-mode-menu",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 2,
+      "unnamedInteractive": 2,
+      "tinyText": 6,
+      "axeViolations": 4
+    },
+    {
+      "viewport": "small320",
+      "state": "lesson1-card-front",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 5,
+      "unnamedInteractive": 3,
+      "tinyText": 6,
+      "axeViolations": 3
+    },
+    {
+      "viewport": "small320",
+      "state": "lesson1-card-back",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 6,
+      "unnamedInteractive": 3,
+      "tinyText": 6,
+      "axeViolations": 3
+    },
+    {
+      "viewport": "small320",
+      "state": "lesson1-mini-explanation-open",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 5,
+      "unnamedInteractive": 3,
+      "tinyText": 7,
+      "axeViolations": 3
+    },
+    {
+      "viewport": "small320",
+      "state": "vision-quest-list",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 2,
+      "unnamedInteractive": 0,
+      "tinyText": 1,
+      "axeViolations": 2
+    },
+    {
+      "viewport": "desktop1440",
+      "state": "top",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 0,
+      "unnamedInteractive": 0,
+      "tinyText": 0,
+      "axeViolations": 2
+    },
+    {
+      "viewport": "desktop1440",
+      "state": "basic-example-list",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 1,
+      "unnamedInteractive": 0,
+      "tinyText": 0,
+      "axeViolations": 2
+    },
+    {
+      "viewport": "desktop1440",
+      "state": "basic-official-tests",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 1,
+      "unnamedInteractive": 0,
+      "tinyText": 0,
+      "axeViolations": 2
+    },
+    {
+      "viewport": "desktop1440",
+      "state": "lesson1-mode-menu",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 1,
+      "unnamedInteractive": 2,
+      "tinyText": 6,
+      "axeViolations": 4
+    },
+    {
+      "viewport": "desktop1440",
+      "state": "lesson1-card-front",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 3,
+      "unnamedInteractive": 3,
+      "tinyText": 6,
+      "axeViolations": 3
+    },
+    {
+      "viewport": "desktop1440",
+      "state": "lesson1-card-back",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 3,
+      "unnamedInteractive": 3,
+      "tinyText": 6,
+      "axeViolations": 3
+    },
+    {
+      "viewport": "desktop1440",
+      "state": "lesson1-mini-explanation-open",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 3,
+      "unnamedInteractive": 3,
+      "tinyText": 7,
+      "axeViolations": 3
+    },
+    {
+      "viewport": "desktop1440",
+      "state": "vision-quest-list",
+      "horizontalOverflowPx": 0,
+      "smallTapTargets": 1,
+      "unnamedInteractive": 0,
+      "tinyText": 1,
+      "axeViolations": 2
+    }
+  ]
+}
