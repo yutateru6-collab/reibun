@@ -295,6 +295,49 @@ export default function App() {
     setIsQuizCommentOpen(false);
   }, [quizIndex, isFlipped, appMode]);
 
+  // Keep long-lived mobile/in-app browser tabs in sync with the latest deployed Vite bundle.
+  useEffect(() => {
+    let checking = false;
+
+    const checkForFreshBundle = async () => {
+      if (checking || document.visibilityState === 'hidden') return;
+      checking = true;
+      try {
+        const response = await fetch(`/?__ui_check=${Date.now()}`, { cache: 'no-store' });
+        if (!response.ok) return;
+        const html = await response.text();
+        const latestMatch = html.match(/<script[^>]+src=["']([^"']+\.js)["']/i);
+        const currentScript = document.querySelector<HTMLScriptElement>('script[type="module"][src]')?.getAttribute('src');
+        const latestScript = latestMatch?.[1];
+
+        if (latestScript && currentScript && latestScript !== currentScript) {
+          const freshUrl = new URL(window.location.href);
+          freshUrl.searchParams.set('__ui_v', latestScript);
+          window.location.replace(freshUrl.toString());
+        }
+      } catch (error) {
+        console.warn('UI freshness check failed', error);
+      } finally {
+        checking = false;
+      }
+    };
+
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') void checkForFreshBundle();
+    };
+
+    window.addEventListener('focus', checkForFreshBundle);
+    document.addEventListener('visibilitychange', handleVisibility);
+    const timer = window.setInterval(checkForFreshBundle, 60_000);
+    void checkForFreshBundle();
+
+    return () => {
+      window.removeEventListener('focus', checkForFreshBundle);
+      document.removeEventListener('visibilitychange', handleVisibility);
+      window.clearInterval(timer);
+    };
+  }, []);
+
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
