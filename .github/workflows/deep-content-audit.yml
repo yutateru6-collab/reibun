@@ -1,0 +1,44 @@
+name: Deep content audit
+
+on:
+  push:
+    branches: [main, exam-2026-midterm-qa]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Validate all source-derived content
+        run: npx tsx scripts/validate-content.ts
+
+      - name: Independently hash-check all 66 visible VQ exercises
+        run: npx tsx scripts/validate-vq-exercises.ts
+
+      - name: Type-check
+        run: npm run lint
+
+      - name: Production build
+        run: npm run build
+
+      - name: Verify build output
+        run: test -f dist/index.html
+
+      - name: Validate Cloudflare bundle
+        run: npx wrangler deploy --dry-run --outdir .wrangler-dryrun
