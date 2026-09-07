@@ -1,1 +1,0 @@
-Visual validation trigger after responsive title correction. The normal Hope card-face change remains intentionally on hold.
