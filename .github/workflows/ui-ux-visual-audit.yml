@@ -42,6 +42,13 @@ jobs:
       - name: Show audit summary
         run: cat audit/ui-ux/summary.json
 
+      - name: Upload UI UX audit evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-ux-audit-evidence
+          path: audit/ui-ux
+          retention-days: 7
+
       - name: Commit audit evidence to audit branch
         run: |
           set -euo pipefail
