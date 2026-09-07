@@ -23,12 +23,28 @@ function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
 }
 
+const sha256 = (value: string) => createHash('sha256').update(value, 'utf8').digest('hex');
 const normalizeSourceText = (value: string) => value.replace(/\s+/g, ' ').trim();
-const hashHopeLesson = (cards: { front: string; translation: string }[]) => {
+const hashBilingualCards = (cards: { front: string; translation: string }[]) => {
   const canonical = cards
     .map((card) => `${normalizeSourceText(card.front)}\0${normalizeSourceText(card.translation)}`)
     .join('\n');
-  return createHash('sha256').update(canonical, 'utf8').digest('hex');
+  return sha256(canonical);
+};
+
+const normalizeHopeTestFront = (value: string) =>
+  value
+    .replace(/\(\s*\)/g, '()')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\s+([.,?!])/g, '$1')
+    .replace(/\)\s+\(/g, ')(');
+const normalizeJapaneseNoWhitespace = (value: string) => value.replace(/\s+/g, '');
+const hashHopeTest = (cards: { front: string; translation: string }[]) => {
+  const canonical = cards
+    .map((card) => `${normalizeHopeTestFront(card.front)}\0${normalizeJapaneseNoWhitespace(card.translation)}`)
+    .join('\n');
+  return sha256(canonical);
 };
 
 const expectedHopeLessonCounts = [9, 8, 10, 11, 9, 7, 9, 9, 10, 9, 10, 9];
@@ -51,13 +67,31 @@ const expectedHopeLessonHashes = [
   'bcac43624d391ace04f811278307a25e9e3bf2732fc527ae6ef09e88127f63d4',
 ];
 
+// Calculated from the six attached Hope Test PDFs. Blank widths and whitespace are normalized,
+// but the printed wording, blank count and Japanese wording remain source-controlled.
+const expectedHopeTestHashes = [
+  '25fea2db8730b3d6cf6bd777b34fcb6931dd698b807dd7550a28abe0b0fbf237',
+  '39f3aa3559a001f6a7809658a8875fff0ad8416d5697b50b9829e1ee1484c87f',
+  '88a636c22fa6e3e06c26db06880f46483d481b3ef171966d3c8c5ad7ba5a50c7',
+  '7ae7ad5f86d49f99af1235aea1c6be90293ecbed8f56e8fa1cc61fea33de58eb',
+  'afb744c1a4ea09783483635f294d463baf780e0c67ab26fe24f5dba247854c28',
+  '83fc38d8542207061cdb39ef88d396c49c8847bca8edae416a2bf62018a2dbab',
+];
+
+// Calculated from numbered basic examples 42-86 in the attached Vision Quest source text.
+const expectedVqCoreHashes = [
+  '95437600c9eaa9dd7206237592e5eb855ef1d4297195afb71835ca3a4754af75',
+  '3a992dbdfb763799a3e49c626bc3e730975b2a2853f7a0a9c78205958219010b',
+  '6b04179b5ef6624dd9c40b7960e6f95b751d82acbbccac527f72d51430e28cd3',
+];
+
 assert(CONTENT_VERSION === '2026-midterm-v1', 'Unexpected content version.');
 assert(basicExampleDecks.length === 12, `Hope lesson deck count: ${basicExampleDecks.length}`);
 assert(basicTestDecks.length === 6, `Hope official test deck count: ${basicTestDecks.length}`);
 
 basicExampleDecks.forEach((deck, index) => {
   assert(deck.cards.length === expectedHopeLessonCounts[index], `${deck.id}: expected ${expectedHopeLessonCounts[index]}, got ${deck.cards.length}`);
-  const actualHash = hashHopeLesson(deck.cards);
+  const actualHash = hashBilingualCards(deck.cards);
   assert(
     actualHash === expectedHopeLessonHashes[index],
     `${deck.id}: attached Hope DOCX source hash mismatch (${actualHash})`
@@ -69,10 +103,32 @@ basicExampleDecks.forEach((deck, index) => {
 
 basicTestDecks.forEach((deck, index) => {
   assert(deck.cards.length === expectedHopeTestCounts[index], `${deck.id}: expected ${expectedHopeTestCounts[index]}, got ${deck.cards.length}`);
+  const actualHash = hashHopeTest(deck.cards);
+  assert(
+    actualHash === expectedHopeTestHashes[index],
+    `${deck.id}: attached Hope Test PDF source hash mismatch (${actualHash})`
+  );
+  deck.cards.forEach((card, cardIndex) => {
+    const example = basicExampleDecks[index].cards[cardIndex];
+    assert(
+      card.back === example.front,
+      `${deck.id} card ${card.id}: answer must match the corresponding Hope Example Bank sentence.`
+    );
+  });
 });
 
 assert(hopeExampleCards.length === 110, `Hope Example Bank count: ${hopeExampleCards.length}`);
 assert(hopeTestCards.length === 54, `Hope official test count: ${hopeTestCards.length}`);
+
+const vqCoreDecks = [vq2_2_Cards, vq3_1_Cards, vq3_2_Cards];
+vqCoreDecks.forEach((cards, index) => {
+  const actualHash = hashBilingualCards(cards);
+  assert(
+    actualHash === expectedVqCoreHashes[index],
+    `VQ core source hash mismatch for group ${index + 1} (${actualHash})`
+  );
+  cards.forEach((card) => assert(card.back === card.front, `VQ core card ${card.id}: back must exactly match front.`));
+});
 
 assert(vq2_2_Cards.length === 13, `VQ 2-2 core count: ${vq2_2_Cards.length}`);
 assert(vq3_1_Cards.length === 14, `VQ 3-1 core count: ${vq3_1_Cards.length}`);
@@ -139,5 +195,7 @@ console.log(JSON.stringify({
   vqVisibleExercises: 66,
   vqBlockedDescriptions: examSourceLedger.blockedDescriptionItems.length,
   activeCards: allCards.length,
-  hopeSourceHashVerification: 'passed',
+  hopeDocxHashVerification: 'passed',
+  hopeTestPdfHashVerification: 'passed',
+  vqCoreHashVerification: 'passed',
 }, null, 2));
