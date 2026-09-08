@@ -9,7 +9,7 @@ fs.mkdirSync(OUT, { recursive: true });
 type Result = { engine: string; check: string; ok: boolean; error?: string };
 const results: Result[] = [];
 const normalize = (value: string) => value.replace(/[\[\]]/g, '').replace(/[　\s]+/g, ' ').trim();
-const assert = (value: unknown, message: string): asserts value => { if (!value) throw new Error(message); };
+function assert(value: unknown, message: string): asserts value { if (!value) throw new Error(message); }
 
 async function run(engine: string, check: string, fn: () => Promise<void>) {
   try {

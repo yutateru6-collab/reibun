@@ -1,0 +1,56 @@
+name: Full app QA
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [full-app-production-audit-v2, full-ui-state-audit, study-edge-regression]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Verify source data, answer rendering and types
+        run: |
+          node --import tsx scripts/validate-content.ts
+          node --import tsx scripts/validate-vq-exercises.ts
+          timeout 15s node --import tsx scripts/validate-answer-rendering.ts
+          npm run lint
+          npm run build
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Start production build
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/preview.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/preview.log
+          exit 1
+      - name: Audit pages and interactions
+        env:
+          APP_URL: http://127.0.0.1:4173/
+        run: node --import tsx scripts/${{ matrix.suite }}.ts
+      - name: Upload reports and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: full-qa-${{ matrix.suite }}
+          path: |
+            audit/
+            /tmp/preview.log
+          retention-days: 14

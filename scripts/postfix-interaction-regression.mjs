@@ -58,7 +58,7 @@ async function auditEngine(engine, browserType) {
 
   await run(engine, 'standard mini survives resume and stays on same card', async () => {
     const context = await newContext(); const page = await context.newPage(); const pageErrors=[]; page.on('pageerror',e=>pageErrors.push(String(e)));
-    await lesson1(page); await page.getByRole('button', { name: /単語カード/ }).click(); await cardToBack(page);
+    await lesson1(page); await page.getByRole('button', { name: /単語カード|問題カード/ }).click(); await cardToBack(page);
     const mini = page.getByRole('button', { name: /ミニ解説を見る/ }); await mini.waitFor(); const before = await counter(page);
     await simulateResume(context, page); await mini.click(); await page.getByText('タップして閉じる').waitFor(); await page.waitForTimeout(800);
     assert(await counter(page) === before, `card changed: ${before} -> ${await counter(page)}`);
@@ -69,7 +69,7 @@ async function auditEngine(engine, browserType) {
 
   await run(engine, 'Hope official Test1 No.7 shows mini explanation instead of source panel', async () => {
     const context = await newContext(); const page = await context.newPage();
-    await hopeTest1(page); await page.getByRole('button', { name: /単語カード/ }).click();
+    await hopeTest1(page); await page.getByRole('button', { name: /単語カード|問題カード/ }).click();
     for (let i = 0; i < 6; i += 1) await page.getByRole('button', { name: '次のカードへ' }).click();
     assert(await counter(page) === '7 / 9', `expected Test1 No.7, got ${await counter(page)}`);
     const card = page.locator('div.cursor-pointer').filter({ hasText: /is to learn/ }).first();
@@ -96,8 +96,8 @@ async function auditEngine(engine, browserType) {
   await run(engine, 'favorite and yet buttons never flip or navigate', async () => {
     const context=await newContext(); const page=await context.newPage(); await lesson1(page); await page.getByRole('button',{name:/単語カード/}).click(); await cardToBack(page);
     const mini=page.getByRole('button',{name:/ミニ解説を見る/}); await mini.waitFor(); const before=await counter(page);
-    await page.getByRole('button',{name:/お気に入り登録/}).click(); assert(await mini.isVisible(),'favorite flipped card'); assert(await counter(page)===before,'favorite changed card');
-    await page.getByRole('button',{name:/「まだ」リスト追加/}).click(); assert(await mini.isVisible(),'yet flipped card'); assert(await counter(page)===before,'yet changed card');
+    await page.getByTitle('このカードをお気に入りに登録・解除').click(); assert(await mini.isVisible(),'favorite flipped card'); assert(await counter(page)===before,'favorite changed card');
+    await page.getByTitle('このカードを「まだ」リストに登録・解除').click(); assert(await mini.isVisible(),'yet flipped card'); assert(await counter(page)===before,'yet changed card');
     await context.close();
   });
 
