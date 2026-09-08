@@ -377,7 +377,10 @@ export default function App() {
     setShowHint(false);
   };
 
-  const currentCard = activeCards[currentIndex];
+  // Filtering/removing the last visible card changes the array before effects run.
+  // Keep this render in bounds as well as updating the stored index in the effect.
+  const visibleIndex = Math.min(currentIndex, Math.max(0, activeCards.length - 1));
+  const currentCard = activeCards[visibleIndex];
   const isCurrentDeckQuestion = currentDeck ? currentDeck.cards.length > 0 && currentDeck.cards.every(card => isOfficialQuestionCard(card)) : false;
 
   // --- Quiz Logic ---
@@ -1161,9 +1164,9 @@ export default function App() {
       {/* Flashcard Area */}
       {activeCards.length > 0 ? (
         <div className="w-full max-w-2xl flex flex-col items-center">
-          <div className="w-full flex justify-between items-center mb-4 px-1 md:px-2">
-            <span className="text-xs md:text-sm font-bold text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm">
-              {currentIndex + 1} / {activeCards.length}
+          <div className="w-full flex flex-wrap gap-2 justify-between items-center mb-4 px-1 md:px-2">
+            <span className="shrink-0 whitespace-nowrap text-xs md:text-sm font-bold text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm">
+              {visibleIndex + 1} / {activeCards.length}
             </span>
             <div className="flex gap-2">
               <button 
@@ -1708,4 +1711,3 @@ export default function App() {
 
   return null;
 }
-

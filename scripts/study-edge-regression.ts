@@ -55,6 +55,20 @@ for (const [engine,type,width] of [['chromium-small',chromium,320],['webkit-mobi
     await p.getByText('100%').waitFor();
     assert.deepEqual(await p.evaluate(k=>JSON.parse(localStorage.getItem(k)||'[]'),YET),[]);
   });
+  await run('shuffle-navigation',{'flashcard-shuffle':'true',[FAV]:JSON.stringify(basicExampleDecks[0].cards.slice(0,3).map(c=>c.id))},async p=>{
+    await review(p,'favorite');await p.getByRole('button',{name:/単語カード/}).click();
+    const seen:number[]=[];
+    for(let i=0;i<3;i++) {
+      const text=await card(p).innerText();
+      const shown=basicExampleDecks[0].cards.find(c=>text.includes(c.front));
+      assert(shown, 'shuffled card has no expected sentence');seen.push(shown.id);
+      await p.getByRole('button',{name:'次のカードへ',exact:true}).click();
+    }
+    assert.equal(new Set(seen).size,3,'shuffle duplicated or skipped a card');
+    assert((await card(p).innerText()).includes(basicExampleDecks[0].cards.find(c=>c.id===seen[0])!.front));
+    await p.getByRole('button',{name:'前のカードへ',exact:true}).click();
+    assert((await card(p).innerText()).includes(basicExampleDecks[0].cards.find(c=>c.id===seen[2])!.front));
+  });
   await run('time-completion',{[FAV]:JSON.stringify([vq.id])},async p=>{
     await review(p,'favorite');
     await p.getByLabel('問題を考える時間').selectOption('3');await p.getByLabel('答えを表示する時間').selectOption('1');
