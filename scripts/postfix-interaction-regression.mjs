@@ -112,7 +112,7 @@ async function auditEngine(engine, browserType) {
 
   await run(engine, 'time attack pauses while mini is open then resumes', async()=>{
     const context=await newContext(); const page=await context.newPage(); await lesson1(page); await page.getByLabel('問題を考える時間').selectOption('3'); await page.getByLabel('答えを表示する時間').selectOption('3'); await domClick(page.getByRole('button',{name:/タイムアタック開始/}));
-    await page.waitForTimeout(3300); const mini=page.getByRole('button',{name:/ミニ解説/}); await mini.waitFor(); const before=await counter(page); await mini.click(); await page.waitForTimeout(7000); assert(await counter(page)===before,'timer advanced while mini was open'); await page.getByText('タップして閉じる').click(); await page.waitForTimeout(3500); assert(await counter(page)!==before,'timer did not resume'); await context.close();
+    await page.waitForTimeout(3300); const mini=page.getByRole('button',{name:/ミニ解説/}); await mini.waitFor(); const before=await counter(page); await domClick(mini); await page.getByText(/解説確認中（停止）/).waitFor(); await page.waitForTimeout(7000); assert(await counter(page)===before,'timer advanced while mini was open'); await domClick(mini); await page.waitForTimeout(3500); assert(await counter(page)!==before,'timer did not resume'); await context.close();
   });
 
   await run(engine, 'VQ point accordion never flips or advances', async()=>{
