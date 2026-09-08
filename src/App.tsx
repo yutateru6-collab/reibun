@@ -396,7 +396,7 @@ export default function App() {
     if (!currentDeck) return [];
     
     let cards = currentDeck.cards;
-    if (currentDeck.id === 'yet-deck') {
+    if (currentDeck.id.endsWith('yet-deck')) {
       cards = decks.flatMap(d => d.cards).filter(c => yetList.includes(c.id));
     }
     
@@ -857,7 +857,7 @@ export default function App() {
                 onClick={() => {
                   setReviewFavoritesOnly(false);
                   setCurrentDeck({
-                    id: 'yet-deck',
+                    id: 'vq-yet-deck',
                     title: '「まだ」の復習デッキ',
                     description: '「まだ」と評価した例文の集中復習',
                     cards: decks.flatMap(d => d.cards).filter(c => yetList.includes(c.id))
@@ -1170,8 +1170,8 @@ export default function App() {
     return (
       <div className="min-h-screen flex flex-col items-center py-6 md:py-8 px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
       {/* Header & Controls */}
-      <div className="w-full max-w-2xl flex flex-wrap justify-between items-center mb-6 md:mb-8 gap-3">
-        <div className="flex items-center gap-2 md:gap-3">
+      <div className="w-full max-w-2xl flex flex-col sm:flex-row sm:flex-wrap sm:justify-between sm:items-center mb-6 md:mb-8 gap-3">
+        <div className="w-full sm:w-auto flex items-center gap-2 md:gap-3">
           <button 
             aria-label="学習モード選択へ戻る"
             onClick={() => { setAppMode('menu'); }}
@@ -1179,12 +1179,12 @@ export default function App() {
           >
             <ChevronLeft size={24} />
           </button>
-          <h1 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white truncate max-w-[150px] md:max-w-none">
+          <h1 className="text-base md:text-xl font-bold text-slate-900 dark:text-white leading-tight whitespace-normal break-words flex-1 min-w-0">
             {currentDeck.title} {isMemorize && "(答えから)"}
           </h1>
         </div>
         
-        <div className="flex items-center gap-1 md:gap-1.5 bg-white dark:bg-slate-800 p-1 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
+        <div className="self-end sm:self-auto flex items-center gap-1 md:gap-1.5 bg-white dark:bg-slate-800 p-1 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
           <button 
             onClick={() => setIsDarkMode(!isDarkMode)}
               aria-label="テーマ切り替え"
