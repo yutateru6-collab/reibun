@@ -95,6 +95,9 @@ async function auditDeck(page:Page, kind:'basic-example'|'basic-test'|'vq-senten
     const card=await outerCard(page);
     const rendered=norm(await card.innerText());
     const expected=norm(frontExpected(kind,c));
+    if (deck.id === 'vq-lesson1-1-q' && !rendered.includes(norm(c.translation))) {
+      add('critical',`${scope}/japanese/${i+1}`,'Japanese question stored separately is missing',{expected:c.translation,rendered});
+    }
     if (!rendered.includes(expected)) {
       add(kind==='vq-question'?'critical':'major',`${scope}/front/${i+1}`,'front does not show the actual required content',{expected,rendered,taskLabel:c.translation});
     }

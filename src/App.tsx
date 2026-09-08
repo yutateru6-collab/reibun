@@ -26,8 +26,12 @@ const OFFICIAL_QUESTION_CARD_IDS = new Set(
 const isVisionQuestQuestionCard = (card?: Card) => Boolean(card && VISION_QUEST_QUESTION_CARD_IDS.has(card.id));
 const isVisionQuestCard = (card?: Card) => Boolean(card && VISION_QUEST_CARD_IDS.has(card.id));
 const isOfficialQuestionCard = (card?: Card) => Boolean(card && OFFICIAL_QUESTION_CARD_IDS.has(card.id));
-const sourcePromptOrTranslation = (card: Card) => isVisionQuestQuestionCard(card) ? card.front : card.translation;
-const officialQuestionPrompt = (card: Card) => isVisionQuestQuestionCard(card) ? card.front : card.front + '\n' + card.translation;
+// Earlier VQ questions store the Japanese question separately; newer ones
+// include it in front and use translation for a task/section label.
+const vqQuestionPrompt = (card: Card) => /[\u3040-\u30ff\u3400-\u9fff]/.test(card.front)
+  ? card.front : card.translation + '\n' + card.front;
+const sourcePromptOrTranslation = (card: Card) => isVisionQuestQuestionCard(card) ? vqQuestionPrompt(card) : card.translation;
+const officialQuestionPrompt = (card: Card) => isVisionQuestQuestionCard(card) ? vqQuestionPrompt(card) : card.front + '\n' + card.translation;
 const answerMeaning = (card: Card) => isOfficialQuestionCard(card) ? highlightAnswers(card.front, card.back) : card.translation;
 
 function canonicalQuizAnswer(answer: string): string {
