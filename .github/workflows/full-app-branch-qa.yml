@@ -1,0 +1,79 @@
+name: Full app branch QA
+
+on:
+  push:
+    branches: [full-app-qa-20260908]
+    paths:
+      - src/**
+      - scripts/full-app-production-audit-v2.ts
+      - scripts/full-ui-state-audit.ts
+      - .github/workflows/full-app-branch-qa.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  branch-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: full-app-qa-20260908
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: |
+          npm install
+          npm install --no-save playwright
+      - name: Validate all source data and build
+        run: |
+          npx tsx scripts/validate-content.ts
+          npx tsx scripts/validate-hope-mini-explanations.ts
+          npx tsx scripts/validate-vq-exercises.ts
+          npm run lint
+          npm run build
+      - name: Install Chromium and WebKit
+        run: npx playwright install --with-deps chromium webkit
+      - name: Start local production preview
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/reibun-preview.log 2>&1 &
+          echo $! > /tmp/reibun-preview.pid
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              echo 'Preview is ready.'
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/reibun-preview.log
+          exit 1
+      - name: Adapt exhaustive audit selector for question cards
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const p = 'scripts/full-app-production-audit-v2.ts';
+          let s = fs.readFileSync(p, 'utf8');
+          s = s.replaceAll('name:/単語カード/', 'name:/単語カード|問題カード/');
+          fs.writeFileSync(p, s);
+          NODE
+      - name: Audit every deck and every standard card on branch
+        env:
+          APP_URL: http://127.0.0.1:4173/?branch_full_audit=${{ github.sha }}
+        run: npx tsx scripts/full-app-production-audit-v2.ts
+      - name: Audit all screen states and interactions
+        env:
+          APP_URL: http://127.0.0.1:4173/?branch_state_audit=${{ github.sha }}
+        run: npx tsx scripts/full-ui-state-audit.ts
+      - name: Upload QA reports and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: full-app-branch-qa-${{ github.sha }}
+          path: |
+            audit/full-app-production-v2
+            audit/full-ui-state
+            /tmp/reibun-preview.log
+          retention-days: 14
