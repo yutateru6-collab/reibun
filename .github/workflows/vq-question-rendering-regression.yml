@@ -44,7 +44,7 @@ jobs:
       - name: Verify real question prompts across study modes
         env:
           APP_URL: http://127.0.0.1:4173/?vq_question_regression=${{ github.sha }}
-        run: npx tsx scripts/vq-question-rendering-regression.ts
+        run: npx tsx scripts/vq-question-rendering-regression.mjs
       - name: Upload regression evidence
         if: always()
         uses: actions/upload-artifact@v4
