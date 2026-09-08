@@ -1,9 +1,12 @@
 import type { Card } from './cards';
+import { getVisionQuestPoint } from './vision_quest_points';
 
 const makeComment = (source: string, alternatives: string[] = [], note = '') => {
-  const parts = [`【出典】${source}`];
-  if (alternatives.length) parts.push(`【資料に明記された別解】\n${alternatives.join('\n')}`);
-  if (note) parts.push(`【原資料メモ】\n${note}`);
+  const parts: string[] = [];
+  const point = getVisionQuestPoint(source);
+  if (point) parts.push(point);
+  if (alternatives.length) parts.push(`【別解】\n${alternatives.join('\n')}`);
+  if (note) parts.push(note);
   return parts.join('\n\n');
 };
 
