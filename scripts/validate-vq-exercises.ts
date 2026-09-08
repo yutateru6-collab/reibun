@@ -50,7 +50,7 @@ for (const group of expected) {
     assert(card.front.trim().length > 0, `${group.lesson}: empty question front at ${card.id}`);
     assert(card.back.trim().length > 0, `${group.lesson}: empty official answer at ${card.id}`);
     assert(card.translation.trim().length > 0, `${group.lesson}: empty task label at ${card.id}`);
-    assert(card.comment.includes('【出典】'), `${group.lesson}: missing source label at ${card.id}`);
+    assert(!card.comment.includes('【出典】'), `${group.lesson}: source label must not be exposed at ${card.id}`);
   }
 }
 

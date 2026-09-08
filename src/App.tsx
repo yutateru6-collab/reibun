@@ -29,8 +29,11 @@ const isOfficialQuestionCard = (card?: Card) => Boolean(card && OFFICIAL_QUESTIO
 // The legacy field can contain either a task label or the Japanese question.
 // Preserve both fields: a Japanese instruction in front does not imply that
 // it already contains the Japanese sentence needed to solve the question.
-const vqQuestionPrompt = (card: Card) => card.front.includes(card.translation)
-  ? card.front : card.translation + '\n' + card.front;
+const HIDDEN_VQ_TASK_LABELS = new Set(['日本語に合うように空欄補充']);
+const vqQuestionPrompt = (card: Card) =>
+  HIDDEN_VQ_TASK_LABELS.has(card.translation) || card.front.includes(card.translation)
+    ? card.front
+    : card.translation + '\n' + card.front;
 const sourcePromptOrTranslation = (card: Card) => isVisionQuestQuestionCard(card) ? vqQuestionPrompt(card) : card.translation;
 const officialQuestionPrompt = (card: Card) => isVisionQuestQuestionCard(card) ? vqQuestionPrompt(card) : card.front + '\n' + card.translation;
 const answerMeaning = (card: Card) => isOfficialQuestionCard(card) ? highlightAnswers(card.front, card.back) : card.translation;
