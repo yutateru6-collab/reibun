@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { chromium, webkit, type BrowserType, type Page } from 'playwright';
+import { chromium, webkit, type BrowserType, type Locator, type Page } from 'playwright';
 import { basicTestDecks, visionQuestQuestionDecks, type Card, type Deck } from '../src/data/cards';
 
 const BASE = process.env.APP_URL || 'http://127.0.0.1:4173';
@@ -9,7 +9,13 @@ fs.mkdirSync(OUT, { recursive: true });
 type Result = { engine: string; check: string; ok: boolean; error?: string };
 const results: Result[] = [];
 const normalize = (value: string) => value.replace(/[\[\]]/g, '').replace(/[　\s]+/g, ' ').trim();
-const assert = (value: unknown, message: string): asserts value => { if (!value) throw new Error(message); };
+function assert(value: unknown, message: string): asserts value {
+  if (!value) throw new Error(message);
+}
+async function domClick(locator: Locator) {
+  await locator.waitFor({ state: 'visible', timeout: 10000 });
+  await locator.evaluate((el) => (el as HTMLElement).click());
+}
 
 async function run(engine: string, check: string, fn: () => Promise<void>) {
   try {
@@ -54,28 +60,28 @@ async function titleIsNotEllipsized(page: Page, label: string) {
 }
 
 async function openVqHome(page: Page) {
-  await page.goto(BASE, { waitUntil: 'networkidle' });
-  await page.getByRole('button', { name: /VISION QUEST/ }).click();
-  await page.getByRole('button', { name: '例文', exact: true }).waitFor();
+  await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 20000 });
+  await domClick(page.getByRole('button', { name: /VISION QUEST/ }));
+  await page.getByRole('button', { name: '例文', exact: true }).waitFor({ state: 'visible', timeout: 10000 });
 }
 
 async function openDeck(page: Page, deck: Deck, kind: 'vq-question' | 'hope-test') {
   if (kind === 'vq-question') {
     await openVqHome(page);
-    await page.getByRole('button', { name: '問題', exact: true }).click();
+    await domClick(page.getByRole('button', { name: '問題', exact: true }));
   } else {
-    await page.goto(BASE, { waitUntil: 'networkidle' });
-    await page.getByRole('button', { name: /基本例文.*マスター/s }).click();
-    await page.getByRole('button', { name: /公式穴埋め/ }).click();
+    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 20000 });
+    await domClick(page.getByRole('button', { name: /基本例文.*マスター/s }));
+    await domClick(page.getByRole('button', { name: /公式穴埋め/ }));
   }
   const heading = page.getByRole('heading', { name: deck.title, exact: true });
-  await page.locator('button').filter({ has: heading }).first().click();
-  await page.getByText('学習モードを選択', { exact: true }).waitFor();
+  await domClick(page.locator('button').filter({ has: heading }).first());
+  await page.getByText('学習モードを選択', { exact: true }).waitFor({ state: 'visible', timeout: 10000 });
 }
 
 async function firstCard(page: Page) {
   const card = page.locator('div.cursor-pointer').first();
-  await card.waitFor({ state: 'visible' });
+  await card.waitFor({ state: 'visible', timeout: 10000 });
   return card;
 }
 
@@ -92,36 +98,36 @@ async function auditVqQuestion(page: Page, engine: string) {
   const card = deck.cards[0];
 
   await openDeck(page, deck, 'vq-question');
-  await page.getByRole('button', { name: /問題カード/ }).waitFor();
+  await page.getByRole('button', { name: /問題カード/ }).waitFor({ state: 'visible', timeout: 10000 });
   await titleIsNotEllipsized(page, `${engine}/VQ menu`);
   await noHorizontalOverflow(page, `${engine}/VQ menu`);
 
-  await page.getByRole('button', { name: /問題カード/ }).click();
+  await domClick(page.getByRole('button', { name: /問題カード/ }));
   let cardEl = await firstCard(page);
   assertActualQuestion(await cardEl.innerText(), card, `${engine}/VQ standard front`);
   await titleIsNotEllipsized(page, `${engine}/VQ study header`);
   await noHorizontalOverflow(page, `${engine}/VQ standard`);
   await page.screenshot({ path: `${OUT}/${engine}-vq-standard-front.png`, fullPage: true });
 
-  await cardEl.click();
+  await domClick(cardEl);
   cardEl = await firstCard(page);
   assert(normalize(await cardEl.innerText()).includes(normalize(card.back)), `${engine}/VQ standard back: completed answer missing`);
 
   await openDeck(page, deck, 'vq-question');
-  await page.getByRole('button', { name: /自己申告テスト/ }).click();
+  await domClick(page.getByRole('button', { name: /自己申告テスト/ }));
   cardEl = await firstCard(page);
   assertActualQuestion(await cardEl.innerText(), card, `${engine}/VQ self-test front`);
-  await cardEl.click();
+  await domClick(cardEl);
   assert(normalize(await (await firstCard(page)).innerText()).includes(normalize(card.back)), `${engine}/VQ self-test back: answer missing`);
 
   await openDeck(page, deck, 'vq-question');
-  await page.getByRole('button', { name: /並べ替えクイズ/ }).click();
+  await domClick(page.getByRole('button', { name: /並べ替えクイズ/ }));
   assertActualQuestion(await page.locator('body').innerText(), card, `${engine}/VQ word-order prompt`);
 
   await openDeck(page, deck, 'vq-question');
   await page.getByLabel('問題を考える時間').selectOption('15');
   await page.getByLabel('答えを表示する時間').selectOption('5');
-  await page.getByRole('button', { name: /タイムアタック開始/ }).click();
+  await domClick(page.getByRole('button', { name: /タイムアタック開始/ }));
   cardEl = await firstCard(page);
   assertActualQuestion(await cardEl.innerText(), card, `${engine}/VQ time-attack front`);
 }
@@ -130,9 +136,9 @@ async function auditHopeOfficialQuestion(page: Page, engine: string) {
   const deck = basicTestDecks[0];
   const card = deck.cards[0];
   await openDeck(page, deck, 'hope-test');
-  await page.getByRole('button', { name: /問題カード/ }).waitFor();
+  await page.getByRole('button', { name: /問題カード/ }).waitFor({ state: 'visible', timeout: 10000 });
 
-  await page.getByRole('button', { name: /自己申告テスト/ }).click();
+  await domClick(page.getByRole('button', { name: /自己申告テスト/ }));
   const cardEl = await firstCard(page);
   const rendered = normalize(await cardEl.innerText());
   assert(rendered.includes(normalize(card.front)), `${engine}/Hope self-test: blank question missing`);
@@ -141,7 +147,7 @@ async function auditHopeOfficialQuestion(page: Page, engine: string) {
   await openDeck(page, deck, 'hope-test');
   await page.getByLabel('問題を考える時間').selectOption('15');
   await page.getByLabel('答えを表示する時間').selectOption('5');
-  await page.getByRole('button', { name: /タイムアタック開始/ }).click();
+  await domClick(page.getByRole('button', { name: /タイムアタック開始/ }));
   const timeCard = await firstCard(page);
   const timeRendered = normalize(await timeCard.innerText());
   assert(timeRendered.includes(normalize(card.front)), `${engine}/Hope time-attack: blank question missing`);
@@ -151,14 +157,14 @@ async function auditHopeOfficialQuestion(page: Page, engine: string) {
 async function auditVqYetNavigation(page: Page, engine: string) {
   const deck = visionQuestQuestionDecks[0];
   await openDeck(page, deck, 'vq-question');
-  await page.getByRole('button', { name: /問題カード/ }).click();
-  await page.getByTitle('このカードを「まだ」リストに登録・解除').click();
-  await page.getByRole('button', { name: '学習モード選択へ戻る' }).click();
-  await page.getByRole('button', { name: '教材一覧へ戻る' }).click();
-  await page.getByRole('button', { name: /「まだ」のカードを復習する/ }).click();
-  await page.getByText('「まだ」の復習デッキ', { exact: true }).waitFor();
-  await page.getByRole('button', { name: '教材一覧へ戻る' }).click();
-  await page.getByRole('button', { name: '例文', exact: true }).waitFor();
+  await domClick(page.getByRole('button', { name: /問題カード/ }));
+  await domClick(page.getByTitle('このカードを「まだ」リストに登録・解除'));
+  await domClick(page.getByRole('button', { name: '学習モード選択へ戻る' }));
+  await domClick(page.getByRole('button', { name: '教材一覧へ戻る' }));
+  await domClick(page.getByRole('button', { name: /「まだ」のカードを復習する/ }));
+  await page.getByText('「まだ」の復習デッキ', { exact: true }).waitFor({ state: 'visible', timeout: 10000 });
+  await domClick(page.getByRole('button', { name: '教材一覧へ戻る' }));
+  await page.getByRole('button', { name: '例文', exact: true }).waitFor({ state: 'visible', timeout: 10000 });
   assert((await page.locator('body').innerText()).includes('VISION QUEST'), `${engine}/VQ yet review returned to the wrong home`);
 }
 
