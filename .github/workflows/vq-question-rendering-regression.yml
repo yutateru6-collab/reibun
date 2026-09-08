@@ -1,0 +1,56 @@
+name: VQ question rendering regression
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  question-rendering:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: |
+          npm install
+          npm install --no-save playwright
+      - name: Validate source and production build
+        run: |
+          npx tsx scripts/validate-content.ts
+          npx tsx scripts/validate-vq-exercises.ts
+          npm run lint
+          npm run build
+      - name: Install Chromium and WebKit
+        run: npx playwright install --with-deps chromium webkit
+      - name: Start production preview
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/reibun-vq-preview.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/reibun-vq-preview.log
+          exit 1
+      - name: Verify real question prompts across study modes
+        env:
+          APP_URL: http://127.0.0.1:4173/?vq_question_regression=${{ github.sha }}
+        run: npx tsx scripts/vq-question-rendering-regression.ts
+      - name: Upload regression evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vq-question-rendering-regression
+          path: |
+            audit/vq-question-regression
+            /tmp/reibun-vq-preview.log
+          retention-days: 14
