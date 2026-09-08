@@ -8,6 +8,23 @@ type AppMode = 'top' | 'vision_quest' | 'home' | 'menu' | 'standard' | 'memorize
 const FAVORITES_STORAGE_KEY = `flashcard-favorites:${CONTENT_VERSION}`;
 const YET_STORAGE_KEY = `flashcard-yet-list:${CONTENT_VERSION}`;
 
+const VISION_QUEST_QUESTION_CARD_IDS = new Set(
+  visionQuestQuestionDecks.flatMap(deck => deck.cards.map(card => card.id))
+);
+const VISION_QUEST_CARD_IDS = new Set(
+  [...visionQuestSentenceDecks, ...visionQuestQuestionDecks].flatMap(deck => deck.cards.map(card => card.id))
+);
+const OFFICIAL_QUESTION_CARD_IDS = new Set(
+  [...basicTestDecks, ...visionQuestQuestionDecks].flatMap(deck => deck.cards.map(card => card.id))
+);
+
+const isVisionQuestQuestionCard = (card?: Card) => Boolean(card && VISION_QUEST_QUESTION_CARD_IDS.has(card.id));
+const isVisionQuestCard = (card?: Card) => Boolean(card && VISION_QUEST_CARD_IDS.has(card.id));
+const isOfficialQuestionCard = (card?: Card) => Boolean(card && OFFICIAL_QUESTION_CARD_IDS.has(card.id));
+const sourcePromptOrTranslation = (card: Card) => isVisionQuestQuestionCard(card) ? card.front : card.translation;
+const officialQuestionPrompt = (card: Card) => isVisionQuestQuestionCard(card) ? card.front : card.front + '\n' + card.translation;
+const answerMeaning = (card: Card) => isOfficialQuestionCard(card) ? highlightAnswers(card.front, card.back) : card.translation;
+
 function highlightAnswers(front: string, back: string): string {
   if (!front || !back) return back;
 
@@ -379,7 +396,7 @@ export default function App() {
     if (!currentDeck) return [];
     
     let cards = currentDeck.cards;
-    if (currentDeck.id === 'yet-deck') {
+    if (currentDeck.id.endsWith('yet-deck')) {
       cards = decks.flatMap(d => d.cards).filter(c => yetList.includes(c.id));
     }
     
@@ -436,6 +453,7 @@ export default function App() {
   };
 
   const currentCard = activeCards[currentIndex];
+  const isCurrentDeckQuestion = currentDeck ? currentDeck.cards.length > 0 && currentDeck.cards.every(card => isOfficialQuestionCard(card)) : false;
 
   // --- Quiz Logic ---
   const generateWordPool = (card: Card) => {
@@ -839,7 +857,7 @@ export default function App() {
                 onClick={() => {
                   setReviewFavoritesOnly(false);
                   setCurrentDeck({
-                    id: 'yet-deck',
+                    id: 'vq-yet-deck',
                     title: '「まだ」の復習デッキ',
                     description: '「まだ」と評価した例文の集中復習',
                     cards: decks.flatMap(d => d.cards).filter(c => yetList.includes(c.id))
@@ -1018,7 +1036,7 @@ export default function App() {
                 <ChevronLeft size={22} />
               </button>
               <div className="min-w-0">
-                <h1 className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white truncate">{currentDeck.title}</h1>
+                <h1 className="text-base sm:text-2xl font-black text-slate-900 dark:text-white leading-tight whitespace-normal break-words">{currentDeck.title}</h1>
                 <p className="text-[11px] sm:text-xs text-slate-600 dark:text-slate-300">学習モードを選択</p>
               </div>
             </div>
@@ -1041,8 +1059,8 @@ export default function App() {
               </div>
               <div className="w-full">
                 <span className="inline-block text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300 rounded-full mb-1">じっくり</span>
-                <h2 className="text-sm sm:text-base font-black text-slate-800 dark:text-slate-100 leading-tight">単語カード</h2>
-                <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1">おもて↔裏で確認</p>
+                <h2 className="text-sm sm:text-base font-black text-slate-800 dark:text-slate-100 leading-tight">{isCurrentDeckQuestion ? '問題カード' : '単語カード'}</h2>
+                <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1">{isCurrentDeckQuestion ? '問題→解答で確認' : 'おもて↔裏で確認'}</p>
               </div>
             </button>
 
@@ -1056,7 +1074,7 @@ export default function App() {
               <div className="w-full">
                 <span className="inline-block text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300 rounded-full mb-1">インプット</span>
                 <h2 className="text-sm sm:text-base font-black text-slate-800 dark:text-slate-100 leading-tight">答えから覚える</h2>
-                <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1">英文→和訳で定着</p>
+                <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1">{isCurrentDeckQuestion ? '解答→元の問題で逆確認' : '英文→和訳で定着'}</p>
               </div>
             </button>
 
@@ -1152,8 +1170,8 @@ export default function App() {
     return (
       <div className="min-h-screen flex flex-col items-center py-6 md:py-8 px-4 bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
       {/* Header & Controls */}
-      <div className="w-full max-w-2xl flex flex-wrap justify-between items-center mb-6 md:mb-8 gap-3">
-        <div className="flex items-center gap-2 md:gap-3">
+      <div className="w-full max-w-2xl flex flex-col sm:flex-row sm:flex-wrap sm:justify-between sm:items-center mb-6 md:mb-8 gap-3">
+        <div className="w-full sm:w-auto flex items-center gap-2 md:gap-3">
           <button 
             aria-label="学習モード選択へ戻る"
             onClick={() => { setAppMode('menu'); }}
@@ -1161,12 +1179,12 @@ export default function App() {
           >
             <ChevronLeft size={24} />
           </button>
-          <h1 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white truncate max-w-[150px] md:max-w-none">
+          <h1 className="text-base md:text-xl font-bold text-slate-900 dark:text-white leading-tight whitespace-normal break-words flex-1 min-w-0">
             {currentDeck.title} {isMemorize && "(答えから)"}
           </h1>
         </div>
         
-        <div className="flex items-center gap-1 md:gap-1.5 bg-white dark:bg-slate-800 p-1 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
+        <div className="self-end sm:self-auto flex items-center gap-1 md:gap-1.5 bg-white dark:bg-slate-800 p-1 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
           <button 
             onClick={() => setIsDarkMode(!isDarkMode)}
               aria-label="テーマ切り替え"
@@ -1230,8 +1248,9 @@ export default function App() {
                 title="このカードをお気に入りに登録・解除"
               >
                 <Star size={14} className={favorites.includes(currentCard.id) ? "fill-current" : ""} />
-                <span className="text-xs font-extrabold tracking-wider">
-                  {favorites.includes(currentCard.id) ? 'お気に入り登録中' : 'お気に入り登録'}
+                <span className="text-[10px] sm:text-xs font-extrabold tracking-tight sm:tracking-wider whitespace-nowrap">
+                  <span className="sm:hidden">{favorites.includes(currentCard.id) ? '★登録中' : 'お気に入り'}</span>
+                  <span className="hidden sm:inline">{favorites.includes(currentCard.id) ? 'お気に入り登録中' : 'お気に入り登録'}</span>
                 </span>
               </button>
 
@@ -1248,8 +1267,9 @@ export default function App() {
                 title="このカードを「まだ」リストに登録・解除"
               >
                 <div className={`w-2 h-2 rounded-full ${yetList.includes(currentCard.id) ? 'bg-rose-500 animate-pulse' : 'bg-slate-300 dark:bg-slate-600'}`}></div>
-                <span className="text-xs font-extrabold tracking-wider">
-                  {yetList.includes(currentCard.id) ? '「まだ」登録中' : '「まだ」リスト追加'}
+                <span className="text-[10px] sm:text-xs font-extrabold tracking-tight sm:tracking-wider whitespace-nowrap">
+                  <span className="sm:hidden">{yetList.includes(currentCard.id) ? 'まだ登録中' : 'まだ追加'}</span>
+                  <span className="hidden sm:inline">{yetList.includes(currentCard.id) ? '「まだ」登録中' : '「まだ」リスト追加'}</span>
                 </span>
               </button>
             </div>
@@ -1263,7 +1283,7 @@ export default function App() {
               if (isFlipped) setShowHint(false); // Reset hint when flipping back to front
             }}
           >
-            {currentDeck.id.startsWith('vq-') ? (
+            {isVisionQuestCard(currentCard) ? (
               // --- Vision Quest デッキ用の表示 ---
               !isFlipped ? (
                 // 表面（めくる前）
@@ -1274,27 +1294,27 @@ export default function App() {
                       {currentCard.back}
                     </p>
                   ) : (
-                    // 通常単語カード（和 ➔ 英）：表面は日本語訳のみ
-                    <p className="text-xl md:text-3xl font-medium text-slate-800 dark:text-slate-100 my-8 leading-relaxed">
-                      {currentCard.translation}
+                    // 通常カード。VQ問題デッキは公式の問題文そのものを表示する。
+                    <p className="text-xl md:text-3xl font-medium text-slate-800 dark:text-slate-100 my-8 leading-relaxed whitespace-pre-wrap">
+                      {sourcePromptOrTranslation(currentCard)}
                     </p>
                   )}
                   <p className="text-xs text-slate-600 dark:text-slate-400 mt-6 md:mt-10 animate-pulse">
-                    タップして{isMemorize ? "日本語訳" : "完成文"}を見る
+                    タップして{isMemorize ? (isVisionQuestQuestionCard(currentCard) ? "元の問題" : "日本語訳") : (isVisionQuestQuestionCard(currentCard) ? "解答" : "完成文")}を見る
                   </p>
                 </div>
               ) : (
                 // 裏面（めくった後：回答とコメント）
                 <div className="flex flex-col items-center text-center w-full animate-in fade-in zoom-in-95 duration-200">
                   <div className="absolute top-6 md:top-8 left-6 md:left-8 text-emerald-700 dark:text-emerald-300 flex items-center gap-2 font-black tracking-wider uppercase text-xs md:text-sm">
-                    <span className="text-xl md:text-2xl">✅</span> 完成文
+                    <span className="text-xl md:text-2xl">✅</span> {isVisionQuestQuestionCard(currentCard) ? '解答' : '完成文'}
                   </div>
                   <p className="text-2xl md:text-5xl font-bold text-emerald-600 dark:text-emerald-400 leading-tight mt-10 md:mt-12 mb-6 md:mb-8">
                     {highlightAnswers(currentCard.front, currentCard.back)}
                   </p>
                   <div className="h-1 w-16 md:w-24 bg-emerald-100 dark:bg-emerald-900/30 rounded-full mb-6 md:mb-8"></div>
-                  <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 font-medium mb-8">
-                    {currentCard.translation}
+                  <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 font-medium mb-8 whitespace-pre-wrap">
+                    {sourcePromptOrTranslation(currentCard)}
                   </p>
 
                   {currentCard.comment && (
@@ -1450,27 +1470,27 @@ export default function App() {
           {!isFlipped ? (
             <div className="text-center animate-in fade-in zoom-in-95">
               <div className="text-indigo-500 dark:text-indigo-400 flex items-center justify-center gap-2 font-black tracking-wider uppercase text-xs mb-6">
-                <span className="text-lg">📢</span> 英語
+                <span className="text-lg">📢</span> {isOfficialQuestionCard(quizCard) ? '問題' : '英語'}
               </div>
-              <p className="text-xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 mb-8 leading-relaxed">
-                {quizCard.back}
+              <p className="text-xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 mb-8 leading-relaxed whitespace-pre-wrap">
+                {isOfficialQuestionCard(quizCard) ? officialQuestionPrompt(quizCard) : quizCard.back}
               </p>
-              <p className="text-sm text-slate-400 mt-12 animate-pulse font-medium">タップして日本語訳を見る</p>
+              <p className="text-sm text-slate-400 mt-12 animate-pulse font-medium">タップして{isOfficialQuestionCard(quizCard) ? '解答' : '日本語訳'}を見る</p>
             </div>
           ) : (
             <div className="text-center animate-in fade-in zoom-in-95 w-full">
               <div className="text-emerald-700 dark:text-emerald-300 flex items-center justify-center gap-2 font-black tracking-wider uppercase text-xs mb-6">
-                <span className="text-lg">💡</span> 日本語での意味
+                <span className="text-lg">💡</span> {isOfficialQuestionCard(quizCard) ? '解答' : '日本語での意味'}
               </div>
-              <p className="text-2xl md:text-4xl font-bold text-emerald-600 dark:text-emerald-400 mb-8 leading-relaxed">
-                {quizCard.translation}
+              <p className="text-2xl md:text-4xl font-bold text-emerald-600 dark:text-emerald-400 mb-8 leading-relaxed whitespace-pre-wrap">
+                {answerMeaning(quizCard)}
               </p>
               <div className="h-px w-24 bg-slate-100 dark:bg-slate-700/50 mx-auto mb-8"></div>
-              <p className="text-lg text-slate-600 dark:text-slate-300 font-medium mb-12">
-                {quizCard.back}
+              <p className="text-lg text-slate-600 dark:text-slate-300 font-medium mb-12 whitespace-pre-wrap">
+                {isOfficialQuestionCard(quizCard) ? officialQuestionPrompt(quizCard) : quizCard.back}
               </p>
                 
-                {((currentDeck.id.startsWith('vq-') || currentDeck.id.startsWith('hope-')) && quizCard.comment) && (
+                {((isVisionQuestCard(quizCard) || currentDeck.id.startsWith('hope-')) && quizCard.comment) && (
                   <div 
                     className="w-full text-left mb-8" 
                     onClick={(e) => e.stopPropagation()}
@@ -1539,27 +1559,27 @@ export default function App() {
           {!isFlipped ? (
             <div className="text-center animate-in fade-in zoom-in-95">
               <div className="text-rose-500 dark:text-rose-400 flex items-center justify-center gap-2 font-black tracking-wider uppercase text-xs mb-6">
-                <span className="text-lg">📢</span> 英語
+                <span className="text-lg">📢</span> {isOfficialQuestionCard(quizCard) ? '問題' : '英語'}
               </div>
-              <p className="text-xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 mb-8 leading-relaxed">
-                {quizCard.back}
+              <p className="text-xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 mb-8 leading-relaxed whitespace-pre-wrap">
+                {isOfficialQuestionCard(quizCard) ? officialQuestionPrompt(quizCard) : quizCard.back}
               </p>
-              <p className="text-sm font-bold text-rose-500 mt-12 animate-pulse">時間内に日本語訳を思い出せ！</p>
+              <p className="text-sm font-bold text-rose-500 mt-12 animate-pulse">時間内に{isOfficialQuestionCard(quizCard) ? '解答' : '日本語訳'}を思い出せ！</p>
             </div>
           ) : (
             <div className="text-center animate-in fade-in zoom-in-95 w-full">
               <div className="text-emerald-700 dark:text-emerald-300 flex items-center justify-center gap-2 font-black tracking-wider uppercase text-xs mb-6">
-                <span className="text-lg">💡</span> 日本語での意味
+                <span className="text-lg">💡</span> {isOfficialQuestionCard(quizCard) ? '解答' : '日本語での意味'}
               </div>
-              <p className="text-2xl md:text-4xl font-bold text-emerald-600 dark:text-emerald-400 mb-8 leading-relaxed">
-                {quizCard.translation}
+              <p className="text-2xl md:text-4xl font-bold text-emerald-600 dark:text-emerald-400 mb-8 leading-relaxed whitespace-pre-wrap">
+                {answerMeaning(quizCard)}
               </p>
               <div className="h-px w-24 bg-slate-100 dark:bg-slate-700/50 mx-auto mb-8"></div>
-              <p className="text-lg text-slate-600 dark:text-slate-300 font-medium mb-8">
-                {quizCard.back}
+              <p className="text-lg text-slate-600 dark:text-slate-300 font-medium mb-8 whitespace-pre-wrap">
+                {isOfficialQuestionCard(quizCard) ? officialQuestionPrompt(quizCard) : quizCard.back}
               </p>
               
-              {((currentDeck.id.startsWith('vq-') || currentDeck.id.startsWith('hope-')) && quizCard.comment) && (
+              {((isVisionQuestCard(quizCard) || currentDeck.id.startsWith('hope-')) && quizCard.comment) && (
                 <div 
                   className="w-full text-left" 
                   onClick={(e) => e.stopPropagation()}
@@ -1607,7 +1627,7 @@ export default function App() {
         </div>
 
         <div className="w-full max-w-2xl bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 md:p-8 mb-6 text-center">
-          <p className="text-slate-600 dark:text-slate-400 mb-4">{quizCard.translation}</p>
+          <p className="text-slate-600 dark:text-slate-300 mb-4 whitespace-pre-wrap">{sourcePromptOrTranslation(quizCard)}</p>
           
           {/* Answer Area */}
           <div className="min-h-[80px] p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 flex flex-wrap gap-2 items-center justify-center mb-4">
@@ -1669,12 +1689,12 @@ export default function App() {
               <div className="p-4 bg-rose-50 dark:bg-rose-900/20 rounded-2xl border border-rose-200 dark:border-rose-900/50 mb-4">
                 <p className="text-sm text-rose-600 dark:text-rose-400 font-bold mb-1">正解は：</p>
                 <p className="text-lg text-rose-700 dark:text-rose-300 font-bold">
-                  {currentDeck.id.startsWith('vq-') ? highlightAnswers(quizCard.front, quizCard.back) : quizCard.back}
+                  {isVisionQuestCard(quizCard) ? highlightAnswers(quizCard.front, quizCard.back) : quizCard.back}
                 </p>
               </div>
             )}
             
-            {((currentDeck.id.startsWith('vq-') || currentDeck.id.startsWith('hope-')) && quizCard.comment) && (
+            {((isVisionQuestCard(quizCard) || currentDeck.id.startsWith('hope-')) && quizCard.comment) && (
               <div 
                 className="w-full text-left" 
                 onClick={(e) => e.stopPropagation()}
