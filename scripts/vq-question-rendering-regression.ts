@@ -122,7 +122,8 @@ async function auditVqQuestion(page: Page, engine: string) {
   await page.getByLabel('問題を考える時間').selectOption('15');
   await page.getByLabel('答えを表示する時間').selectOption('5');
   await page.getByRole('button', { name: /タイムアタック開始/ }).click();
-  cardEl = await firstCard(page);
+  // Time attack reveals automatically, so its panel is intentionally not clickable.
+  cardEl = page.locator('body');
   assertActualQuestion(await cardEl.innerText(), card, `${engine}/VQ time-attack front`);
 }
 
@@ -142,7 +143,7 @@ async function auditHopeOfficialQuestion(page: Page, engine: string) {
   await page.getByLabel('問題を考える時間').selectOption('15');
   await page.getByLabel('答えを表示する時間').selectOption('5');
   await page.getByRole('button', { name: /タイムアタック開始/ }).click();
-  const timeCard = await firstCard(page);
+  const timeCard = page.locator('body');
   const timeRendered = normalize(await timeCard.innerText());
   assert(timeRendered.includes(normalize(card.front)), `${engine}/Hope time-attack: blank question missing`);
   assert(timeRendered.includes(normalize(card.translation)), `${engine}/Hope time-attack: Japanese prompt missing`);
