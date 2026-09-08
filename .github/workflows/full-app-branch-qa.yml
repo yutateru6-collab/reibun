@@ -1,4 +1,5 @@
 name: Full app branch QA
+# final verification after VQ question, official-test, mobile-header, and review-navigation fixes
 
 on:
   push:
