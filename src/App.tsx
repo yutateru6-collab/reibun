@@ -26,9 +26,10 @@ const OFFICIAL_QUESTION_CARD_IDS = new Set(
 const isVisionQuestQuestionCard = (card?: Card) => Boolean(card && VISION_QUEST_QUESTION_CARD_IDS.has(card.id));
 const isVisionQuestCard = (card?: Card) => Boolean(card && VISION_QUEST_CARD_IDS.has(card.id));
 const isOfficialQuestionCard = (card?: Card) => Boolean(card && OFFICIAL_QUESTION_CARD_IDS.has(card.id));
-// Earlier VQ questions store the Japanese question separately; newer ones
-// include it in front and use translation for a task/section label.
-const vqQuestionPrompt = (card: Card) => /[\u3040-\u30ff\u3400-\u9fff]/.test(card.front)
+// The legacy field can contain either a task label or the Japanese question.
+// Preserve both fields: a Japanese instruction in front does not imply that
+// it already contains the Japanese sentence needed to solve the question.
+const vqQuestionPrompt = (card: Card) => card.front.includes(card.translation)
   ? card.front : card.translation + '\n' + card.front;
 const sourcePromptOrTranslation = (card: Card) => isVisionQuestQuestionCard(card) ? vqQuestionPrompt(card) : card.translation;
 const officialQuestionPrompt = (card: Card) => isVisionQuestQuestionCard(card) ? vqQuestionPrompt(card) : card.front + '\n' + card.translation;

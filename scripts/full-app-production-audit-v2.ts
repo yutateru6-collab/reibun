@@ -95,7 +95,7 @@ async function auditDeck(page:Page, kind:'basic-example'|'basic-test'|'vq-senten
     const card=await outerCard(page);
     const rendered=norm(await card.innerText());
     const expected=norm(frontExpected(kind,c));
-    if (deck.id === 'vq-lesson1-1-q' && !rendered.includes(norm(c.translation))) {
+    if (((c.id >= 2101 && c.id <= 2129) || (c.id >= 2140 && c.id <= 2148)) && !rendered.includes(norm(c.translation))) {
       add('critical',`${scope}/japanese/${i+1}`,'Japanese question stored separately is missing',{expected:c.translation,rendered});
     }
     if (!rendered.includes(expected)) {
