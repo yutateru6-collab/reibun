@@ -1,3 +1,4 @@
+import { openHopeMenuFromList, firstStudyCard } from './hope-ui-helpers.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium, webkit, type Page } from 'playwright';
@@ -47,14 +48,14 @@ async function counter(page: Page) {
   return '';
 }
 async function outerCard(page: Page) {
-  const card = page.locator('div.cursor-pointer').first();
+  const card = await firstStudyCard(page);
   await card.waitFor({ state:'visible', timeout:8000 });
   return card;
 }
 async function openBasic(page: Page) {
   await fresh(page);
   await page.getByRole('button',{name:/基本例文.*マスター/s}).click();
-  await page.getByRole('button',{name:/例文（110）/}).waitFor();
+  await page.locator('[data-ui=hope-lesson-list]').waitFor();
 }
 async function openVq(page: Page) {
   await fresh(page);
@@ -69,7 +70,8 @@ async function clickDeck(page: Page, title: string) {
 async function openDeck(page: Page, kind:'basic-example'|'basic-test'|'vq-sentence'|'vq-question', deck:Deck, index:number) {
   if (kind.startsWith('basic')) {
     await openBasic(page);
-    if (kind==='basic-test') await page.getByRole('button',{name:/公式穴埋め（54）/}).click();
+    await openHopeMenuFromList(page,deck.id);
+    return;
   } else {
     await openVq(page);
     if (kind==='vq-question') await page.getByRole('button',{name:'問題',exact:true}).click();
@@ -86,7 +88,8 @@ async function auditDeck(page:Page, kind:'basic-example'|'basic-test'|'vq-senten
   await noHorizontalOverflow(page,`${scope}/menu`);
   await titleNotClipped(page,`${scope}/menu`);
   await page.screenshot({path:path.join(OUT,'screenshots',`${scope.replaceAll('/','__')}__menu.png`),fullPage:true});
-  await page.getByRole('button',{name:/単語カード|問題カード/}).click();
+  if(kind.startsWith('basic')) await page.locator(kind==='basic-test'?'[data-mode=cloze]':'[data-mode=learn]').click();
+  else await page.getByRole('button',{name:/単語カード|問題カード/}).click();
   await outerCard(page);
   for (let i=0;i<deck.cards.length;i++) {
     const c=deck.cards[i];
@@ -144,7 +147,7 @@ async function auditVqQuestionModes(page:Page, deck:Deck, deckIndex:number) {
 async function landingAudit(page:Page) {
   await fresh(page); await noHorizontalOverflow(page,'top'); await page.screenshot({path:path.join(OUT,'screenshots','top.png'),fullPage:true});
   await openBasic(page); await noHorizontalOverflow(page,'basic-home'); await page.screenshot({path:path.join(OUT,'screenshots','basic-home.png'),fullPage:true});
-  await page.getByRole('button',{name:/公式穴埋め（54）/}).click(); await page.screenshot({path:path.join(OUT,'screenshots','basic-tests.png'),fullPage:true});
+  await openHopeMenuFromList(page,'hope-test1'); await page.screenshot({path:path.join(OUT,'screenshots','basic-tests-unified.png'),fullPage:true});
   await openVq(page); await noHorizontalOverflow(page,'vq-home'); await page.screenshot({path:path.join(OUT,'screenshots','vq-home.png'),fullPage:true});
   await page.getByRole('button',{name:'問題',exact:true}).click(); await page.screenshot({path:path.join(OUT,'screenshots','vq-questions.png'),fullPage:true});
   await page.getByRole('button',{name:/以前の範囲を見る/}).click(); await page.screenshot({path:path.join(OUT,'screenshots','vq-questions-older.png'),fullPage:true});

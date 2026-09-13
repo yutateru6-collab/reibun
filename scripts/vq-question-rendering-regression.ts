@@ -1,3 +1,4 @@
+import { openHopeMenuFromList } from './hope-ui-helpers.mjs';
 import fs from 'node:fs';
 import { chromium, webkit, type BrowserType, type Page } from 'playwright';
 import { basicTestDecks, visionQuestQuestionDecks, type Card, type Deck } from '../src/data/cards';
@@ -66,7 +67,8 @@ async function openDeck(page: Page, deck: Deck, kind: 'vq-question' | 'hope-test
   } else {
     await page.goto(BASE, { waitUntil: 'networkidle' });
     await page.getByRole('button', { name: /基本例文.*マスター/s }).click();
-    await page.getByRole('button', { name: /公式穴埋め/ }).click();
+    await openHopeMenuFromList(page,deck.id);
+    return;
   }
   const heading = page.getByRole('heading', { name: deck.title, exact: true });
   await page.locator('button').filter({ has: heading }).first().click();
@@ -131,7 +133,7 @@ async function auditHopeOfficialQuestion(page: Page, engine: string) {
   const deck = basicTestDecks[0];
   const card = deck.cards[0];
   await openDeck(page, deck, 'hope-test');
-  await page.getByRole('button', { name: /問題カード/ }).waitFor();
+  await page.getByRole('button', { name: /穴埋めで確認/ }).waitFor();
 
   await page.getByRole('button', { name: /自己申告テスト/ }).click();
   const cardEl = await firstCard(page);

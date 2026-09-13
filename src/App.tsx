@@ -3,6 +3,9 @@ import { decks, Card, Deck, basicExampleDecks, basicTestDecks, visionQuestSenten
 import { highlightAnswers } from './lib/highlight-answers';
 import { readBoolean, readIds, saveSetting } from './lib/settings';
 import { CONTENT_VERSION } from './data/exam_source_ledger';
+import { HOPE_LESSONS, getHopeLessonForDeck, HOPE_JAPANESE_FIRST_KEY } from './hope/lessons';
+import HopeLessonMenu from './hope/LessonMenu';
+import HopeStudyCard from './hope/StudyCard';
 import { Moon, Sun, MoonStar, Shuffle, Star, ChevronLeft, ChevronRight, RotateCcw, Lightbulb, MessageCircle, Home, BookOpen, GraduationCap, Brain, List, Timer, CheckCircle, XCircle, Settings } from 'lucide-react';
 
 type AppMode = 'top' | 'vision_quest' | 'home' | 'menu' | 'standard' | 'memorize' | 'self' | 'order' | 'time' | 'result';
@@ -130,7 +133,9 @@ export default function App() {
   // New state variables for test modes
   const [appMode, setAppMode] = useState<AppMode>('top');
   const [visionQuestTab, setVisionQuestTab] = useState<'sentences' | 'questions'>('sentences');
-  const [basicTab, setBasicTab] = useState<'sentences' | 'tests'>('sentences');
+  const currentHopeLesson = getHopeLessonForDeck(currentDeck);
+  const [hopeJapaneseFirst, setHopeJapaneseFirst] = useState(() => readBoolean(HOPE_JAPANESE_FIRST_KEY));
+  useEffect(() => { saveSetting(HOPE_JAPANESE_FIRST_KEY, JSON.stringify(hopeJapaneseFirst)); }, [hopeJapaneseFirst]);
   const [showOlderVisionQuest, setShowOlderVisionQuest] = useState(false);
   const [timeLimit, setTimeLimit] = useState<number>(10);
   const [resultDisplayTime, setResultDisplayTime] = useState<number>(3);
@@ -367,21 +372,21 @@ export default function App() {
   useEffect(() => {
     setShuffledOrder([]);
     setCurrentIndex(0);
-    setIsFlipped(isBackDefault);
+    setIsFlipped(currentHopeLesson ? false : isBackDefault);
     setShowHint(false);
-  }, [currentDeck, isShuffle, reviewFavoritesOnly, isBackDefault]);
+  }, [currentDeck, isShuffle, reviewFavoritesOnly, isBackDefault, currentHopeLesson]);
 
   const handleNext = () => {
     if (activeCards.length === 0) return;
     setCurrentIndex((prev) => (prev + 1) % activeCards.length);
-    setIsFlipped(isBackDefault);
+    setIsFlipped(currentHopeLesson ? false : isBackDefault);
     setShowHint(false);
   };
 
   const handlePrev = () => {
     if (activeCards.length === 0) return;
     setCurrentIndex((prev) => (prev - 1 + activeCards.length) % activeCards.length);
-    setIsFlipped(isBackDefault);
+    setIsFlipped(currentHopeLesson ? false : isBackDefault);
     setShowHint(false);
   };
 
@@ -400,9 +405,13 @@ export default function App() {
     setIsCorrect(null);
   };
 
-  const startQuiz = (mode: AppMode) => {
-    if (!currentDeck || activeCards.length === 0) return;
-    const cardsToUse = isShuffle ? [...activeCards].sort(() => Math.random() - 0.5) : [...activeCards];
+  const startQuiz = (mode: AppMode, selectedDeck?: Deck) => {
+    const nextDeck = selectedDeck ?? currentDeck;
+    const pool = selectedDeck ? selectedDeck.cards : activeCards;
+    if (!nextDeck || pool.length === 0) return;
+    // Select the snapshot before setState: switching from cloze to order must not use the previous deck.
+    if (selectedDeck) { setCurrentDeck(selectedDeck); setReviewFavoritesOnly(false); }
+    const cardsToUse = isShuffle ? [...pool].sort(() => Math.random() - 0.5) : [...pool];
     
     setQuizCards(cardsToUse);
     setQuizIndex(0);
@@ -847,54 +856,29 @@ export default function App() {
             </button>
           </header>
 
-          <div className="flex justify-center mb-8 w-full">
-            <div className="flex bg-slate-200/50 dark:bg-slate-800/50 p-1 rounded-xl w-full max-w-md">
+          <p className="mb-5 text-sm text-slate-600 dark:text-slate-300">Lessonを選んで、例文・穴埋め・並べ替えを練習できます。</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4" data-ui="hope-lesson-list">
+            {HOPE_LESSONS.map((lesson) => (
               <button
-                onClick={() => setBasicTab('sentences')}
-                className={`flex-1 py-3 px-4 rounded-lg font-bold text-sm transition-all text-center ${
-                  basicTab === 'sentences'
-                    ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-700 dark:hover:text-slate-200'
-                }`}
-              >
-                例文（110）
-              </button>
-              <button
-                onClick={() => setBasicTab('tests')}
-                className={`flex-1 py-3 px-4 rounded-lg font-bold text-sm transition-all text-center ${
-                  basicTab === 'tests'
-                    ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-700 dark:hover:text-slate-200'
-                }`}
-              >
-                公式穴埋め（54）
-              </button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            {(basicTab === 'sentences' ? basicExampleDecks : basicTestDecks).map((deck) => (
-              <button
-                key={deck.id}
+                type="button"
+                key={lesson.id}
+                data-lesson={lesson.id}
                 onClick={() => {
-                  setCurrentDeck(deck);
+                  setCurrentDeck(lesson.examples);
+                  setReviewFavoritesOnly(false);
                   setAppMode('menu');
                 }}
-                className="group relative bg-white dark:bg-slate-800 p-5 md:p-6 rounded-2xl md:rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 text-left transition-all hover:shadow-lg hover:-translate-y-0.5 overflow-hidden"
+                className="group bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 text-left hover:border-indigo-400 transition-colors focus-visible:outline-2 focus-visible:outline-indigo-500"
               >
-                <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-1.5 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                  {deck.title}
-                </h2>
-                <p className="text-sm text-slate-600 dark:text-slate-300 mb-3">
-                  {deck.description} ・ {deck.cards.length}{basicTab === 'sentences' ? '文' : '問'}
-                </p>
-                <div className="flex items-center gap-2 text-sm font-bold text-indigo-700 dark:text-indigo-300">
-                  <span>学習を始める</span>
-                  <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                <div className="flex items-center justify-between gap-3"><h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">{lesson.title}</h2><ChevronRight size={21} className="text-indigo-600 dark:text-indigo-300 shrink-0" /></div>
+                <p className="text-sm text-slate-600 dark:text-slate-300 mt-2">{lesson.examples.cards.length}例文{lesson.cloze ? ` ・ 穴埋め${lesson.cloze.cards.length}問` : ''}</p>
+                <div className="flex flex-wrap gap-2 mt-3 text-xs font-semibold text-indigo-800 dark:text-indigo-200">
+                  <span className="rounded-lg bg-indigo-50 dark:bg-indigo-950/40 px-2 py-1">例文</span>
+                  {lesson.cloze && <span className="rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 px-2 py-1">穴埋め</span>}
+                  <span className="rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-200 px-2 py-1">並べ替え</span>
                 </div>
               </button>
             ))}
-
           </div>
 
           {favorites.length > 0 && (
@@ -953,6 +937,24 @@ export default function App() {
         </div>
       </div>
     );
+  }
+
+  // One lesson entry for both complete sentences and the original cloze test.
+  if (appMode === 'menu' && currentHopeLesson) {
+    return <HopeLessonMenu
+      lesson={currentHopeLesson}
+      startWithCloze={isCurrentDeckQuestion}
+      dark={isDarkMode} shuffle={isShuffle} timeLimit={timeLimit} answerTime={resultDisplayTime}
+      onBack={() => { setCurrentDeck(null); setAppMode('home'); }}
+      onHome={() => { setCurrentDeck(null); setAppMode('top'); }}
+      onTheme={() => setIsDarkMode(!isDarkMode)}
+      onShuffle={setIsShuffle} onTimeLimit={setTimeLimit} onAnswerTime={setResultDisplayTime}
+      onStudy={(deck) => {
+        setCurrentDeck(deck); setReviewFavoritesOnly(false); setCurrentIndex(0);
+        setShuffledOrder([]); setIsFlipped(false); setIsCommentOpen(false); setAppMode('standard');
+      }}
+      onQuiz={startQuiz}
+    />;
   }
 
   // Menu Screen
@@ -1118,7 +1120,7 @@ export default function App() {
             <ChevronLeft size={24} />
           </button>
           <h1 className="text-base md:text-xl font-bold text-slate-900 dark:text-white leading-tight whitespace-normal break-words flex-1 min-w-0">
-            {currentDeck.title} {isMemorize && "(答えから)"}
+            {currentHopeLesson ? `${currentHopeLesson.title}｜${isCurrentDeckQuestion ? "穴埋め" : "例文"}` : currentDeck.title} {isMemorize && "(答えから)"}
           </h1>
         </div>
         
@@ -1144,7 +1146,7 @@ export default function App() {
             </span>
           </button>
 
-          {!isMemorize && (
+          {!isMemorize && !currentHopeLesson && (
             <button 
               onClick={() => setIsBackDefault(!isBackDefault)}
               className={`p-1.5 md:p-2 rounded-xl transition-colors flex flex-col items-center justify-center min-w-[48px] min-h-11 md:min-w-[54px] ${isBackDefault ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400' : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
@@ -1168,6 +1170,16 @@ export default function App() {
           </button>
         </div>
       </div>
+
+      {currentHopeLesson && !isCurrentDeckQuestion && (
+        <div className="w-full max-w-2xl flex gap-2 mb-5" role="group" aria-label="例文の表示方向">
+          {[false, true].map(japanese => <button type="button" key={String(japanese)} aria-pressed={hopeJapaneseFirst === japanese}
+            onClick={() => { setHopeJapaneseFirst(japanese); setIsFlipped(false); setIsCommentOpen(false); }}
+            className={`flex-1 min-h-12 rounded-xl border px-3 py-2 text-sm sm:text-base font-bold transition-colors focus-visible:outline-2 focus-visible:outline-indigo-400 ${hopeJapaneseFirst === japanese ? 'bg-indigo-600 dark:bg-indigo-500 text-white border-indigo-600 dark:border-indigo-500' : 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200'}`}>
+            {japanese ? '日本語から見る' : '英語から見る'}
+          </button>)}
+        </div>
+      )}
 
       {/* Flashcard Area */}
       {activeCards.length > 0 ? (
@@ -1214,7 +1226,11 @@ export default function App() {
           </div>
 
           {/* Card */}
-          <div 
+          {currentHopeLesson ? <HopeStudyCard
+            card={currentCard} cloze={isCurrentDeckQuestion} japaneseFirst={hopeJapaneseFirst}
+            revealed={isFlipped} commentOpen={isCommentOpen}
+            onFlip={() => setIsFlipped(!isFlipped)} onComment={() => setIsCommentOpen(!isCommentOpen)}
+          /> : <div 
             className="w-full bg-white dark:bg-slate-800 rounded-[2rem] md:rounded-[2.5rem] shadow-xl border border-slate-200 dark:border-slate-700 p-6 md:p-12 min-h-[350px] md:min-h-[450px] flex flex-col justify-center items-center cursor-pointer transition-all hover:shadow-2xl relative overflow-hidden active:scale-[0.99]"
             onClick={() => {
               setIsFlipped(!isFlipped);
@@ -1345,7 +1361,7 @@ export default function App() {
                 </div>
               )
             )}
-          </div>
+          </div>}
 
           {/* Navigation */}
           <div className="flex items-center justify-center gap-4 md:gap-6 mt-8 md:mt-10 w-full">

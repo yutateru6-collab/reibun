@@ -35,7 +35,7 @@ for (const [engine,type,width] of [['chromium-small',chromium,320],['webkit-mobi
   }
   await run('corrupt-storage',{'flashcard-dark-mode':'{broken','flashcard-shuffle':'null',[FAV]:'{}',[YET]:'null',app_greeting_queue:'[999]'},async p=>{
     await basic(p); await p.getByRole('button',{name:/Lesson 1 /}).first().click();
-    await p.getByRole('button',{name:/単語カード/}).click();assert((await card(p).innerText()).includes(hope.front));
+    await p.locator('[data-mode=learn]').click();assert((await p.locator('[data-ui=hope-study-card]').innerText()).includes(hope.front));
   });
   await run('mixed-favorites',{[FAV]:JSON.stringify([hope.id,vq.id])},async p=>{
     await review(p,'favorite');await p.getByRole('button',{name:/単語カード|問題カード/}).click();

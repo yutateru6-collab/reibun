@@ -1,3 +1,4 @@
+import { openHopeMenuFromList, firstStudyCard } from './hope-ui-helpers.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium, webkit, type Browser, type Page } from 'playwright';
@@ -48,12 +49,11 @@ async function clickDeck(page: Page, deck: Deck) {
 async function openBasic(page: Page) {
   await fresh(page);
   await page.getByRole('button', { name: /基本例文.*マスター/s }).click();
-  await page.getByRole('button', { name: /例文（110）/ }).waitFor();
+  await page.locator('[data-ui=hope-lesson-list]').waitFor();
 }
 async function openBasicDeck(page: Page, deck: Deck, tests = false) {
   await openBasic(page);
-  if (tests) await page.getByRole('button', { name: /公式穴埋め（54）/ }).click();
-  await clickDeck(page, deck);
+  await openHopeMenuFromList(page, deck.id);
 }
 async function openVq(page: Page) {
   await fresh(page);
@@ -68,7 +68,7 @@ async function openVqDeck(page: Page, deck: Deck, questions: boolean) {
   await clickDeck(page, deck);
 }
 async function firstClickableCard(page: Page) {
-  const el = page.locator('div.cursor-pointer').first();
+  const el = await firstStudyCard(page);
   await el.waitFor({ state: 'visible', timeout: 10000 });
   return el;
 }
@@ -147,8 +147,8 @@ async function auditHopeOfficialQuestionStates(page: Page) {
   const deck = basicTestDecks[0];
   const card = deck.cards[0];
   await openBasicDeck(page, deck, true);
-  await assertBodyIncludes(page, '問題カード', 'Hope official menu question semantics');
-  await page.getByRole('button', { name: /問題カード/ }).click();
+  await assertBodyIncludes(page, '穴埋めで確認', 'Hope official menu question semantics');
+  await page.getByRole('button', { name: /穴埋めで確認/ }).click();
   await assertBodyIncludes(page, card.front, 'Hope standard blank prompt');
   await assertBodyIncludes(page, card.translation, 'Hope standard Japanese prompt');
   await (await firstClickableCard(page)).click();
@@ -173,14 +173,17 @@ async function auditBasicExampleModes(page: Page) {
   const deck = basicExampleDecks[0];
   const card = deck.cards[0];
   await openBasicDeck(page, deck, false);
-  await page.getByRole('button', { name: /単語カード/ }).click();
+  await page.getByRole('button', { name: /例文を覚える/ }).click();
   await assertBodyIncludes(page, card.front, 'basic standard front');
-  await assertBodyIncludes(page, card.translation, 'basic standard translation');
   await (await firstClickableCard(page)).click();
   await assertBodyIncludes(page, card.back, 'basic standard back');
+  await assertBodyIncludes(page, card.translation, 'basic translation revealed');
 
   await openBasicDeck(page, deck, false);
-  await page.getByRole('button', { name: /答えから覚える/ }).click();
+  await page.getByRole('button', { name: /例文を覚える/ }).click();
+  await page.getByRole('button', { name: '日本語から見る', exact:true }).click();
+  await assertBodyIncludes(page, card.translation, 'Japanese-first cue');
+  await (await firstClickableCard(page)).click();
   await assertBodyIncludes(page, card.back, 'basic memorize English');
 
   await openBasicDeck(page, deck, false);
@@ -190,7 +193,7 @@ async function auditBasicExampleModes(page: Page) {
   await assertBodyIncludes(page, card.translation, 'basic self Japanese');
 
   await openBasicDeck(page, deck, false);
-  await page.getByRole('button', { name: /並べ替えクイズ/ }).click();
+  await page.getByRole('button', { name: /並べ替えで確認/ }).click();
   await assertBodyIncludes(page, card.translation, 'basic order prompt');
 }
 
@@ -207,7 +210,7 @@ async function auditResultScreen(page: Page) {
   await assertBodyIncludes(page, '100%', 'result score');
   await screenshot(page, 'result-screen');
   await page.getByRole('button', { name: /メニューに戻る/ }).click();
-  await assertBodyIncludes(page, '学習モードを選択', 'result return menu');
+  await assertBodyIncludes(page, '同じ例文を、練習方法を変えて', 'result return menu');
 }
 
 async function auditThemeAndOldRanges(page: Page) {
