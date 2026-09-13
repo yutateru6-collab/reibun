@@ -18,11 +18,9 @@ jobs:
           test "$(git hash-object src/App.tsx)" = f34ab4f66ad04b903a5855342ac948dfd5407d57
           git apply --check .github/review/card-focus.patch
           git apply .github/review/card-focus.patch
-          mv .github/review/card-focus-qa.yml .github/workflows/card-focus-qa.yml
-          rm .github/review/card-focus.patch .github/workflows/apply-card-focus.yml
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add src/App.tsx .github/review .github/workflows
+          git add src/App.tsx
           git commit -m 'fix: center study cards on entry and navigation without changing study content'
           git push origin HEAD:refs/heads/fix/center-study-card-20260913
       - uses: actions/setup-node@v4
