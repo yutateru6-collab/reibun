@@ -1,0 +1,73 @@
+name: Study card viewport QA
+on:
+  push:
+    branches: [main, fix/center-study-card-20260913]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  card-focus:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Types and unchanged source data
+        run: |
+          npm run lint
+          npx tsx scripts/validate-content.ts
+          npx tsx scripts/unified-lessons-model.ts
+          npx tsx scripts/workbook-model-regression.ts
+          npm run build
+      - name: Browsers and Japanese fonts
+        run: |
+          npx playwright install --with-deps chromium webkit
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Local preview
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/reibun-preview.log 2>&1 &
+          for n in $(seq 1 30); do curl -fsS http://127.0.0.1:4173 >/dev/null && break || sleep 1; done
+      - name: Chromium centering, manual scroll and resize
+        run: npx tsx scripts/card-focus-regression.ts
+      - name: WebKit centering, manual scroll and resize
+        env:
+          BROWSER: webkit
+        run: npx tsx scripts/card-focus-regression.ts
+      - name: Existing card modes and saved progress
+        run: npx tsx scripts/study-edge-regression.ts
+      - name: Exact build on the existing reibun Worker
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          PUBLIC_URL: https://reibun.itisnowornever271.workers.dev
+        run: |
+          set -euo pipefail
+          asset=$(grep -oE 'src="/assets/[^"]+\.js"' dist/index.html | head -1 | cut -d'"' -f2)
+          test -n "$asset"
+          for n in $(seq 1 36); do
+            if curl -fsSL "$PUBLIC_URL/?card_focus_check=${GITHUB_SHA}" -o /tmp/live.html && grep -Fq "$asset" /tmp/live.html; then
+              curl -fsSL "$PUBLIC_URL$asset" -o /tmp/live.js
+              if grep -Fq 'study-card-focus' /tmp/live.js; then
+                echo "Confirmed exact deployed asset: $asset"
+                exit 0
+              fi
+            fi
+            sleep 10
+          done
+          exit 1
+      - name: Existing production app centering
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          APP_URL: https://reibun.itisnowornever271.workers.dev
+          QA_OUT: audit/card-focus-production
+        run: npx tsx scripts/card-focus-regression.ts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: card-focus-qa
+          path: audit/
+          retention-days: 7
