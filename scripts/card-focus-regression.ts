@@ -108,7 +108,12 @@ for (const [width, height] of [[320, 568], [390, 650], [430, 780], [768, 1024], 
     console.log(`PASS ${engine} ${width}x${height}`);
   } catch (error) {
     await page.screenshot({ path: path.join(OUT, `failure-${width}.png`), fullPage: true });
-    reports.push({ width, height, error: String(error), pageErrors: errors });
+    reports.push({ width, height, error: String(error), pageErrors: errors, layout: await page.evaluate(() => {
+      const card = document.querySelector<HTMLElement>('[data-ui="study-card-focus"]');
+      const screen = document.querySelector<HTMLElement>('[data-ui="study-screen"]');
+      const rect = card?.getBoundingClientRect();
+      return { top: rect?.top, height: rect?.height, focus: card?.dataset.focusPosition, scroll: scrollY, viewport: visualViewport?.height, scrollHeight: document.documentElement.scrollHeight, screenStyle: screen?.getAttribute('style') };
+    }) });
     throw error;
   } finally {
     await context.close();

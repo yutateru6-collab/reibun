@@ -18,7 +18,7 @@ export function useStudyCardFocus(active: boolean, navigationKey: string) {
       return;
     }
 
-    const originalPadding = screen.style.paddingBottom;
+    const originalMinHeight = screen.style.minHeight;
     const originalAnchor = screen.style.overflowAnchor;
     const originalMargin = card.style.marginTop;
     let disposed = false;
@@ -36,7 +36,7 @@ export function useStudyCardFocus(active: boolean, navigationKey: string) {
 
       // Always calculate from the natural layout; repeated resize events must
       // not accumulate blank space above or below the card.
-      screen.style.paddingBottom = originalPadding;
+      screen.style.minHeight = originalMinHeight;
       card.style.marginTop = originalMargin;
       const height = viewport?.height || window.innerHeight;
       const offset = viewport?.offsetTop || 0;
@@ -54,10 +54,14 @@ export function useStudyCardFocus(active: boolean, navigationKey: string) {
       const maxScroll = Math.max(0, scrolling.scrollHeight - scrolling.clientHeight);
       // Leave enough room after the navigation controls to reach the centre
       // even when the card is the last substantial element on a short page.
-      const extraAfter = Math.max(0, target - maxScroll);
-      if (extraAfter > 0) {
-        const basePadding = parseFloat(getComputedStyle(screen).paddingBottom) || 0;
-        screen.style.paddingBottom = `${basePadding + Math.ceil(extraAfter) + 1}px`;
+      if (target > maxScroll) {
+        const screenBox = screen.getBoundingClientRect();
+        const screenTop = screenBox.top + window.scrollY;
+        // Growing padding alone can be swallowed by min-height: 100vh's empty
+        // space. Set the required total height instead, so scrolling can reach
+        // the target on short cloze pages as well as long sentence pages.
+        const neededHeight = target + scrolling.clientHeight - screenTop + 1;
+        screen.style.minHeight = `${Math.ceil(Math.max(screenBox.height, neededHeight))}px`;
       }
       window.scrollTo({ top: target, left: window.scrollX, behavior: 'instant' });
       card.dataset.focusPosition = box.height > height - 32 ? 'top' : 'center';
@@ -93,7 +97,7 @@ export function useStudyCardFocus(active: boolean, navigationKey: string) {
       window.removeEventListener('touchmove', respectUser);
       window.removeEventListener('wheel', respectUser);
       window.removeEventListener('keydown', respectUser);
-      screen.style.paddingBottom = originalPadding;
+      screen.style.minHeight = originalMinHeight;
       screen.style.overflowAnchor = originalAnchor;
       card.style.marginTop = originalMargin;
       delete card.dataset.focusPosition;
