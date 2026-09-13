@@ -1,22 +1,72 @@
 name: Unified lessons QA
 on:
   push:
-    branches: [feat/unified-hope-lessons-20260913]
+    branches: [main, feat/unified-hope-lessons-20260913]
+  pull_request:
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  snapshot:
+  unified-lessons:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - name: Archive exact source for isolated review
-        run: |
-          mkdir -p review
-          git archive HEAD -o review/source.tar
-          git rev-parse HEAD > review/commit.txt
-      - uses: actions/upload-artifact@v4
+      - uses: actions/setup-node@v4
         with:
-          name: unified-lessons-source
-          path: review/
-          retention-days: 3
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Types, source integrity and lesson mapping
+        run: |
+          npm run lint
+          npx tsx scripts/validate-content.ts
+          npx tsx scripts/unified-lessons-model.ts
+          npx tsx scripts/workbook-model-regression.ts
+      - run: npm run build
+      - name: Browsers and Japanese fonts
+        run: |
+          npx playwright install --with-deps chromium webkit
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Local preview
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/reibun-preview.log 2>&1 &
+          for n in $(seq 1 30); do curl -fsS http://127.0.0.1:4173 >/dev/null && break || sleep 1; done
+      - name: Chromium all lessons, directions, modes and preserved storage
+        run: npx tsx scripts/unified-lessons-ui.ts
+      - name: WebKit all lessons, directions, modes and preserved storage
+        env:
+          BROWSER: webkit
+        run: npx tsx scripts/unified-lessons-ui.ts
+      - name: Wait for this exact build on the existing reibun Worker
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          PUBLIC_URL: https://reibun.itisnowornever271.workers.dev
+        run: |
+          set -euo pipefail
+          asset=$(grep -oE 'src="/assets/[^"]+\.js"' dist/index.html | head -1 | cut -d'"' -f2)
+          test -n "$asset"
+          for n in $(seq 1 36); do
+            if curl -fsSL "$PUBLIC_URL/?unified_check=${GITHUB_SHA}" -o /tmp/live.html && grep -Fq "$asset" /tmp/live.html; then
+              curl -fsSL "$PUBLIC_URL$asset" -o /tmp/live.js
+              if grep -Fq 'hope-lesson-list' /tmp/live.js; then
+                echo "Confirmed exact deployed asset: $asset"
+                exit 0
+              fi
+            fi
+            sleep 10
+          done
+          echo 'Updated build has not reached the existing reibun Worker.'
+          exit 1
+      - name: Verify unified lessons on the existing production app
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          APP_URL: https://reibun.itisnowornever271.workers.dev
+          QA_OUT: audit/unified-production
+        run: npx tsx scripts/unified-lessons-ui.ts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unified-lessons-qa
+          path: audit/
+          retention-days: 7
