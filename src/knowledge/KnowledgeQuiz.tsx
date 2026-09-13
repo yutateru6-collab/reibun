@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Brain, Home, ChevronLeft } from 'lucide-react';
 import { useDialog } from '../workbook/useDialog';
@@ -52,10 +52,12 @@ export default function KnowledgeQuiz() {
     if (location.hash === '#knowledge') history.replaceState(null, '', location.pathname + location.search);
   }
   useDialog(open, close, '[data-ui="knowledge-dialog"]');
-  useEffect(() => {
+  // Finish navigation focus before the next paint. A delayed animation-frame
+  // focus can steal an input event when the next question is answered quickly.
+  useLayoutEffect(() => {
     if (!open) return;
-    const frame = requestAnimationFrame(() => { mainRef.current?.scrollTo({ top: 0 }); headingRef.current?.focus({ preventScroll: true }); });
-    return () => cancelAnimationFrame(frame);
+    mainRef.current?.scrollTo({ top: 0 });
+    headingRef.current?.focus({ preventScroll: true });
   }, [open, view, question?.id]);
   function launch() { setOpen(true); setView('setup'); history.replaceState(null, '', location.pathname + location.search + '#knowledge'); }
   function begin(start: number) {
@@ -141,7 +143,7 @@ export default function KnowledgeQuiz() {
         {view === 'practice' && session && question && <>
           <div className="tk-progress-row"><span>STEP {question.stage} · {session.title}</span><strong>{session.index + 1} / {session.ids.length}</strong></div>
           <progress value={session.ids.filter(id => session.responses[id]?.grade).length} max={session.ids.length} aria-label="このセットの進み具合" />
-          <article className="tk-question" data-question={question.number} data-format={question.format}>
+          <article key={question.id} className="tk-question" data-question={question.number} data-format={question.format}>
             <div className="tk-qmeta"><span>第{question.number}問　{FORMATS[question.format]}</span><label className="tk-flag"><input type="checkbox" checked={progress.flagged.includes(question.id)} onChange={toggleFlag} />△ 迷った</label></div>
             <p className="tk-instruction">{instructions[question.format]}</p>
             <h1 className="tk-prompt" ref={headingRef} tabIndex={-1}><Prompt text={question.prompt} /></h1>
