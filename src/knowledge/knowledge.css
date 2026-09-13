@@ -6,6 +6,7 @@
 
 /* The guide's comparisons are intentionally written on separate lines. */
 .tk-point p { white-space: pre-line; }
+.tk-topic-card > strong, .tk-next-card h2 { text-wrap: balance; }
 
 @media (max-width: 600px) {
   .tk-mobile-br { display: block; }
