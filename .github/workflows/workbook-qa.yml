@@ -1,0 +1,30 @@
+name: Workbook and print QA
+on:
+  push:
+    branches: [feat/tense-workbook-print-20260913]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  workbook:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Preserve source and build for review
+        run: |
+          mkdir -p qa-review
+          git archive HEAD -o qa-review/source.tar
+          tar -czf qa-review/dependencies.tgz node_modules
+          cp -r dist qa-review/dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: workbook-review
+          path: qa-review
+          retention-days: 3
