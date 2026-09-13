@@ -1,0 +1,80 @@
+name: Knowledge 102 QA
+on:
+  push:
+    branches: [main, feat/tense-knowledge-102-20260913]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: knowledge-102-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  knowledge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Types, 102 answers, document parity and existing source integrity
+        run: |
+          mkdir -p audit/knowledge
+          npm run lint 2>&1 | tee audit/knowledge/types.log
+          npx tsx scripts/knowledge-model-regression.ts 2>&1 | tee audit/knowledge/model.log
+          npx tsx scripts/validate-content.ts 2>&1 | tee audit/knowledge/source-integrity.log
+          npx tsx scripts/workbook-model-regression.ts 2>&1 | tee audit/knowledge/workbook-model.log
+      - run: npm run build
+      - name: Install browsers and Japanese fonts
+        run: |
+          npx playwright install --with-deps chromium webkit
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Start preview
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/reibun-knowledge-preview.log 2>&1 &
+          for n in $(seq 1 30); do curl -fsS http://127.0.0.1:4173 >/dev/null && break || sleep 1; done
+      - name: Chromium all 102 questions, mobile, desktop and persistence
+        run: node scripts/knowledge-ui-regression.mjs
+      - name: WebKit all 102 questions and persistence
+        env:
+          BROWSER: webkit
+        run: node scripts/knowledge-ui-regression.mjs
+      - name: Existing worksheet and study modes
+        run: |
+          node scripts/workbook-ui-regression.mjs
+          npx tsx scripts/study-edge-regression.ts
+      - name: Confirm this exact production build
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          PUBLIC_URL: https://reibun.itisnowornever271.workers.dev
+        run: |
+          set -euo pipefail
+          asset=$(grep -oE 'src="/assets/[^"]+\.js"' dist/index.html | head -1 | cut -d'"' -f2)
+          test -n "$asset"
+          for n in $(seq 1 36); do
+            if curl -fsSL "$PUBLIC_URL/?knowledge_check=${GITHUB_SHA}" -o /tmp/live-knowledge.html && grep -Fq "$asset" /tmp/live-knowledge.html; then
+              curl -fsSL "$PUBLIC_URL$asset" -o /tmp/live-knowledge.js
+              if grep -Fq 'tense-knowledge-102-v1' /tmp/live-knowledge.js; then
+                printf 'commit=%s\nasset=%s\nurl=%s\n' "$GITHUB_SHA" "$asset" "$PUBLIC_URL" | tee audit/knowledge/production-build.txt
+                exit 0
+              fi
+            fi
+            sleep 10
+          done
+          echo 'This exact build has not reached the existing reibun Worker.'
+          exit 1
+      - name: Existing production URL knowledge check
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          APP_URL: https://reibun.itisnowornever271.workers.dev
+          QA_OUT: audit/knowledge/production
+        run: node scripts/knowledge-ui-regression.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: knowledge-102-qa
+          path: audit/
+          retention-days: 7
