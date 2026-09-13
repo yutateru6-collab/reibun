@@ -67,3 +67,18 @@ Vite の `VITE_*` 環境変数はブラウザ用 JavaScript に埋め込まれ�
 - Known source inconsistencies are preserved and recorded instead of being silently corrected.
 
 Run `npx tsx scripts/validate-content.ts` to verify source hashes, content counts, active card IDs, and range integrity.
+
+## 時制の問題集・印刷（2026-09-13）
+
+公開先は引き続き `https://reibun.itisnowornever271.workers.dev/`。別アプリは作成しません。
+
+- ホームの「クイズ」から既存のクイズ一覧・文法説明に進みます。
+- 「問題集・印刷」は時制①・②の元のExercises46問、同じ基本例文の形式変更32問、新作40問。暗唱例文Test3の元の問題10問は別の範囲から選べます（合計128問）。
+- 元の英文・空欄・語群・解答・別解は元データを参照して維持。画像未収録の問題は除外。不整合は注記して黙って修正しません。
+- 元の問題／形式変更／応用問題〔新作〕を各問に明示。種類ごとの問数・形式・範囲・並び順を選べます。
+- 生成時点の問題・選択肢と正答を同じスナップショットとして保存し、練習・問題用紙・解答用紙で共有します。履歴は端末内の最新8セットです。
+- 選択問題は自動採点、記述は別解を含む解説で自己採点。誤答だけの復習・印刷にも対応。入力中の解答と採点結果はメモリ内、復習対象IDと問題セットはlocalStorageに保存します。
+- A4縦／JIS B4横2段。問題のみ・解答解説のみ・両方を選択。解答は新しいページから始まり、用紙上に同じセット番号を表示します。
+- PDFはブラウザの印刷画面から保存します。用紙サイズを合わせ、倍率100％、ブラウザのヘッダー／フッターなしを推奨。字体・プリンタ依存の差は印刷プレビューで確認してください。
+
+検証: `npx tsx scripts/workbook-model-regression.ts` と `node scripts/workbook-ui-regression.mjs`。ブラウザ検証はローカルプレビューを起動して実行します。GitHub ActionsでChromium/WebKit、既存学習モード、本番のビルド一致も確認します。

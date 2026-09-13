@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useDialog } from './workbook/useDialog';
 import {
   BookOpen,
   Brain,
@@ -21,7 +22,7 @@ import {
   type GrammarUnitId,
 } from './data/grammar_review';
 
-type GuideView = 'learn' | 'quiz' | 'perfect';
+type GuideView = 'hub' | 'learn' | 'quiz' | 'perfect';
 type QuizFilter = 'all' | 'perfect' | 'tense' | 'verbs';
 type QuizCategory = Exclude<QuizFilter, 'all'> | 'mixed';
 
@@ -63,7 +64,7 @@ function readMistakes(): string[] {
 export default function ExamRangeGuide() {
   const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [view, setView] = useState<GuideView>('quiz');
+  const [view, setView] = useState<GuideView>('hub');
   const [filter, setFilter] = useState<QuizFilter>('all');
   const [unitId, setUnitId] = useState<GrammarUnitId>('tense-1');
   const [learnIndex, setLearnIndex] = useState(0);
@@ -153,7 +154,7 @@ export default function ExamRangeGuide() {
   }, [allQuestions, mistakeIds]);
 
   useEffect(() => {
-    localStorage.setItem(MISTAKE_STORAGE_KEY, JSON.stringify(mistakeIds));
+    try { localStorage.setItem(MISTAKE_STORAGE_KEY, JSON.stringify(mistakeIds)); } catch { /* Storage can be unavailable in private mode. */ }
   }, [mistakeIds]);
 
   useEffect(() => {
@@ -171,14 +172,7 @@ export default function ExamRangeGuide() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (!isOpen) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [isOpen]);
+  useDialog(isOpen, () => setIsOpen(false), '[data-ui="quiz-dialog"]');
 
   const openLearn = (nextUnitId: GrammarUnitId) => {
     setUnitId(nextUnitId);
@@ -247,11 +241,10 @@ export default function ExamRangeGuide() {
     { id: 'verbs', label: '動詞②' },
   ];
 
-  const topEntry = portalTarget
-    ? createPortal(
+  const quizHub = (
         <section
           data-ui="exam-quiz-hub"
-          className="order-first col-span-2 w-full rounded-2xl sm:rounded-3xl border-2 border-fuchsia-200 dark:border-fuchsia-900/50 bg-gradient-to-br from-fuchsia-50 via-white to-indigo-50 dark:from-fuchsia-950/25 dark:via-slate-800 dark:to-indigo-950/25 p-3.5 sm:p-5 shadow-sm"
+          className="w-full rounded-2xl sm:rounded-3xl border-2 border-fuchsia-200 dark:border-fuchsia-900/50 bg-gradient-to-br from-fuchsia-50 via-white to-indigo-50 dark:from-fuchsia-950/25 dark:via-slate-800 dark:to-indigo-950/25 p-3.5 sm:p-5 shadow-sm"
         >
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
@@ -344,10 +337,17 @@ export default function ExamRangeGuide() {
               </div>
             ))}
           </div>
-        </section>,
-        portalTarget,
-      )
-    : null;
+        </section>
+  );
+
+  const topEntry = portalTarget ? createPortal(
+    <button type="button" data-ui="quiz-launcher" onClick={() => { setView('hub'); setIsOpen(true); }}
+      className="col-span-1 rounded-2xl sm:rounded-3xl border-2 border-fuchsia-200 dark:border-fuchsia-900/50 bg-white dark:bg-slate-800 p-4 sm:p-6 text-center shadow-sm hover:border-fuchsia-500 transition-colors min-h-[148px] sm:min-h-[180px] flex flex-col items-center justify-center">
+      <span className="w-12 h-12 rounded-2xl bg-fuchsia-100 dark:bg-fuchsia-900/30 text-fuchsia-600 dark:text-fuchsia-300 mb-2.5 flex items-center justify-center"><Brain size={26} /></span>
+      <span className="block text-lg sm:text-xl font-black text-slate-900 dark:text-white">クイズ</span>
+      <span className="block mt-1 text-[10px] sm:text-xs text-slate-600 dark:text-slate-300">時制・完了形・動詞を確認</span>
+    </button>, portalTarget,
+  ) : null;
 
   return (
     <>
@@ -364,6 +364,7 @@ export default function ExamRangeGuide() {
             role="dialog"
             aria-modal="true"
             aria-label="試験対策クイズ"
+            data-ui="quiz-dialog"
             className="h-[100dvh] sm:h-[calc(100dvh-2rem)] sm:max-h-[900px] w-full sm:max-w-3xl sm:mx-auto bg-slate-50 dark:bg-slate-900 sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col"
           >
             <header className="shrink-0 px-3 sm:px-5 py-3 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur">
@@ -371,6 +372,7 @@ export default function ExamRangeGuide() {
                 <div className="min-w-0">
                   <div className="text-[10px] font-black tracking-wider text-fuchsia-600 dark:text-fuchsia-300">{CURRENT_EXAM_RANGE_LABEL}</div>
                   <h2 className="text-base sm:text-xl font-black text-slate-900 dark:text-white leading-tight whitespace-normal">
+                    {view === 'hub' && 'クイズ'}
                     {view === 'learn' && `${selectedUnit.title}｜覚える`}
                     {view === 'quiz' && quizTitle}
                     {view === 'perfect' && '完了形 30秒まとめ'}
@@ -378,16 +380,17 @@ export default function ExamRangeGuide() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => setIsOpen(false)}
-                  aria-label="クイズ一覧へ戻る"
+                  onClick={() => { if (view === 'hub') setIsOpen(false); else setView('hub'); }}
+                  aria-label={view === 'hub' ? 'ホームへ戻る' : 'クイズ一覧へ戻る'}
                   className="min-w-11 min-h-11 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 flex items-center justify-center"
                 >
-                  <X size={22} />
+                  {view === 'hub' ? <X size={22} /> : <ChevronLeft size={22} />}
                 </button>
               </div>
             </header>
 
             <div className="flex-1 overflow-y-auto overscroll-contain px-3 sm:px-5 py-4 sm:py-5">
+              {view === 'hub' && quizHub}
               {view === 'perfect' && (
                 <div className="space-y-4">
                   <div className="rounded-2xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/50 p-4">
@@ -563,11 +566,11 @@ export default function ExamRangeGuide() {
                       <div className="mt-4 text-xs font-black text-emerald-600 dark:text-emerald-300">RESULT</div>
                       <div className="mt-1 text-4xl font-black text-slate-900 dark:text-white">{quizScore} / {quizQuestions.length}</div>
                       <p className="mt-3 text-sm font-semibold text-slate-600 dark:text-slate-300 leading-relaxed">
-                        間違えた問題はトップの「ミス復習」に自動で残ります。正解できたらリストから外れます。
+                        間違えた問題はクイズ一覧の「ミスだけ復習」に自動で残ります。正解できたらリストから外れます。
                       </p>
                       <div className="grid grid-cols-2 gap-2 mt-5">
                         <button type="button" onClick={restartQuiz} className="min-h-12 rounded-xl border border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 font-black text-sm flex items-center justify-center gap-2"><RotateCcw size={17} /> もう一度</button>
-                        <button type="button" onClick={() => setIsOpen(false)} className="min-h-12 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black text-sm flex items-center justify-center gap-2">一覧へ戻る</button>
+                        <button type="button" onClick={() => setView('hub')} className="min-h-12 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black text-sm flex items-center justify-center gap-2">一覧へ戻る</button>
                       </div>
                     </div>
                   )}
