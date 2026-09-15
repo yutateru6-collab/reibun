@@ -25,7 +25,12 @@ const CATEGORY_OFFSET: Record<GrammarCategoryV3['id'], number> = {
 };
 
 function moveCorrectChoice(question: GrammarQuestionV2, targetIndex: number): GrammarQuestionV3 {
-  if (question.correctIndex === targetIndex) return { ...question, choices: [...question.choices] };
+  if (question.correctIndex === targetIndex) {
+    return {
+      ...question,
+      choices: [...question.choices] as [string, string, string, string],
+    };
+  }
 
   const choices = [...question.choices] as [string, string, string, string];
   [choices[question.correctIndex], choices[targetIndex]] = [choices[targetIndex], choices[question.correctIndex]];
