@@ -3,7 +3,7 @@ import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
 import ExamRangeGuide from './ExamRangeGuide.tsx';
 import Workbook from './workbook/Workbook';
-import SimpleGrammarCheckV2 from './knowledge/SimpleGrammarCheckV2';
+import SimpleGrammarCheckV3 from './knowledge/SimpleGrammarCheckV3';
 import './index.css';
 
 createRoot(document.getElementById('root')!).render(
@@ -11,6 +11,6 @@ createRoot(document.getElementById('root')!).render(
     <App />
     <ExamRangeGuide />
     <Workbook />
-    <SimpleGrammarCheckV2 />
+    <SimpleGrammarCheckV3 />
   </StrictMode>,
 );
