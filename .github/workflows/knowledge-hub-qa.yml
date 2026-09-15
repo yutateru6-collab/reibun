@@ -19,11 +19,12 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Preserve existing source data and audit grammar bank
+      - name: Preserve existing source data and audit grammar bank and shuffle
         run: |
           mkdir -p audit/knowledge-hub
           npm run lint
           npx tsx scripts/grammar-bank-audit.ts
+          npx tsx scripts/grammar-shuffle-audit.ts
           npx tsx scripts/knowledge-model-regression.ts
           npx tsx scripts/validate-content.ts
           npx tsx scripts/workbook-model-regression.ts
@@ -37,15 +38,15 @@ jobs:
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/hub-preview.log 2>&1 &
           for n in $(seq 1 30); do curl -fsS http://127.0.0.1:4173 >/dev/null && break || sleep 1; done
-      - name: Chromium all 120 questions and exact A-D balance
+      - name: Chromium all 120 shuffled questions and exact A-D balance
         run: node --import tsx scripts/knowledge-ui-regression.mjs
-      - name: WebKit all 120 questions and exact A-D balance
+      - name: WebKit all 120 shuffled questions and exact A-D balance
         env:
           BROWSER: webkit
         run: node --import tsx scripts/knowledge-ui-regression.mjs
-      - name: Basics-first structure, examples and balance in Chromium
+      - name: Level-block structure, examples, shuffle and balance in Chromium
         run: npx tsx scripts/knowledge-hub-regression.ts
-      - name: Basics-first structure, examples and balance in WebKit
+      - name: Level-block structure, examples, shuffle and balance in WebKit
         env:
           BROWSER: webkit
         run: npx tsx scripts/knowledge-hub-regression.ts
@@ -63,14 +64,14 @@ jobs:
           for n in $(seq 1 42); do
             if curl -fsSL "$PUBLIC_URL/?grammar_hub_check=${GITHUB_SHA}" -o /tmp/live-hub.html && grep -Fq "$asset" /tmp/live-hub.html; then
               curl -fsSL "$PUBLIC_URL$asset" -o /tmp/live-hub.js
-              if grep -Fq 'grammar-three-track-v4' /tmp/live-hub.js && grep -Fq 'balanced-answer-layout-40x3-v1' /tmp/live-hub.js; then
-                echo "Confirmed deployed balanced asset: $asset" | tee audit/knowledge-hub/production-build.txt
+              if grep -Fq 'grammar-three-track-v4' /tmp/live-hub.js && grep -Fq 'balanced-answer-layout-40x3-v1' /tmp/live-hub.js && grep -Fq 'level-block-question-shuffle-v1' /tmp/live-hub.js; then
+                echo "Confirmed deployed shuffled grammar asset: $asset" | tee audit/knowledge-hub/production-build.txt
                 exit 0
               fi
             fi
             sleep 10
           done
-          echo 'The exact balanced-answer build is not live yet.'
+          echo 'The exact shuffled grammar build is not live yet.'
           exit 1
       - name: Verify production category hub
         if: github.ref == 'refs/heads/main'
