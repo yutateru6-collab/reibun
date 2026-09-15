@@ -20,12 +20,13 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Types, answer distribution, grammar bank and source integrity
+      - name: Types, answer distribution, shuffle, grammar bank and source integrity
         run: |
           set -euo pipefail
           mkdir -p audit/knowledge
           npm run lint 2>&1 | tee audit/knowledge/types.log
           npx tsx scripts/grammar-bank-audit.ts 2>&1 | tee audit/knowledge/grammar-bank.log
+          npx tsx scripts/grammar-shuffle-audit.ts 2>&1 | tee audit/knowledge/grammar-shuffle.log
           npx tsx scripts/knowledge-model-regression.ts 2>&1 | tee audit/knowledge/legacy-model.log
           npx tsx scripts/validate-content.ts 2>&1 | tee audit/knowledge/source-integrity.log
           npx tsx scripts/workbook-model-regression.ts 2>&1 | tee audit/knowledge/workbook-model.log
@@ -38,13 +39,13 @@ jobs:
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/reibun-knowledge-preview.log 2>&1 &
           for n in $(seq 1 30); do curl -fsS http://127.0.0.1:4173 >/dev/null && break || sleep 1; done
-      - name: Chromium all 120 questions, scoring, examples and answer balance
+      - name: Chromium all 120 shuffled questions, scoring, examples and answer balance
         run: node --import tsx scripts/knowledge-ui-regression.mjs
-      - name: WebKit all 120 questions, scoring, examples and answer balance
+      - name: WebKit all 120 shuffled questions, scoring, examples and answer balance
         env:
           BROWSER: webkit
         run: node --import tsx scripts/knowledge-ui-regression.mjs
-      - name: Grammar hub structure, basics-first order and balanced A-D answers
+      - name: Grammar hub structure, level blocks, shuffle and balanced A-D answers
         run: npx tsx scripts/knowledge-hub-regression.ts
       - name: Existing worksheet and study modes
         run: |
@@ -61,14 +62,14 @@ jobs:
           for n in $(seq 1 36); do
             if curl -fsSL "$PUBLIC_URL/?grammar_check=${GITHUB_SHA}" -o /tmp/live-knowledge.html && grep -Fq "$asset" /tmp/live-knowledge.html; then
               curl -fsSL "$PUBLIC_URL$asset" -o /tmp/live-knowledge.js
-              if grep -Fq 'grammar-three-track-v4' /tmp/live-knowledge.js && grep -Fq 'balanced-answer-layout-40x3-v1' /tmp/live-knowledge.js; then
+              if grep -Fq 'grammar-three-track-v4' /tmp/live-knowledge.js && grep -Fq 'balanced-answer-layout-40x3-v1' /tmp/live-knowledge.js && grep -Fq 'level-block-question-shuffle-v1' /tmp/live-knowledge.js; then
                 printf 'commit=%s\nasset=%s\nurl=%s\n' "$GITHUB_SHA" "$asset" "$PUBLIC_URL" | tee audit/knowledge/production-build.txt
                 exit 0
               fi
             fi
             sleep 10
           done
-          echo 'This exact balanced-answer build has not reached the existing reibun Worker.'
+          echo 'This exact shuffled grammar build has not reached the existing reibun Worker.'
           exit 1
       - name: Production grammar check
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
