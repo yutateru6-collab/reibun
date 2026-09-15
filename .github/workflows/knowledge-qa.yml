@@ -22,6 +22,7 @@ jobs:
       - run: npm ci
       - name: Types, answer distribution, grammar bank and source integrity
         run: |
+          set -euo pipefail
           mkdir -p audit/knowledge
           npm run lint 2>&1 | tee audit/knowledge/types.log
           npx tsx scripts/grammar-bank-audit.ts 2>&1 | tee audit/knowledge/grammar-bank.log
