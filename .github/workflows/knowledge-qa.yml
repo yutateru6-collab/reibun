@@ -1,13 +1,13 @@
-name: Knowledge 102 QA
+name: Grammar check 108 QA
 on:
   push:
-    branches: [main, feat/tense-knowledge-102-20260913]
+    branches: [main]
   pull_request:
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: knowledge-102-${{ github.ref }}
+  group: grammar-check-108-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   knowledge:
@@ -20,11 +20,11 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Types, 102 answers, document parity and existing source integrity
+      - name: Types, grammar bank and existing source integrity
         run: |
           mkdir -p audit/knowledge
           npm run lint 2>&1 | tee audit/knowledge/types.log
-          npx tsx scripts/knowledge-model-regression.ts 2>&1 | tee audit/knowledge/model.log
+          npx tsx scripts/knowledge-model-regression.ts 2>&1 | tee audit/knowledge/legacy-model.log
           npx tsx scripts/validate-content.ts 2>&1 | tee audit/knowledge/source-integrity.log
           npx tsx scripts/workbook-model-regression.ts 2>&1 | tee audit/knowledge/workbook-model.log
       - run: npm run build
@@ -36,12 +36,14 @@ jobs:
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/reibun-knowledge-preview.log 2>&1 &
           for n in $(seq 1 30); do curl -fsS http://127.0.0.1:4173 >/dev/null && break || sleep 1; done
-      - name: Chromium all 102 questions, mobile, desktop and persistence
+      - name: Chromium three categories and all 108 questions
         run: node scripts/knowledge-ui-regression.mjs
-      - name: WebKit all 102 questions and persistence
+      - name: WebKit three categories and all 108 questions
         env:
           BROWSER: webkit
         run: node scripts/knowledge-ui-regression.mjs
+      - name: Grammar bank structure and first-question basics
+        run: npx tsx scripts/knowledge-hub-regression.ts
       - name: Existing worksheet and study modes
         run: |
           node scripts/workbook-ui-regression.mjs
@@ -55,9 +57,9 @@ jobs:
           asset=$(grep -oE 'src="/assets/[^"]+\.js"' dist/index.html | head -1 | cut -d'"' -f2)
           test -n "$asset"
           for n in $(seq 1 36); do
-            if curl -fsSL "$PUBLIC_URL/?knowledge_check=${GITHUB_SHA}" -o /tmp/live-knowledge.html && grep -Fq "$asset" /tmp/live-knowledge.html; then
+            if curl -fsSL "$PUBLIC_URL/?grammar_check=${GITHUB_SHA}" -o /tmp/live-knowledge.html && grep -Fq "$asset" /tmp/live-knowledge.html; then
               curl -fsSL "$PUBLIC_URL$asset" -o /tmp/live-knowledge.js
-              if grep -Fq 'tense-knowledge-102-v1' /tmp/live-knowledge.js; then
+              if grep -Fq 'reibun:grammar-check:mistakes:v1' /tmp/live-knowledge.js; then
                 printf 'commit=%s\nasset=%s\nurl=%s\n' "$GITHUB_SHA" "$asset" "$PUBLIC_URL" | tee audit/knowledge/production-build.txt
                 exit 0
               fi
@@ -66,7 +68,7 @@ jobs:
           done
           echo 'This exact build has not reached the existing reibun Worker.'
           exit 1
-      - name: Existing production URL knowledge check
+      - name: Production grammar check
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           APP_URL: https://reibun.itisnowornever271.workers.dev
@@ -75,6 +77,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: knowledge-102-qa
+          name: grammar-check-108-qa
           path: audit/
           retention-days: 7
