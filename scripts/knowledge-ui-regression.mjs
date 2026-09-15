@@ -20,6 +20,7 @@ async function attach(context, direct = false) {
   await page.goto(direct ? `${base}/#knowledge` : base, { waitUntil: 'networkidle' });
   if (!direct) await page.locator('[data-ui="knowledge-launcher"]').click();
   await dlg().waitFor();
+  assert.equal(await dlg().getAttribute('data-design'), 'grammar-three-track-v3');
   assert.equal(await dlg().locator('[data-ui="grammar-category-list"] [data-category]').count(), 3);
 }
 
@@ -31,30 +32,34 @@ async function bounds() {
 
 async function finishCategory(id, title) {
   await dlg().locator(`[data-category="${id}"]`).click();
-  for (let i = 1; i <= 36; i++) {
+  for (let i = 1; i <= 40; i++) {
     const section = dlg().locator('[data-ui="grammar-quiz-question"]');
     await section.waitFor();
-    assert.ok((await section.innerText()).includes(`${i} / 36`));
+    assert.ok((await section.innerText()).includes(`${i} / 40`));
     const article = section.locator('article');
-    const choices = article.locator('button');
+    const choices = article.locator('[data-choice]');
     assert.equal(await choices.count(), 4);
     await choices.first().click();
-    await article.getByRole('status').waitFor();
-    await article.getByRole('button', { name: i === 36 ? /結果を見る/ : /次の問題/ }).click();
+    await article.locator('[data-ui="grammar-feedback"]').waitFor();
+    const example = article.locator('[data-ui="grammar-example"]');
+    await example.waitFor();
+    assert.ok((await example.innerText()).includes('例文'));
+    assert.ok((await example.locator('p').innerText()).trim().split(/\s+/).length >= 2);
+    await article.getByRole('button', { name: i === 40 ? /結果を見る/ : /次の問題/ }).click();
   }
   const result = dlg().locator('[data-ui="grammar-quiz-result"]');
   await result.waitFor();
   assert.ok((await result.innerText()).includes(title));
-  assert.ok((await result.innerText()).includes('/ 36'));
+  assert.ok((await result.innerText()).includes('/ 40'));
   await result.getByRole('button', { name: '3分野に戻る', exact: true }).click();
 }
 
 try {
   let context = await browser.newContext({ viewport: { width: 390, height: 844 }, locale: 'ja-JP' });
   await attach(context);
-  assert.equal(await dlg().locator('[data-category="perfect"]').innerText().then(t => t.includes('完了形') && t.includes('36問')), true);
-  assert.equal(await dlg().locator('[data-category="future"]').innerText().then(t => t.includes('未来表現') && t.includes('36問')), true);
-  assert.equal(await dlg().locator('[data-category="countable"]').innerText().then(t => t.includes('可算・不可算') && t.includes('36問')), true);
+  assert.equal(await dlg().locator('[data-category="perfect"]').innerText().then(t => t.includes('完了形') && t.includes('40問')), true);
+  assert.equal(await dlg().locator('[data-category="future"]').innerText().then(t => t.includes('未来表現') && t.includes('40問')), true);
+  assert.equal(await dlg().locator('[data-category="countable"]').innerText().then(t => t.includes('可算・不可算') && t.includes('40問')), true);
   assert.equal(await dlg().getByText('「なんとなく」を、「わかる」に。').count(), 0);
   await bounds();
   await page.screenshot({ path: `${out}/mobile-three-categories.png` });
@@ -75,7 +80,7 @@ try {
   await page.evaluate(() => document.documentElement.classList.add('dark'));
   await page.screenshot({ path: `${out}/desktop-dark-three-categories.png` });
   assert.deepEqual(errors, []);
-  fs.writeFileSync(`${out}/report.json`, JSON.stringify({ success: true, browser: browserName, categories: 3, questionsPerCategory: 36, totalAccessible: 108, directHash: true, errors }, null, 2));
+  fs.writeFileSync(`${out}/report.json`, JSON.stringify({ success: true, browser: browserName, categories: 3, questionsPerCategory: 40, totalAccessible: 120, everyAnswerHasExample: true, directHash: true, errors }, null, 2));
   await context.close();
 } catch (e) {
   if (page && !page.isClosed()) {
@@ -88,4 +93,4 @@ try {
   await browser.close();
 }
 
-console.log(`Grammar check UI PASS (${browserName}): 3 categories, 108 questions, mobile/desktop.`);
+console.log(`Grammar check UI PASS (${browserName}): 3 categories, 120 questions, every answer has an example.`);
