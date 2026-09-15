@@ -14,10 +14,11 @@ import {
 } from 'lucide-react';
 import { useDialog } from '../workbook/useDialog';
 import {
-  GRAMMAR_CATEGORIES_V2,
-  type GrammarCategoryV2,
-  type GrammarQuestionV2,
-} from './grammar_curriculum_v2';
+  GRAMMAR_ANSWER_LAYOUT_VERSION,
+  GRAMMAR_CATEGORIES_V3,
+  type GrammarCategoryV3,
+  type GrammarQuestionV3,
+} from './grammar_curriculum_v3';
 
 const TOP_SCREEN_GRID_SELECTOR = '[data-ui="compact-home-bento-v1"] .grid.grid-cols-2';
 const STORAGE_KEY = 'reibun:grammar-check:mistakes:v1';
@@ -42,8 +43,8 @@ export default function SimpleGrammarCheckV2() {
   const [target, setTarget] = useState<HTMLElement | null>(null);
   const [open, setOpen] = useState(() => typeof window !== 'undefined' && window.location.hash === '#knowledge');
   const [view, setView] = useState<View>('hub');
-  const [category, setCategory] = useState<GrammarCategoryV2 | null>(null);
-  const [questions, setQuestions] = useState<GrammarQuestionV2[]>([]);
+  const [category, setCategory] = useState<GrammarCategoryV3 | null>(null);
+  const [questions, setQuestions] = useState<GrammarQuestionV3[]>([]);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -110,7 +111,7 @@ export default function SimpleGrammarCheckV2() {
     history.replaceState(null, '', window.location.pathname + window.location.search + '#knowledge');
   };
 
-  const begin = (nextCategory: GrammarCategoryV2, nextQuestions = nextCategory.questions) => {
+  const begin = (nextCategory: GrammarCategoryV3, nextQuestions = nextCategory.questions) => {
     setCategory(nextCategory);
     setQuestions(nextQuestions);
     setIndex(0);
@@ -158,7 +159,8 @@ export default function SimpleGrammarCheckV2() {
     <div
       className="fixed inset-0 z-[120] bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100"
       data-ui="knowledge-dialog"
-      data-design="grammar-three-track-v3"
+      data-design="grammar-three-track-v4"
+      data-answer-layout={GRAMMAR_ANSWER_LAYOUT_VERSION}
       role="dialog"
       aria-modal="true"
       aria-label="文法チェック"
@@ -178,7 +180,7 @@ export default function SimpleGrammarCheckV2() {
           <div className="max-w-2xl mx-auto">
             {view === 'hub' && (
               <div className="grid gap-3" data-ui="grammar-category-list">
-                {GRAMMAR_CATEGORIES_V2.map((item) => {
+                {GRAMMAR_CATEGORIES_V3.map((item) => {
                   const Icon = icons[item.id];
                   return <button
                     key={item.id}
