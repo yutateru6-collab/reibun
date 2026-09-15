@@ -36,15 +36,15 @@ jobs:
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/hub-preview.log 2>&1 &
           for n in $(seq 1 30); do curl -fsS http://127.0.0.1:4173 >/dev/null && break || sleep 1; done
-      - name: Three categories and all 108 questions in Chromium
+      - name: Three categories and all 120 questions in Chromium
         run: node scripts/knowledge-ui-regression.mjs
-      - name: Three categories and all 108 questions in WebKit
+      - name: Three categories and all 120 questions in WebKit
         env:
           BROWSER: webkit
         run: node scripts/knowledge-ui-regression.mjs
-      - name: Category structure and source-backed basics in Chromium
+      - name: Basics-first structure and examples in Chromium
         run: npx tsx scripts/knowledge-hub-regression.ts
-      - name: Category structure in WebKit
+      - name: Basics-first structure and examples in WebKit
         env:
           BROWSER: webkit
         run: npx tsx scripts/knowledge-hub-regression.ts
@@ -62,7 +62,7 @@ jobs:
           for n in $(seq 1 42); do
             if curl -fsSL "$PUBLIC_URL/?grammar_hub_check=${GITHUB_SHA}" -o /tmp/live-hub.html && grep -Fq "$asset" /tmp/live-hub.html; then
               curl -fsSL "$PUBLIC_URL$asset" -o /tmp/live-hub.js
-              if grep -Fq '完了形・未来表現・可算／不可算' /tmp/live-hub.js; then
+              if grep -Fq 'grammar-three-track-v3' /tmp/live-hub.js; then
                 echo "Confirmed deployed asset: $asset" | tee audit/knowledge-hub/production-build.txt
                 exit 0
               fi
