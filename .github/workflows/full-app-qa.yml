@@ -24,10 +24,11 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Verify source data, answer rendering and types
+      - name: Verify source data, grammar bank, answer rendering and types
         run: |
           node --import tsx scripts/validate-content.ts
           node --import tsx scripts/validate-vq-exercises.ts
+          npx tsx scripts/grammar-bank-audit.ts
           timeout 15s node --import tsx scripts/validate-answer-rendering.ts
           npm run lint
           npm run build
