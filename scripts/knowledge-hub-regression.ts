@@ -7,6 +7,7 @@ import {
   TOTAL_GRAMMAR_QUESTIONS_V3,
   answerPositionCounts,
 } from '../src/knowledge/grammar_curriculum_v3';
+import { GRAMMAR_SHUFFLE_VERSION } from '../src/knowledge/grammar_shuffle';
 
 const base = (process.env.APP_URL || 'http://127.0.0.1:4173').replace(/\/$/, '');
 const browserName = process.env.BROWSER || 'chromium';
@@ -64,6 +65,21 @@ async function bounds() {
   assert.ok(value.width <= value.screen + 1, JSON.stringify(value));
 }
 
+function questionById(category: (typeof GRAMMAR_CATEGORIES_V3)[number], id: string) {
+  const question = category.questions.find(item => item.id === id);
+  assert.ok(question, `${category.id}: unknown question ${id}`);
+  return question;
+}
+
+function assertOrder(category: (typeof GRAMMAR_CATEGORIES_V3)[number], ids: string[]) {
+  assert.equal(ids.length, 40);
+  assert.deepEqual([...ids].sort(), [...category.questions.map(q => q.id)].sort());
+  const byId = new Map(category.questions.map(q => [q.id, q]));
+  assert.ok(ids.slice(0, 16).every(id => byId.get(id)?.level === '基本'));
+  assert.ok(ids.slice(16, 28).every(id => byId.get(id)?.level === '使い分け'));
+  assert.ok(ids.slice(28).every(id => byId.get(id)?.level === '応用'));
+}
+
 try {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, locale: 'ja-JP' });
   page = await context.newPage();
@@ -73,12 +89,14 @@ try {
   await dlg().waitFor();
   assert.equal(await dlg().getAttribute('data-design'), 'grammar-three-track-v4');
   assert.equal(await dlg().getAttribute('data-answer-layout'), GRAMMAR_ANSWER_LAYOUT_VERSION);
+  assert.equal(await dlg().getAttribute('data-shuffle-version'), GRAMMAR_SHUFFLE_VERSION);
   assert.equal(await dlg().locator('[data-ui="grammar-category-list"] [data-category]').count(), 3);
   assert.equal(await dlg().locator('[data-category="perfect"]').getByText('完了形', { exact: true }).count(), 1);
   assert.equal(await dlg().locator('[data-category="future"]').getByText('未来表現', { exact: true }).count(), 1);
   assert.equal(await dlg().locator('[data-category="countable"]').getByText('可算・不可算', { exact: true }).count(), 1);
   assert.equal(await dlg().getByText('前回のつづき').count(), 0);
   assert.equal(await dlg().getByText('基本から進む').count(), 0);
+  assert.equal(await dlg().getByText('毎回シャッフル', { exact: false }).count(), 3);
   await bounds();
   await page.screenshot({ path: `${out}/three-category-hub.png` });
 
@@ -87,19 +105,25 @@ try {
     const question = dlg().locator('[data-ui="grammar-quiz-question"]');
     await question.waitFor();
     assert.ok((await question.innerText()).includes(`${category.title}　1 / 40`));
-    assert.equal(await question.getAttribute('data-question-id'), category.questions[0].id);
-    assert.ok((await question.innerText()).includes(category.questions[0].prompt));
+    const orderRaw = await question.getAttribute('data-question-order');
+    assert.ok(orderRaw);
+    assertOrder(category, orderRaw.split(',').filter(Boolean));
+    const questionId = await question.getAttribute('data-question-id');
+    assert.ok(questionId);
+    const current = questionById(category, questionId);
+    assert.ok((await question.innerText()).includes(current.prompt));
     assert.ok((await question.innerText()).includes('基本'));
+    assert.equal(await question.locator('[data-ui="grammar-shuffle"]').count(), 1);
 
-    const correct = category.questions[0];
-    await question.locator(`[data-choice="${correct.correctIndex}"]`).click();
+    await question.locator(`[data-choice="${current.correctIndex}"]`).click();
     const feedback = question.locator('[data-ui="grammar-feedback"]');
     await feedback.waitFor();
     assert.ok((await feedback.innerText()).includes('正解'));
-    assert.ok((await feedback.innerText()).includes(correct.explanation));
+    assert.ok((await feedback.innerText()).includes(current.explanation));
     const example = question.locator('[data-ui="grammar-example"]');
     assert.equal(await example.getByText('例文', { exact: true }).count(), 1);
-    assert.equal((await example.locator('p').innerText()).trim(), correct.example);
+    assert.equal((await example.locator('p').innerText()).trim(), current.example);
+    assert.equal(await question.locator('[data-ui="grammar-shuffle"]').isDisabled(), true);
     await question.getByRole('button', { name: /次の問題/ }).click();
     assert.ok((await dlg().locator('[data-ui="grammar-quiz-question"]').innerText()).includes('2 / 40'));
     await dlg().getByRole('button', { name: '3分野', exact: true }).click();
@@ -113,6 +137,7 @@ try {
     success: true,
     browserName,
     answerLayoutVersion: GRAMMAR_ANSWER_LAYOUT_VERSION,
+    shuffleVersion: GRAMMAR_SHUFFLE_VERSION,
     categories: GRAMMAR_CATEGORIES_V3.map(category => ({
       id: category.id,
       count: category.questions.length,
@@ -120,6 +145,8 @@ try {
     })),
     total: TOTAL_GRAMMAR_QUESTIONS_V3,
     basicsFirst: true,
+    shuffledWithinLevelBlocks: true,
+    visibleShuffleControl: true,
     everyAnswerHasExample: true,
     errors,
   }, null, 2));
@@ -135,4 +162,4 @@ try {
   await browser.close();
 }
 
-console.log(`Grammar check hub PASS: ${browserName}, 3 categories, ${TOTAL_GRAMMAR_QUESTIONS_V3} questions, A/B/C/D balanced 10 each, basics first, examples on every answer.`);
+console.log(`Grammar check hub PASS: ${browserName}, 3 categories, ${TOTAL_GRAMMAR_QUESTIONS_V3} shuffled questions, A/B/C/D balanced, level blocks preserved, examples on every answer.`);
