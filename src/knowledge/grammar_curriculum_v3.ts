@@ -24,10 +24,21 @@ const CATEGORY_OFFSET: Record<GrammarCategoryV3['id'], number> = {
   countable: 2,
 };
 
+// These two concepts intentionally appear in both 完了形 and 未来表現, but the
+// learner should not see the exact same question twice. Keep the grammar point
+// and answer unchanged while making the focus of the 未来表現 version explicit.
+const PROMPT_OVERRIDES: Record<string, string> = {
+  'fu-05': '未来表現の1つである未来完了形の基本形は？',
+  'fu-19': 'by six がある次の文で、空欄に入る未来表現は？\nWill you (　　　) the work by six?',
+};
+
 function moveCorrectChoice(question: GrammarQuestionV2, targetIndex: number): GrammarQuestionV3 {
+  const prompt = PROMPT_OVERRIDES[question.id] ?? question.prompt;
+
   if (question.correctIndex === targetIndex) {
     return {
       ...question,
+      prompt,
       choices: [...question.choices] as [string, string, string, string],
     };
   }
@@ -37,6 +48,7 @@ function moveCorrectChoice(question: GrammarQuestionV2, targetIndex: number): Gr
 
   return {
     ...question,
+    prompt,
     choices,
     correctIndex: targetIndex,
   };
