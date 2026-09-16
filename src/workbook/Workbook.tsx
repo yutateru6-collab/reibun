@@ -91,13 +91,13 @@ export default function Workbook() {
 
   const launcher = target ? createPortal(<button type="button" data-ui="workbook-launcher" onClick={() => { setOpen(true); setView('setup'); setNotice(''); }} className="col-span-1 rounded-2xl sm:rounded-3xl border-2 border-indigo-200 dark:border-indigo-900/50 bg-white dark:bg-slate-800 p-4 sm:p-6 text-center shadow-sm hover:border-indigo-500 transition-colors min-h-[148px] sm:min-h-[180px] flex flex-col items-center justify-center">
     <span className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 mb-2.5 flex items-center justify-center"><BookOpen size={26} /></span>
-    <span className="block text-lg sm:text-xl font-black text-slate-900 dark:text-white">時制の練習問題</span>
-    <span className="block mt-1 text-[10px] sm:text-xs text-slate-600 dark:text-slate-300">画面で解く・プリントを作る</span>
+    <span className="block text-base sm:text-xl font-black text-slate-900 dark:text-white leading-tight">時制・完了形<br className="sm:hidden" />強化練習</span>
+    <span className="block mt-1 text-[10px] sm:text-xs text-slate-600 dark:text-slate-300">弱点を形式別に反復</span>
   </button>, target) : null;
 
-  return <>{launcher}{open && createPortal(<div className="wb-root" data-ui="workbook-dialog" role="dialog" aria-modal="true" aria-label="時制の練習問題">
+  return <>{launcher}{open && createPortal(<div className="wb-root" data-ui="workbook-dialog" role="dialog" aria-modal="true" aria-label="時制・完了形 強化練習">
     <header className="wb-header">
-      <div><h1>時制の練習問題</h1><small>Vision Quest II ｜ 時制・完了形</small></div>
+      <div><h1>時制・完了形 強化練習</h1><small>弱点を形式別・問題数別に反復</small></div>
       <div className="wb-row">
         {view !== 'setup' && <button className="wb-btn" onClick={() => setView(view === 'print' ? returnView : 'setup')} aria-label="前の画面へ戻る"><ChevronLeft size={18} /></button>}
         <button className="wb-btn" onClick={() => setOpen(false)} aria-label="ホームへ戻る"><Home size={18} /></button>

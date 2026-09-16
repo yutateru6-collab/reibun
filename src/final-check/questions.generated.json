@@ -1,0 +1,2212 @@
+{
+  "meta": {
+    "version": "vq2-final-check-2026-v1",
+    "questionSourceSha256": "a20c7c355c390540e2c3ddf3a10000b150b47e18eae9ca8ddaa6e6f305f6432b",
+    "answerSourceSha256": "54ce94f05afda0bb6994faa6e5d2e91984338acaa7d212c7e9d79c89bfa0d793",
+    "total": 200,
+    "counts": {
+      "tense1": 52,
+      "tense2": 52,
+      "verb1": 50,
+      "verb2": 46
+    },
+    "sourceNotes": [
+      "第1ラウンド 動詞①: ※ p.15 Description の show / leave の 2 問は、提供された文字データではイラスト内の具体物を特定できないため、具体物を推測せず、元問題で確認できる動詞・文型の範囲だけを形式変換しています。",
+      "第2ラウンド 動詞①: ※ p.15 Description の show / leave の 2 問は、提供された文字データではイラスト内の具体物を特定できないため、具体物を推測せず、元問題で確認できる動詞・文型の範囲だけを形式変換しています。"
+    ]
+  },
+  "questions": [
+    {
+      "id": "vq2-final-r1-tense1-01",
+      "round": 1,
+      "section": "tense1",
+      "number": 1,
+      "format": "choice",
+      "prompt": "「私は彼の言葉を誤解していたことに気づいた。」 I noticed that I ( ) his words.",
+      "solution": "② had misunderstood noticed より前の出来事なので過去完了。",
+      "choices": [
+        "misunderstood",
+        "had misunderstood",
+        "have misunderstood",
+        "was misunderstanding"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r1-tense1-02",
+      "round": 1,
+      "section": "tense1",
+      "number": 2,
+      "format": "correction",
+      "prompt": "「現在の習慣」を表す文に直しなさい。 My sister is taking piano lessons twice a week.",
+      "solution": "My sister takes piano lessons twice a week. twice a week の現在の習慣は現在形。"
+    },
+    {
+      "id": "vq2-final-r1-tense1-03",
+      "round": 1,
+      "section": "tense1",
+      "number": 3,
+      "format": "order",
+      "prompt": "「私はもうすでに全部のお金を使ってしまった。」 (all the money / already / have / I / spent)",
+      "solution": "I have already spent all the money. 現在への結果が残るので現在完了。"
+    },
+    {
+      "id": "vq2-final-r1-tense1-04",
+      "round": 1,
+      "section": "tense1",
+      "number": 4,
+      "format": "choice",
+      "prompt": "「雨が降り始めたとき、彼女は犬を散歩させていた。」 She ( ) her dog when it began to rain.",
+      "solution": "③ was walking 過去のある時点で進行中の動作は過去進行形。",
+      "choices": [
+        "walked",
+        "has walked",
+        "was walking",
+        "had walked"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": "vq2-final-r1-tense1-05",
+      "round": 1,
+      "section": "tense1",
+      "number": 5,
+      "format": "choice",
+      "prompt": "My brother works for a local bank. 下線部 works が現在形なのはなぜか。",
+      "solution": "② 現在の習慣・状態を現在形で表している。",
+      "choices": [
+        "今まさに進行中だから",
+        "現在の習慣・状態を表すから",
+        "過去よりさらに前だから",
+        "完了した結果を表すから"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r1-tense1-06",
+      "round": 1,
+      "section": "tense1",
+      "number": 6,
+      "format": "correction",
+      "prompt": "「私は父が誕生日に買ってくれたオーディオプレーヤーをなくした。」 I had lost the audio player that my father bought for me for my birthday. 動詞の形を 2 か所直しなさい。",
+      "solution": "I lost the audio player that my father had bought for me for my birthday. lost が基準となる過去、父が買ったの はそれより前なので had bought。"
+    },
+    {
+      "id": "vq2-final-r1-tense1-07",
+      "round": 1,
+      "section": "tense1",
+      "number": 7,
+      "format": "choice",
+      "prompt": "「めいは毎週土曜日に我が家に来る。」 My niece ( ) to my house every Saturday.",
+      "solution": "③ comes every Saturday の現在の習慣なので現在形。",
+      "choices": [
+        "is coming",
+        "had come",
+        "comes",
+        "came"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": "vq2-final-r1-tense1-08",
+      "round": 1,
+      "section": "tense1",
+      "number": 8,
+      "format": "choice",
+      "prompt": "When we got to the gym, the volleyball game ( ).",
+      "solution": "① had already finished 体育館に着いた時点より前に試合が終わっていたため過去完了。",
+      "choices": [
+        "had already finished",
+        "already finished",
+        "has already finished",
+        "was already finishing"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r1-tense1-09",
+      "round": 1,
+      "section": "tense1",
+      "number": 9,
+      "format": "order",
+      "prompt": "「オバマ氏は広島を訪問した初めての現職アメリカ大統領でした。」 (the first / Mr. Obama / to visit Hiroshima / was / sitting U.S. president)",
+      "solution": "Mr. Obama was the first sitting U.S. president to visit Hiroshima. the first + 名詞 + to do の形。"
+    },
+    {
+      "id": "vq2-final-r1-tense1-10",
+      "round": 1,
+      "section": "tense1",
+      "number": 10,
+      "format": "correction",
+      "prompt": "「彼らは今、教室で何をしていますか。」 What do they do in the classroom now? 現在進行形の疑問文に直しなさい。",
+      "solution": "What are they doing in the classroom now? now の「今している動作」は be + doing。"
+    },
+    {
+      "id": "vq2-final-r1-tense1-11",
+      "round": 1,
+      "section": "tense1",
+      "number": 11,
+      "format": "choice",
+      "prompt": "I realized I ( ) him before.",
+      "solution": "① had seen realized より前の経験なので過去完了。元教材では had met も可。",
+      "choices": [
+        "had seen",
+        "saw",
+        "have seen",
+        "was seeing"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r1-tense1-12",
+      "round": 1,
+      "section": "tense1",
+      "number": 12,
+      "format": "choice",
+      "prompt": "「彼女はよく先生に質問をしていました。」 She often asked her teachers questions. asked が過去形なの はなぜか。",
+      "solution": "④ often を伴う過去の反復・習慣は過去形。",
+      "choices": [
+        "現在の習慣だから",
+        "現在までの継続だから",
+        "過去のある時点で進行中だから",
+        "過去の習慣を表すから"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": "vq2-final-r1-tense1-13",
+      "round": 1,
+      "section": "tense1",
+      "number": 13,
+      "format": "correction",
+      "prompt": "「多くの人々が彼は無実だと信じるようになった。」 Many people became to believe that he is innocent. 元問題と同じ表現に直しなさい。",
+      "solution": "Many people have come to believe that he is innocent. 「〜するようになってきた」は have come to do。"
+    },
+    {
+      "id": "vq2-final-r1-tense1-14",
+      "round": 1,
+      "section": "tense1",
+      "number": 14,
+      "format": "order",
+      "prompt": "(basketball / now / in the gym / Tom and John / are playing)",
+      "solution": "Tom and John are playing basketball in the gym now. now の現在の動作なので現在進行形。"
+    },
+    {
+      "id": "vq2-final-r1-tense1-15",
+      "round": 1,
+      "section": "tense1",
+      "number": 15,
+      "format": "correction",
+      "prompt": "School was over. Let's hang out! 「学校が終わった。遊びに行こう」という現在の状況に合うように直しなさい。",
+      "solution": "School is over. Let's hang out! 「終わった状態である」という現在の状態なので is over。"
+    },
+    {
+      "id": "vq2-final-r1-tense1-16",
+      "round": 1,
+      "section": "tense1",
+      "number": 16,
+      "format": "fill",
+      "prompt": "The temperature in summer ( ) because of global warming. 現在進行形を使い、rise を適切な形にしなさい。",
+      "solution": "is rising 現在も進行中の変化を現在進行形で表す。元教材では has been rising も可。"
+    },
+    {
+      "id": "vq2-final-r1-tense1-17",
+      "round": 1,
+      "section": "tense1",
+      "number": 17,
+      "format": "correction",
+      "prompt": "I hurried to the station, and luckily, the train didn't arrive yet. 「駅へ急いだ時点まで、まだ到着していなかった」の意味に直しなさい。",
+      "solution": "I hurried to the station, and luckily, the train had not [hadn't] arrived yet. 過去の基準時まで未完了なので過去 完了の否定。"
+    },
+    {
+      "id": "vq2-final-r1-tense1-18",
+      "round": 1,
+      "section": "tense1",
+      "number": 18,
+      "format": "order",
+      "prompt": "(when I got home / was talking / my sister / on the phone)",
+      "solution": "My sister was talking on the phone when I got home. 帰宅した時点で進行中だったので過去進行形。"
+    },
+    {
+      "id": "vq2-final-r1-tense1-19",
+      "round": 1,
+      "section": "tense1",
+      "number": 19,
+      "format": "rewrite",
+      "prompt": "After she had had a baby, she had started swimming every day. after で順序が明らかなため、元問題と同じく過去完了を使わずに書き換えなさい。",
+      "solution": "After she had a baby, she started swimming every day. after で出来事の順序が明確なら、両方を過去形にでき る。"
+    },
+    {
+      "id": "vq2-final-r1-tense1-20",
+      "round": 1,
+      "section": "tense1",
+      "number": 20,
+      "format": "order",
+      "prompt": "(every weekend / Haruka / lunch / cooks)",
+      "solution": "Haruka cooks lunch every weekend. every weekend の現在の習慣なので現在形。"
+    },
+    {
+      "id": "vq2-final-r1-tense1-21",
+      "round": 1,
+      "section": "tense1",
+      "number": 21,
+      "format": "rewrite",
+      "prompt": "He has a big car. own を使って同じ意味にしなさい。",
+      "solution": "He owns a big car. own は状態動詞で「所有している」。"
+    },
+    {
+      "id": "vq2-final-r1-tense1-22",
+      "round": 1,
+      "section": "tense1",
+      "number": 22,
+      "format": "correction",
+      "prompt": "「最近、彼女のことが好きになってきた。」 Recently, I came to like her. 元問題と同じ時制に直しなさい。",
+      "solution": "Recently, I have come to like her. 最近までの変化と現在とのつながりを現在完了で表す。"
+    },
+    {
+      "id": "vq2-final-r1-tense1-23",
+      "round": 1,
+      "section": "tense1",
+      "number": 23,
+      "format": "correction",
+      "prompt": "「私は子どもの頃、よく祖母の家を訪ねました。」 When I am a child, I often visit my grandmother's house. 動詞を 2 か所直しなさい。",
+      "solution": "When I was a child, I often visited my grandmother's house. 過去の時期・過去の習慣なので was / visited。"
+    },
+    {
+      "id": "vq2-final-r1-tense1-24",
+      "round": 1,
+      "section": "tense1",
+      "number": 24,
+      "format": "choice",
+      "prompt": "I ( ) this afternoon and caught a big fish.",
+      "solution": "① went fishing caught と同じ過去の出来事を順に述べるので過去形。",
+      "choices": [
+        "went fishing",
+        "was fishing",
+        "have gone fishing",
+        "had gone fishing"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r1-tense1-25",
+      "round": 1,
+      "section": "tense1",
+      "number": 25,
+      "format": "choice",
+      "prompt": "It was the first time she ( ) the tea ceremony.",
+      "solution": "② had tried It was the first time + S + had + 過去分詞。",
+      "choices": [
+        "has tried",
+        "had tried",
+        "tried",
+        "was trying"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r1-tense1-26",
+      "round": 1,
+      "section": "tense1",
+      "number": 26,
+      "format": "correction",
+      "prompt": "「今朝起きた時、雪が降っていた。」 It snowed when I got up this morning. 「降っていた」の形に直しなさい。",
+      "solution": "It was snowing when I got up this morning. 過去のある時点で進行中だった動作は過去進行形。"
+    },
+    {
+      "id": "vq2-final-r1-tense2-01",
+      "round": 1,
+      "section": "tense2",
+      "number": 1,
+      "format": "choice",
+      "prompt": "「おばが会いに来てくれた時、私は数時間読書をしていた。」 I ( ) for a few hours when my aunt came to see me.",
+      "solution": "② had been reading 過去の基準時まで続いていた動作なので過去完了進行形。",
+      "choices": [
+        "had read",
+        "had been reading",
+        "have been reading",
+        "was reading"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r1-tense2-02",
+      "round": 1,
+      "section": "tense2",
+      "number": 2,
+      "format": "correction",
+      "prompt": "I won't give up until my dream will come true. until が導く時の副詞節の時制を直しなさい。",
+      "solution": "I won't give up until my dream comes true. 時・条件の副詞節では未来のことも現在形。"
+    },
+    {
+      "id": "vq2-final-r1-tense2-03",
+      "round": 1,
+      "section": "tense2",
+      "number": 3,
+      "format": "choice",
+      "prompt": "Water boils at 100 degrees Celsius. boils が現在形なのはなぜか。",
+      "solution": "② 科学的な真理は現在形で表す。",
+      "choices": [
+        "現在だけの一時的動作だから",
+        "変わらない事実・真理だから",
+        "過去からの継続だから",
+        "未来の予定だから"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r1-tense2-04",
+      "round": 1,
+      "section": "tense2",
+      "number": 4,
+      "format": "order",
+      "prompt": "(once / has been / my sister / to my father's office)",
+      "solution": "My sister has been to my father's office once. have been to は「〜へ行ったことがある」という経験。"
+    },
+    {
+      "id": "vq2-final-r1-tense2-05",
+      "round": 1,
+      "section": "tense2",
+      "number": 5,
+      "format": "correction",
+      "prompt": "We are expected handing in the assignment next Wednesday. be expected の後を正しく直しなさい。",
+      "solution": "We are expected to hand in the assignment next Wednesday. be expected to do「〜する予定である／〜すると予 想される」。"
+    },
+    {
+      "id": "vq2-final-r1-tense2-06",
+      "round": 1,
+      "section": "tense2",
+      "number": 6,
+      "format": "choice",
+      "prompt": "「私はその時までヨーロッパへ行ったことがなかった。」 I ( ) to Europe until then.",
+      "solution": "③ hadn't been 過去の基準時までの経験の否定なので過去完了。",
+      "choices": [
+        "haven't been",
+        "wasn't",
+        "hadn't been",
+        "didn't go"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": "vq2-final-r1-tense2-07",
+      "round": 1,
+      "section": "tense2",
+      "number": 7,
+      "format": "order",
+      "prompt": "「父が亡くなり 10 年が過ぎた。」 (have / since / passed / Ten years / my father died)",
+      "solution": "Ten years have passed since my father died. 「〜してから…年になる」= years have passed since + 過去形。"
+    },
+    {
+      "id": "vq2-final-r1-tense2-08",
+      "round": 1,
+      "section": "tense2",
+      "number": 8,
+      "format": "correction",
+      "prompt": "My family is going visit Kyoto next Tuesday. 元問題の予定表現に直しなさい。",
+      "solution": "My family is going to visit Kyoto next Tuesday. be going to + 動詞の原形。元教材では is planning to visit も可。"
+    },
+    {
+      "id": "vq2-final-r1-tense2-09",
+      "round": 1,
+      "section": "tense2",
+      "number": 9,
+      "format": "choice",
+      "prompt": "I ( ) home when the doorbell rang.",
+      "solution": "① was about to leave be about to do は「まさに〜しようとしている」。過去の場面なので was。",
+      "choices": [
+        "was about to leave",
+        "am about to leave",
+        "had left",
+        "have been leaving"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r1-tense2-10",
+      "round": 1,
+      "section": "tense2",
+      "number": 10,
+      "format": "correction",
+      "prompt": "My great-grandmother has lived in a nursing home last year. last year に合う時制に直しなさい。",
+      "solution": "My great-grandmother lived in a nursing home last year. last year は現在と切り離された過去なので過去形。"
+    },
+    {
+      "id": "vq2-final-r1-tense2-11",
+      "round": 1,
+      "section": "tense2",
+      "number": 11,
+      "format": "choice",
+      "prompt": "We have loved each other since we first met. have loved が適切なのはなぜか。",
+      "solution": "② since を伴う過去から現在までの状態の継続は現在完了。",
+      "choices": [
+        "過去の一回の出来事だから",
+        "過去から現在まで状態が続いているから",
+        "未来の予定だから",
+        "過去のある時点で進行中だから"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r1-tense2-12",
+      "round": 1,
+      "section": "tense2",
+      "number": 12,
+      "format": "choice",
+      "prompt": "空模様を見て「まもなく雨が降りそうだ」と言う。 It ( ) soon.",
+      "solution": "① is going to rain 現在の状況を根拠にした近い未来の予測は be going to。",
+      "choices": [
+        "is going to rain",
+        "will have rained",
+        "rains",
+        "has rained"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r1-tense2-13",
+      "round": 1,
+      "section": "tense2",
+      "number": 13,
+      "format": "order",
+      "prompt": "「彼らは金曜日の朝、この問題について話し合うことになっている。」 (on Friday morning / will be discussing / this problem / They)",
+      "solution": "They will be discussing this problem on Friday morning. 未来進行形で「〜することになっている」という予定を 表す。"
+    },
+    {
+      "id": "vq2-final-r1-tense2-14",
+      "round": 1,
+      "section": "tense2",
+      "number": 14,
+      "format": "correction",
+      "prompt": "「最近、彼から便りがない。」 I didn't hear from him recently. 現在まで「便りがない」ことを表す現在完了形に直しなさい。",
+      "solution": "I haven't heard from him recently [lately]. recently / lately と現在完了で、最近から現在までを表す。"
+    },
+    {
+      "id": "vq2-final-r1-tense2-15",
+      "round": 1,
+      "section": "tense2",
+      "number": 15,
+      "format": "choice",
+      "prompt": "「私はデイビッドを 10 年間知っている。」 I ( ) David for ten years.",
+      "solution": "② have known know は状態動詞。過去から現在までの状態の継続は現在完了。",
+      "choices": [
+        "knew",
+        "have known",
+        "have been knowing",
+        "am knowing"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r1-tense2-16",
+      "round": 1,
+      "section": "tense2",
+      "number": 16,
+      "format": "fill",
+      "prompt": "「彼女は大学在学中に起業しようと思っている。」 be thinking of doing を用いて完成させなさい。 She ( ) when she is in college.",
+      "solution": "is thinking of starting a business be thinking of doing「〜しようと思っている」。"
+    },
+    {
+      "id": "vq2-final-r1-tense2-17",
+      "round": 1,
+      "section": "tense2",
+      "number": 17,
+      "format": "fill",
+      "prompt": "It ( ) heavily for a few days. 現在完了進行形を使い、rain を適切な形にしなさい。",
+      "solution": "has been raining 過去から現在まで続く動作。元教材では has rained も可。"
+    },
+    {
+      "id": "vq2-final-r1-tense2-18",
+      "round": 1,
+      "section": "tense2",
+      "number": 18,
+      "format": "written",
+      "prompt": "This train arrives at Tokyo Station. 「到着直前の、準備が進んでいる近い未来」を現在進行形で表しなさい。",
+      "solution": "This train is arriving at Tokyo Station. 発着などの近い予定は現在進行形で表せる。"
+    },
+    {
+      "id": "vq2-final-r1-tense2-19",
+      "round": 1,
+      "section": "tense2",
+      "number": 19,
+      "format": "order",
+      "prompt": "「もう一度行けば、東京ディズニーリゾートに 3 回行ったことになるだろう。」 (if I go there again / to Tokyo Disney Resort / three times / will have been / I)",
+      "solution": "I will have been to Tokyo Disney Resort three times if I go there again. 未来のある時点までの経験は未来完了。 if 節内は現在形。"
+    },
+    {
+      "id": "vq2-final-r1-tense2-20",
+      "round": 1,
+      "section": "tense2",
+      "number": 20,
+      "format": "written",
+      "prompt": "I wait for the bus for half an hour now. 現在までの動作の継続を現在完了進行形で表しなさい。",
+      "solution": "I have been waiting for the bus for half an hour now. 現在まで続く動作は have been doing。元教材では have waited も可。"
+    },
+    {
+      "id": "vq2-final-r1-tense2-21",
+      "round": 1,
+      "section": "tense2",
+      "number": 21,
+      "format": "choice",
+      "prompt": "「長く待つこともなく、彼はやって来た。」 I ( ) long when he came.",
+      "solution": "① had not been waiting 過去の基準時までの動作の継続の否定なので過去完了進行形。元教材では hadn't waited も 可。",
+      "choices": [
+        "had not been waiting",
+        "have not waited",
+        "was not waiting",
+        "did not wait"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r1-tense2-22",
+      "round": 1,
+      "section": "tense2",
+      "number": 22,
+      "format": "rewrite",
+      "prompt": "I last saw my elementary school teacher a long time ago. It's been ... since を使って同じ意味に書き換えなさい。",
+      "solution": "It's been a long time since I last saw my elementary school teacher. 「〜するのは久しぶり」= It has been a long time since + 過去形。"
+    },
+    {
+      "id": "vq2-final-r1-tense2-23",
+      "round": 1,
+      "section": "tense2",
+      "number": 23,
+      "format": "choice",
+      "prompt": "「具体的な準備が進んでいる近い未来」を現在進行形で表す。 My cousin ( ) for Canada tomorrow evening.",
+      "solution": "① is leaving leave など発着の近い予定は現在進行形で表せる。元教材では will leave も可。",
+      "choices": [
+        "is leaving",
+        "leaves",
+        "will have left",
+        "has left"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r1-tense2-24",
+      "round": 1,
+      "section": "tense2",
+      "number": 24,
+      "format": "fill",
+      "prompt": "「その歌手は来年、2 枚目のアルバムを発売する。」 will を用いて完成させなさい。 The singer ( ) his second album next year.",
+      "solution": "will release 未来のことを will + 動詞の原形で表す。元教材では他の未来表現も可。"
+    },
+    {
+      "id": "vq2-final-r1-tense2-25",
+      "round": 1,
+      "section": "tense2",
+      "number": 25,
+      "format": "choice",
+      "prompt": "「地球は太陽の周りを回る。」 The earth ( ) the sun.",
+      "solution": "① goes around 変わらない真理なので現在形。元教材では moves around も可。",
+      "choices": [
+        "goes around",
+        "went around",
+        "is going around",
+        "has gone around"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r1-tense2-26",
+      "round": 1,
+      "section": "tense2",
+      "number": 26,
+      "format": "rewrite",
+      "prompt": "He hasn't had a good time with an old friend for a long time. It's been ... since を使って同じ意味にしなさい。",
+      "solution": "It's been a long time since he last had a good time with an old friend. 現在完了の否定 + for a long time と It's been a long time since ... は同様の意味を表す。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-01",
+      "round": 1,
+      "section": "verb1",
+      "number": 1,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 In Japan, we don't notice ( ) to us.",
+      "solution": "② how much peace means ポイント：how much + S + V の間接疑問。",
+      "choices": [
+        "how much does peace mean",
+        "how much peace means",
+        "peace means how much",
+        "how peace much means"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r1-verb1-02",
+      "round": 1,
+      "section": "verb1",
+      "number": 2,
+      "format": "fill",
+      "prompt": "日本語に合うように適切な語を入れなさい。 私たちは毎年、トマトを育てている。 We ______ tomatoes every year.",
+      "solution": "grow ポイント：grow は目的語 tomatoes をとり「〜を育てる」の他動詞。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-03",
+      "round": 1,
+      "section": "verb1",
+      "number": 3,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 Our teacher ( how / us / math / taught / to study ).",
+      "solution": "taught us how to study math ポイント：teach + 人 + how to do。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-04",
+      "round": 1,
+      "section": "verb1",
+      "number": 4,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 Do you remember ( ) hiking?",
+      "solution": "③ going ポイント：remember doing「〜したことを覚えている」。",
+      "choices": [
+        "go",
+        "to go",
+        "going",
+        "went"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": "vq2-final-r1-verb1-05",
+      "round": 1,
+      "section": "verb1",
+      "number": 5,
+      "format": "correction",
+      "prompt": "次の英文の誤りを直しなさい。 You can't enter into this building without permission.",
+      "solution": "You can't enter this building without permission. ポイント：enter は他動詞なので into は不要。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-06",
+      "round": 1,
+      "section": "verb1",
+      "number": 6,
+      "format": "fill",
+      "prompt": "空所に 1 語入れなさい。 This song reminds me ______ the summer festival.",
+      "solution": "of ポイント：remind + 人 + of 〜。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-07",
+      "round": 1,
+      "section": "verb1",
+      "number": 7,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 I ( know / did / not ) that he had moved.",
+      "solution": "did not know ポイント：know の目的語に that 節がくる。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-08",
+      "round": 1,
+      "section": "verb1",
+      "number": 8,
+      "format": "fill",
+      "prompt": "日本語に合うように空所を補いなさい。 彼は喫煙をやめることにした。 He ______ ______ ______ smoking.",
+      "solution": "decided to stop ポイント：decide to do / stop doing。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-09",
+      "round": 1,
+      "section": "verb1",
+      "number": 9,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 Can you ( me / your notebook / lend ) for a while?",
+      "solution": "lend me your notebook ポイント：lend + 人 + 物 の SVOO。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-10",
+      "round": 1,
+      "section": "verb1",
+      "number": 10,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 Her book ( ) well.",
+      "solution": "① sold ポイント：sell は「（物が）売れる」の自動詞としても使える。",
+      "choices": [
+        "sold",
+        "sold it",
+        "was sold it",
+        "selling"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r1-verb1-11",
+      "round": 1,
+      "section": "verb1",
+      "number": 11,
+      "format": "correction",
+      "prompt": "次の英文の誤りを直しなさい。 Our teacher explained us the rules of the game.",
+      "solution": "Our teacher explained the rules of the game to us. ポイント：explain + 物 + to 人。SVOO にはしない。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-12",
+      "round": 1,
+      "section": "verb1",
+      "number": 12,
+      "format": "fill",
+      "prompt": "日本語に合うように空所を補いなさい。 I can't remember ______ I bought the skirt.",
+      "solution": "when ポイント：remember の目的語に間接疑問（when + S + V）。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-13",
+      "round": 1,
+      "section": "verb1",
+      "number": 13,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 Let's ( where / her / ask / she's from ).",
+      "solution": "ask her where she's from ポイント：ask + 人 + 疑問詞節。間接疑問は平叙文語順。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-14",
+      "round": 1,
+      "section": "verb1",
+      "number": 14,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 Do you know ( )?",
+      "solution": "② what time the last train leaves ポイント：what time + S + V の間接疑問。",
+      "choices": [
+        "what time does the last train leave",
+        "what time the last train leaves",
+        "the last train leaves what time",
+        "what time leaves the last train"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r1-verb1-15",
+      "round": 1,
+      "section": "verb1",
+      "number": 15,
+      "format": "fill",
+      "prompt": "日本語に合うように空所を補いなさい。 そのトマトはすぐに成長した。 The tomato ______ quickly.",
+      "solution": "grew ポイント：grow はここでは「成長する」の自動詞。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-16",
+      "round": 1,
+      "section": "verb1",
+      "number": 16,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 I ( should / think / we / reduce ) the amount of garbage.",
+      "solution": "think we should reduce ポイント：think (that) S + V。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-17",
+      "round": 1,
+      "section": "verb1",
+      "number": 17,
+      "format": "fill",
+      "prompt": "日本語に合うように空所を補いなさい。 My grandmother is going to ______ a new dress.",
+      "solution": "make ポイント：make + 目的語。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-18",
+      "round": 1,
+      "section": "verb1",
+      "number": 18,
+      "format": "choice",
+      "prompt": "元のイラスト問題で使う show の語順として正しいものを選びなさい。",
+      "solution": "② show + 人 + 物ポイント：元問題はイラスト依存。文字データで確認できる show と SVOO の語法のみを出題。",
+      "choices": [
+        "show + 物 + 人",
+        "show + 人 + 物",
+        "show + to + 人 + 物",
+        "show + 人 + to + 物"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r1-verb1-19",
+      "round": 1,
+      "section": "verb1",
+      "number": 19,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 They say that store ( ).",
+      "solution": "① sells everything ポイント：sell は目的語 everything をとる他動詞。",
+      "choices": [
+        "sells everything",
+        "sells well everything",
+        "is sold everything",
+        "sells"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r1-verb1-20",
+      "round": 1,
+      "section": "verb1",
+      "number": 20,
+      "format": "fill",
+      "prompt": "日本語に合うように空所を補いなさい。 My father ______ me ______ I should eat more vegetables.",
+      "solution": "told / that ポイント：tell + 人 + that 節。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-21",
+      "round": 1,
+      "section": "verb1",
+      "number": 21,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 We ( a bus / need / to take ) to go to the library.",
+      "solution": "need to take a bus ポイント：need to do / take a bus。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-22",
+      "round": 1,
+      "section": "verb1",
+      "number": 22,
+      "format": "fill",
+      "prompt": "空所に 1 語ずつ入れなさい。 His defense played an important part ______ winning the game.",
+      "solution": "in ポイント：play an important part in 〜。in の後は名詞・動名詞。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-23",
+      "round": 1,
+      "section": "verb1",
+      "number": 23,
+      "format": "correction",
+      "prompt": "次の英文の誤りを直しなさい。 I hope seeing you again.",
+      "solution": "I hope to see you again. ポイント：hope to do「〜したいと思う」。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-24",
+      "round": 1,
+      "section": "verb1",
+      "number": 24,
+      "format": "fill",
+      "prompt": "日本語に合うように空所を補いなさい。 Please ______ me the package as soon as you can.",
+      "solution": "send ポイント：send + 人 + 物 の SVOO。"
+    },
+    {
+      "id": "vq2-final-r1-verb1-25",
+      "round": 1,
+      "section": "verb1",
+      "number": 25,
+      "format": "choice",
+      "prompt": "元のイラスト問題の leave は、この文では目的語を必要とする。最も適切な説明を選びなさい。",
+      "solution": "② 他動詞として「leave + 目的語 + at home」 ポイント：元問題はイラスト依存。文字データで確認できる leave の他動詞用法のみを出題。",
+      "choices": [
+        "自動詞として使う",
+        "他動詞として「leave + 目的語 + at home」の形で使う",
+        "leave to + 目的語 とする",
+        "be leave とする"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r1-verb2-01",
+      "round": 1,
+      "section": "verb2",
+      "number": 1,
+      "format": "fill",
+      "prompt": "空所を補いなさい。 My cousin is ______ forward to ______ married to her fiancé.",
+      "solution": "looking / getting ポイント：look forward to doing。get married to 〜。"
+    },
+    {
+      "id": "vq2-final-r1-verb2-02",
+      "round": 1,
+      "section": "verb2",
+      "number": 2,
+      "format": "correction",
+      "prompt": "次の英文の誤りを直しなさい。 We elected him a leader.",
+      "solution": "We elected him leader. ポイント：elect + O + C。役職の補語 leader は無冠詞。"
+    },
+    {
+      "id": "vq2-final-r1-verb2-03",
+      "round": 1,
+      "section": "verb2",
+      "number": 3,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 ( seems / he / that / knows / it ) the truth.",
+      "solution": "It seems that he knows the truth. ポイント：It seems that S + V。= He seems to know ..."
+    },
+    {
+      "id": "vq2-final-r1-verb2-04",
+      "round": 1,
+      "section": "verb2",
+      "number": 4,
+      "format": "fill",
+      "prompt": "日本語に合うように空所を補いなさい。 You should ______ ______ a hat.",
+      "solution": "put on ポイント：put on + 名詞 / put + 名詞 + on。"
+    },
+    {
+      "id": "vq2-final-r1-verb2-05",
+      "round": 1,
+      "section": "verb2",
+      "number": 5,
+      "format": "correction",
+      "prompt": "次の英文の誤りを直しなさい。 Please leave alone me.",
+      "solution": "Please leave me alone. ポイント：leave + O + C。"
+    },
+    {
+      "id": "vq2-final-r1-verb2-06",
+      "round": 1,
+      "section": "verb2",
+      "number": 6,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 After ten years, he ( ) a good doctor.",
+      "solution": "② became ポイント：SVC。変化を表す become。",
+      "choices": [
+        "stayed",
+        "became",
+        "looked",
+        "kept"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r1-verb2-07",
+      "round": 1,
+      "section": "verb2",
+      "number": 7,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 The medicine ( ).",
+      "solution": "① made me sick ポイント：make + O + C。feel は省略して made me sick も文脈上可能だが、元解答は made me (feel) sick/ill。",
+      "choices": [
+        "made me sick",
+        "made sick me",
+        "made me sickness",
+        "made to me sick"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r1-verb2-08",
+      "round": 1,
+      "section": "verb2",
+      "number": 8,
+      "format": "fill",
+      "prompt": "空所を補いなさい。 I found ______ difficult ______ get a job.",
+      "solution": "it / to ポイント：find + 形式目的語 it + C + 真目的語 to do。"
+    },
+    {
+      "id": "vq2-final-r1-verb2-09",
+      "round": 1,
+      "section": "verb2",
+      "number": 9,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 His hobby ( ).",
+      "solution": "① is collecting stamps ポイント：SVC。C に動名詞。stamp collecting も可。",
+      "choices": [
+        "is collecting stamps",
+        "is collect stamps",
+        "collects stamps is",
+        "is to collecting stamps"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r1-verb2-10",
+      "round": 1,
+      "section": "verb2",
+      "number": 10,
+      "format": "fill",
+      "prompt": "日本語に合うように空所を補いなさい。 My friends came to the airport to ______ me ______.",
+      "solution": "see / off ポイント：see + 人 + off「〜を見送る」。"
+    },
+    {
+      "id": "vq2-final-r1-verb2-11",
+      "round": 1,
+      "section": "verb2",
+      "number": 11,
+      "format": "correction",
+      "prompt": "次の英文の誤りを直しなさい。 Don't leave open the door.",
+      "solution": "Don't leave the door open. ポイント：leave + O + C「O を C のままにしておく」。"
+    },
+    {
+      "id": "vq2-final-r1-verb2-12",
+      "round": 1,
+      "section": "verb2",
+      "number": 12,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 It's ( ) and hotter.",
+      "solution": "② getting hotter ポイント：get + 比較級 / 比較級 and 比較級。",
+      "choices": [
+        "get hotter",
+        "getting hotter",
+        "getting hot",
+        "got hotter"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r1-verb2-13",
+      "round": 1,
+      "section": "verb2",
+      "number": 13,
+      "format": "rewrite",
+      "prompt": "元問題と同じ that 節を使う形に書き換えなさい。 My sister was disappointed because it rained heavily during her excursion.",
+      "solution": "My sister was disappointed that it rained heavily during her excursion. ポイント：be disappointed that S + V。"
+    },
+    {
+      "id": "vq2-final-r1-verb2-14",
+      "round": 1,
+      "section": "verb2",
+      "number": 14,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 Some of my friends ( Sue / me / call ).",
+      "solution": "call me Sue ポイント：call + O + C（O=C）。"
+    },
+    {
+      "id": "vq2-final-r1-verb2-15",
+      "round": 1,
+      "section": "verb2",
+      "number": 15,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 My plan for next year ( abroad / is / to study ).",
+      "solution": "is to study abroad ポイント：SVC。C に to 不定詞。"
+    },
+    {
+      "id": "vq2-final-r1-verb2-16",
+      "round": 1,
+      "section": "verb2",
+      "number": 16,
+      "format": "fill",
+      "prompt": "be 動詞を使わず、空所を補いなさい。 She ______ ______ when she read the letter.",
+      "solution": "looked sad / seemed sad ポイント：SVC。looked / seemed sad。"
+    },
+    {
+      "id": "vq2-final-r1-verb2-17",
+      "round": 1,
+      "section": "verb2",
+      "number": 17,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 The problem is ( enough money / that / have / don't / we ).",
+      "solution": "that we don't have enough money ポイント：SVC。C に that 節。"
+    },
+    {
+      "id": "vq2-final-r1-verb2-18",
+      "round": 1,
+      "section": "verb2",
+      "number": 18,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 She always ( ).",
+      "solution": "② keeps her desk clean ポイント：keep + O + C。neat / tidy も可。",
+      "choices": [
+        "keeps clean her desk",
+        "keeps her desk clean",
+        "keeps her clean desk",
+        "keeps her desk cleaning"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r1-verb2-19",
+      "round": 1,
+      "section": "verb2",
+      "number": 19,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 The important thing ( ).",
+      "solution": "② is to do your best ポイント：SVC。C に to 不定詞。",
+      "choices": [
+        "is do your best",
+        "is to do your best",
+        "to do is your best",
+        "is doing to your best"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r1-verb2-20",
+      "round": 1,
+      "section": "verb2",
+      "number": 20,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 ( ) he's worried about something.",
+      "solution": "① It seems that ポイント：It seems (that) ... / He seems (to be) ...。",
+      "choices": [
+        "It seems that",
+        "He seems that",
+        "It seems to",
+        "He seems of"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r1-verb2-21",
+      "round": 1,
+      "section": "verb2",
+      "number": 21,
+      "format": "fill",
+      "prompt": "be 動詞を使わず、空所を補いなさい。 The boy ______ ______ because he is about to give a speech.",
+      "solution": "looks nervous / seems nervous ポイント：SVC。looks / seems nervous。"
+    },
+    {
+      "id": "vq2-final-r1-verb2-22",
+      "round": 1,
+      "section": "verb2",
+      "number": 22,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 My dream ( ) a teacher.",
+      "solution": "① is to be ポイント：SVC。C に to 不定詞。become も可。",
+      "choices": [
+        "is to be",
+        "is being to",
+        "to be is",
+        "is be"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r1-verb2-23",
+      "round": 1,
+      "section": "verb2",
+      "number": 23,
+      "format": "fill",
+      "prompt": "空所を補いなさい。 I found ______ easy ______ get up early every day.",
+      "solution": "it / to ポイント：find + it + C + to do。現在完了 I've found も可。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-01",
+      "round": 2,
+      "section": "tense1",
+      "number": 1,
+      "format": "order",
+      "prompt": "「彼女が茶道をしてみるのは初めてだった。」 (It / the first time / was / she / had tried / the tea ceremony)",
+      "solution": "It was the first time she had tried the tea ceremony. 「…するのは初めてだった」は It was the first time + S + had + 過去分詞。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-02",
+      "round": 2,
+      "section": "tense1",
+      "number": 2,
+      "format": "fill",
+      "prompt": "「私は父が誕生日に買ってくれたオーディオプレーヤーをなくした。」 I ( ) the audio player that my father ( ) for me for my birthday. （lose / buy を適切な形にする）",
+      "solution": "lost / had bought 「なくした」が基準となる過去、父が買ったのはそれより前なので過去完了。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-03",
+      "round": 2,
+      "section": "tense1",
+      "number": 3,
+      "format": "choice",
+      "prompt": "「妹は週に 2 回、ピアノのレッスンを受けています。」現在の習慣を表す元問題の形を選びなさい。 She ( ) piano lessons twice a week.",
+      "solution": "② takes twice a week の現在の習慣なので現在形。",
+      "choices": [
+        "is taking",
+        "takes",
+        "took",
+        "had taken"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r2-tense1-04",
+      "round": 2,
+      "section": "tense1",
+      "number": 4,
+      "format": "fill",
+      "prompt": "「今朝起きた時、雪が降っていた。」 It ( ) when I got up this morning. （snow を適切な形にする）",
+      "solution": "was snowing 過去のある時点で進行中だった動作は過去進行形。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-05",
+      "round": 2,
+      "section": "tense1",
+      "number": 5,
+      "format": "choice",
+      "prompt": "「学校が終わった。遊びに行きましょう！」に最も合うものを選びなさい。",
+      "solution": "② School is over. Let's hang out! be over は「終わった状態である」という現在の状態。",
+      "choices": [
+        "School was over. Let's hang out!",
+        "School is over. Let's hang out!",
+        "School has over. Let's hang out!",
+        "School is being over. Let's hang out!"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r2-tense1-06",
+      "round": 2,
+      "section": "tense1",
+      "number": 6,
+      "format": "order",
+      "prompt": "「私は彼の言葉を誤解していたことに気づいた。」 I noticed that (his words / misunderstood / I / had).",
+      "solution": "I noticed that I had misunderstood his words. noticed より前の出来事なので過去完了。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-07",
+      "round": 2,
+      "section": "tense1",
+      "number": 7,
+      "format": "correction",
+      "prompt": "「オバマ氏は広島を訪問した初めての現職アメリカ大統領でした。」 Mr. Obama was the first sitting U.S. president visiting Hiroshima. 下線部にあたる visiting を元問題と同じ形に直しなさい。",
+      "solution": "to visit the first + 名詞 + to do の形。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-08",
+      "round": 2,
+      "section": "tense1",
+      "number": 8,
+      "format": "fill",
+      "prompt": "「私は子どもの頃、よく祖母の家を訪ねました。」 When I ( ) a child, I often ( ) my grandmother's house. （be / visit を適切な形にする）",
+      "solution": "was / visited 子どもの頃という過去の時期と、過去の習慣なので過去形。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-09",
+      "round": 2,
+      "section": "tense1",
+      "number": 9,
+      "format": "order",
+      "prompt": "「私たちが体育館に着いた時、バレーボールの試合はすでに終わっていた。」 When we got to the gym, (already / the volleyball game / had / finished).",
+      "solution": "When we got to the gym, the volleyball game had already finished. 到着した時点より前に試合が終わっていたた め過去完了。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-10",
+      "round": 2,
+      "section": "tense1",
+      "number": 10,
+      "format": "choice",
+      "prompt": "「地球温暖化のために、夏の気温が上がっている。」元問題と同じ「現在も進行中の変化」を表す形を選びな さい。 The temperature in summer ( ) because of global warming.",
+      "solution": "② is rising 現在も進行中の変化を現在進行形で表す。元教材では has been rising も可。",
+      "choices": [
+        "rises",
+        "is rising",
+        "rose",
+        "had risen"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r2-tense1-11",
+      "round": 2,
+      "section": "tense1",
+      "number": 11,
+      "format": "order",
+      "prompt": "「今日の午後に釣りに行き、大きな魚を釣った。」 (this afternoon / went fishing / I / and / caught a big fish)",
+      "solution": "I went fishing this afternoon and caught a big fish. 過去の出来事を起こった順に述べるので過去形でよい。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-12",
+      "round": 2,
+      "section": "tense1",
+      "number": 12,
+      "format": "fill",
+      "prompt": "「めいは毎週土曜日に我が家に来る。」 My niece ( ) to my house every Saturday. （come を適切な形にする）",
+      "solution": "comes every Saturday の現在の習慣なので現在形。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-13",
+      "round": 2,
+      "section": "tense1",
+      "number": 13,
+      "format": "order",
+      "prompt": "「兄は地元の銀行に勤めている。」 (for / a local bank / my brother / works)",
+      "solution": "My brother works for a local bank. 現在の習慣・状態を現在形で表す。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-14",
+      "round": 2,
+      "section": "tense1",
+      "number": 14,
+      "format": "correction",
+      "prompt": "I realized I saw him before. 「彼に以前会ったことがあると気づいた」の意味になるよう、saw を元問題と同じ時制に直しなさい。",
+      "solution": "had seen realized より前の経験なので過去完了。元教材では had met も可。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-15",
+      "round": 2,
+      "section": "tense1",
+      "number": 15,
+      "format": "correction",
+      "prompt": "I already spent all the money. 「もう全部使ってしまい、今お金が残っていない」という結果を表す現在完了形に直しなさい。",
+      "solution": "I have already spent all the money. 動作の完了と、その結果生じた現在の状況を現在完了で表す。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-16",
+      "round": 2,
+      "section": "tense1",
+      "number": 16,
+      "format": "fill",
+      "prompt": "「彼女はよく先生に質問をしていました。」 She often ( ) her teachers questions. （ask を「過去の習慣」を表す形にする）",
+      "solution": "asked often を伴う過去の反復・習慣なので過去形。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-17",
+      "round": 2,
+      "section": "tense1",
+      "number": 17,
+      "format": "order",
+      "prompt": "「最近、彼女のことが好きになってきた。」 (Recently / come / I / have / to like / her)",
+      "solution": "Recently, I have come to like her. 「〜するようになってきた」は have come to do。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-18",
+      "round": 2,
+      "section": "tense1",
+      "number": 18,
+      "format": "correction",
+      "prompt": "He is owning a big car. 状態動詞 own を用いて、元問題と同じ自然な英文に直しなさい。",
+      "solution": "He owns a big car. own は「所有している」という状態動詞なので通常進行形にしない。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-19",
+      "round": 2,
+      "section": "tense1",
+      "number": 19,
+      "format": "order",
+      "prompt": "「雨が降り始めたとき、彼女は犬を散歩させていた。」 (when / her dog / she / was walking / it began to rain)",
+      "solution": "She was walking her dog when it began to rain. 雨が降り始めた時点で進行中だったため過去進行形。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-20",
+      "round": 2,
+      "section": "tense1",
+      "number": 20,
+      "format": "fill",
+      "prompt": "「ハルカは毎週末、昼食を作る。」 Haruka ( ) lunch every weekend. （cook を現在の習慣を表す形にする）",
+      "solution": "cooks every weekend の現在の習慣なので現在形。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-21",
+      "round": 2,
+      "section": "tense1",
+      "number": 21,
+      "format": "order",
+      "prompt": "「多くの人々が彼は無実だと信じるようになった。」 (have / many people / come / to believe / that) he is innocent.",
+      "solution": "Many people have come to believe that he is innocent. 最近までの変化と現在とのつながりを現在完了で表す。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-22",
+      "round": 2,
+      "section": "tense1",
+      "number": 22,
+      "format": "choice",
+      "prompt": "「私が帰宅した時、姉は電話で話をしていた。」 My sister ( ) on the phone when I got home.",
+      "solution": "② was talking 帰宅した時点で進行中だった動作なので過去進行形。",
+      "choices": [
+        "had talked",
+        "was talking",
+        "has talked",
+        "talks"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r2-tense1-23",
+      "round": 2,
+      "section": "tense1",
+      "number": 23,
+      "format": "order",
+      "prompt": "「駅まで急いだ。そして幸いなことに、電車はまだ到着していなかった。」 I hurried to the station, and luckily, (yet / the train / had not / arrived).",
+      "solution": "I hurried to the station, and luckily, the train had not [hadn't] arrived yet. 過去の基準時まで未完了なので過去 完了の否定。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-24",
+      "round": 2,
+      "section": "tense1",
+      "number": 24,
+      "format": "fill",
+      "prompt": "「彼らは今、教室で何をしていますか。」 What ( ) they ( ) in the classroom now? （be / do を適切な形にする）",
+      "solution": "are / doing now の「今している動作」は現在進行形の疑問文。"
+    },
+    {
+      "id": "vq2-final-r2-tense1-25",
+      "round": 2,
+      "section": "tense1",
+      "number": 25,
+      "format": "choice",
+      "prompt": "after によって出来事の順序が明らかなため、両方とも過去形を用いた文を選びなさい。",
+      "solution": "① After she had a baby, she started swimming every day. after で順序が明らかなので、元教材では両方を過去形 で表す。",
+      "choices": [
+        "After she had a baby, she started swimming every day.",
+        "After she had had a baby, she had started swimming every day.",
+        "After she has a baby, she started swimming every day.",
+        "After she has had a baby, she starts swimming every day."
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r2-tense1-26",
+      "round": 2,
+      "section": "tense1",
+      "number": 26,
+      "format": "correction",
+      "prompt": "Tom and John play basketball in the gym now. 「今まさに体育館でバスケットボールをしている」という意味になるように直しなさい。",
+      "solution": "Tom and John are playing basketball in the gym now. now の今まさに進行中の動作は現在進行形。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-01",
+      "round": 2,
+      "section": "tense2",
+      "number": 1,
+      "format": "order",
+      "prompt": "「彼女は大学在学中に起業しようと思っている。」 (She / is / thinking / of / starting / a business) when she is in college.",
+      "solution": "She is thinking of starting a business when she is in college. be thinking of doing「〜しようと思っている」。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-02",
+      "round": 2,
+      "section": "tense2",
+      "number": 2,
+      "format": "correction",
+      "prompt": "Ten years passed since my father died. 「父が亡くなってから今までに 10 年が過ぎた」という現在完了の文に直しなさい。",
+      "solution": "Ten years have passed since my father died. 「〜してから…年になる」は years have passed since + 過去形。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-03",
+      "round": 2,
+      "section": "tense2",
+      "number": 3,
+      "format": "correction",
+      "prompt": "My sister has gone to my father's office once. 「妹は父の会社に一度行ったことがある」という経験を表す元問題の形に直しなさい。",
+      "solution": "My sister has been to my father's office once. have been to は「〜へ行ったことがある」という経験。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-04",
+      "round": 2,
+      "section": "tense2",
+      "number": 4,
+      "format": "order",
+      "prompt": "「私は夢が実現するまで諦めません。」 (I / won't / give up / until / my dream / comes true)",
+      "solution": "I won't give up until my dream comes true. 時・条件の副詞節では未来のことも現在形。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-05",
+      "round": 2,
+      "section": "tense2",
+      "number": 5,
+      "format": "choice",
+      "prompt": "「この電車は東京駅に到着します。」準備が進んでいる近い未来を表す形を選びなさい。 This train ( ) at Tokyo Station.",
+      "solution": "② is arriving 発着など、準備が進んでいる近い未来は現在進行形で表せる。",
+      "choices": [
+        "arrived",
+        "is arriving",
+        "has arrived",
+        "will have arrived"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r2-tense2-06",
+      "round": 2,
+      "section": "tense2",
+      "number": 6,
+      "format": "order",
+      "prompt": "「私はその時までヨーロッパへ行ったことがなかった。」 (to Europe / I / hadn't been / until then)",
+      "solution": "I hadn't been to Europe until then. 過去の基準時までの経験の否定なので過去完了。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-07",
+      "round": 2,
+      "section": "tense2",
+      "number": 7,
+      "format": "fill",
+      "prompt": "「私たちは初めて出会ってからずっと愛し合っている。」 We ( ) each other since we first met. （love を適切な形にする）",
+      "solution": "have loved since を伴う過去から現在までの状態の継続は現在完了。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-08",
+      "round": 2,
+      "section": "tense2",
+      "number": 8,
+      "format": "order",
+      "prompt": "「その歌手は来年、2 枚目のアルバムを発売する。」 (his second album / the singer / will / next year / release)",
+      "solution": "The singer will release his second album next year. will + 動詞の原形で未来を表す。元教材では他の未来表現も 可。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-09",
+      "round": 2,
+      "section": "tense2",
+      "number": 9,
+      "format": "order",
+      "prompt": "「私の家族は次の火曜日に京都を訪れます。」 (next Tuesday / is going to visit / Kyoto / my family)",
+      "solution": "My family is going to visit Kyoto next Tuesday. be going to + 動詞の原形。元教材では is planning to visit も可。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-10",
+      "round": 2,
+      "section": "tense2",
+      "number": 10,
+      "format": "order",
+      "prompt": "「玄関のベルが鳴った時、ちょうど出かけようとしていた。」 (when / was about to leave / I / home) the doorbell rang.",
+      "solution": "I was about to leave home when the doorbell rang. be about to do は「まさに〜しようとしている」。過去の場 面なので was。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-11",
+      "round": 2,
+      "section": "tense2",
+      "number": 11,
+      "format": "fill",
+      "prompt": "「地球は太陽の周りを回る。」 The earth ( ) around the sun. （go を変わらない真理を表す形にする）",
+      "solution": "goes 変わらない真理なので現在形。元教材では moves around も可。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-12",
+      "round": 2,
+      "section": "tense2",
+      "number": 12,
+      "format": "choice",
+      "prompt": "「今まで半時間ずっとバスを待っている。」 I ( ) for the bus for half an hour now.",
+      "solution": "② have been waiting 現在まで続く動作は have been doing。元教材では have waited も可。",
+      "choices": [
+        "waited",
+        "have been waiting",
+        "was waiting",
+        "had been waiting"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r2-tense2-13",
+      "round": 2,
+      "section": "tense2",
+      "number": 13,
+      "format": "order",
+      "prompt": "「彼が旧友と楽しいひと時を過ごすのは久しぶりだ。」 (since / it's been a long time / he / last had / a good time with an old friend)",
+      "solution": "It's been a long time since he last had a good time with an old friend. 現在完了の否定 + for a long time と同様 の意味を表す。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-14",
+      "round": 2,
+      "section": "tense2",
+      "number": 14,
+      "format": "correction",
+      "prompt": "I have not been waiting long when he came. 「彼が来るまで長く待っていなかった」という、過去の基準時までの継続を表す形に直しなさい。",
+      "solution": "I had not [hadn't] been waiting long when he came. 過去の基準時までの継続の否定は過去完了進行形。元教材で は hadn't waited も可。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-15",
+      "round": 2,
+      "section": "tense2",
+      "number": 15,
+      "format": "fill",
+      "prompt": "「私たちは来週水曜日に宿題を提出する予定です。」 We ( ) next Wednesday. be expected to do と hand in を用いて完成させなさい。",
+      "solution": "are expected to hand in the assignment be expected to do「〜する予定である／〜すると予想される」。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-16",
+      "round": 2,
+      "section": "tense2",
+      "number": 16,
+      "format": "choice",
+      "prompt": "「昨年、私のひいおばあさんは老人ホームで生活していた。」 My great-grandmother ( ) in a nursing home last year.",
+      "solution": "③ lived last year は現在と切り離された過去なので過去形。",
+      "choices": [
+        "has lived",
+        "lives",
+        "lived",
+        "has been living"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": "vq2-final-r2-tense2-17",
+      "round": 2,
+      "section": "tense2",
+      "number": 17,
+      "format": "fill",
+      "prompt": "「最近、彼から便りがない。」 I ( ) from him recently. 現在完了形で完成させなさい。",
+      "solution": "haven't heard recently / lately と現在完了で、最近から現在までを表す。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-18",
+      "round": 2,
+      "section": "tense2",
+      "number": 18,
+      "format": "written",
+      "prompt": "They discuss this problem on Friday morning. 「金曜日の朝、この問題について話し合うことになっている」という予定を未来進行形で表しなさい。",
+      "solution": "They will be discussing this problem on Friday morning. 未来進行形で「〜することになっている」という予定を 表す。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-19",
+      "round": 2,
+      "section": "tense2",
+      "number": 19,
+      "format": "correction",
+      "prompt": "I have been knowing David for ten years. 状態動詞 know を使い、過去から現在までの状態の継続を表す元問題の形に直しなさい。",
+      "solution": "I have known David for ten years. know は状態動詞。過去から現在までの継続は現在完了。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-20",
+      "round": 2,
+      "section": "tense2",
+      "number": 20,
+      "format": "order",
+      "prompt": "「まもなく雨が降りそうだ。」 (soon / it / is going / to rain)",
+      "solution": "It is going to rain soon. 現在の状況を根拠にした近い未来の予測は be going to。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-21",
+      "round": 2,
+      "section": "tense2",
+      "number": 21,
+      "format": "order",
+      "prompt": "「おばが会いに来てくれた時、私は数時間読書をしていた。」 (for a few hours / had been reading / I / when my aunt came to see me)",
+      "solution": "I had been reading for a few hours when my aunt came to see me. 過去の基準時まで続いていた動作なので過去 完了進行形。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-22",
+      "round": 2,
+      "section": "tense2",
+      "number": 22,
+      "format": "fill",
+      "prompt": "「いとこは明日の夕方、カナダに向かう。」 My cousin ( ) for Canada tomorrow evening. 具体的な準備が進んでいる近い未来を現在進行形で表しなさい。",
+      "solution": "is leaving leave など発着の近い予定は現在進行形。元教材では will leave も可。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-23",
+      "round": 2,
+      "section": "tense2",
+      "number": 23,
+      "format": "fill",
+      "prompt": "「もう一度行けば、東京ディズニーリゾートに 3 回行ったことになるだろう。」 If I go there again, I ( ) to Tokyo Disney Resort three times. 未来完了形で完成させなさい。",
+      "solution": "will have been 未来のある時点までの経験は未来完了。if 節内は現在形。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-24",
+      "round": 2,
+      "section": "tense2",
+      "number": 24,
+      "format": "correction",
+      "prompt": "It is raining heavily for a few days. 「この数日、ずっと雨が激しく降り続いている」という現在までの継続を現在完了進行形に直しなさい。",
+      "solution": "It has been raining heavily for a few days. 過去から現在まで続く動作。元教材では has rained も可。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-25",
+      "round": 2,
+      "section": "tense2",
+      "number": 25,
+      "format": "correction",
+      "prompt": "Water is boiling at 100 degrees Celsius. 「水は摂氏 100 度で沸騰する」という変わらない真理を表す文に直しなさい。",
+      "solution": "Water boils at 100 degrees Celsius. 科学的・普遍的な真理は現在形で表す。"
+    },
+    {
+      "id": "vq2-final-r2-tense2-26",
+      "round": 2,
+      "section": "tense2",
+      "number": 26,
+      "format": "order",
+      "prompt": "「小学校の先生に会うのは久しぶりだ。」 (I / last saw / my elementary school teacher / it's been / a long time / since)",
+      "solution": "It's been a long time since I last saw my elementary school teacher. 「〜するのは久しぶり」= It has been a long time since + 過去形。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-01",
+      "round": 2,
+      "section": "verb1",
+      "number": 1,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 Please ( the package / me / send ) as soon as you can.",
+      "solution": "send me the package ポイント：send + 人 + 物 の SVOO。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-02",
+      "round": 2,
+      "section": "verb1",
+      "number": 2,
+      "format": "correction",
+      "prompt": "次の英文の誤りを直しなさい。 His defense played an important part on winning the game.",
+      "solution": "His defense played an important part in winning the game. ポイント：play an important part in 〜。in の後は名詞・動名詞。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-03",
+      "round": 2,
+      "section": "verb1",
+      "number": 3,
+      "format": "fill",
+      "prompt": "日本語に合うように空所を補いなさい。 I ______ ______ ______ you again.",
+      "solution": "hope to see ポイント：hope to do「〜したいと思う」。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-04",
+      "round": 2,
+      "section": "verb1",
+      "number": 4,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 The tomato ( ) quickly.",
+      "solution": "① grew ポイント：grow はここでは「成長する」の自動詞。",
+      "choices": [
+        "grew",
+        "grew it",
+        "was grow",
+        "growing"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r2-verb1-05",
+      "round": 2,
+      "section": "verb1",
+      "number": 5,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 We ( ) to go to the library.",
+      "solution": "② need to take a bus ポイント：need to do / take a bus。",
+      "choices": [
+        "need taking a bus",
+        "need to take a bus",
+        "need take a bus",
+        "need to ride on a bus"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r2-verb1-06",
+      "round": 2,
+      "section": "verb1",
+      "number": 6,
+      "format": "correction",
+      "prompt": "次の英文の誤りを直しなさい。 Let's ask her where is she from.",
+      "solution": "Let's ask her where she's from. ポイント：ask + 人 + 疑問詞節。間接疑問は平叙文語順。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-07",
+      "round": 2,
+      "section": "verb1",
+      "number": 7,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 I can't remember ( ) I bought the skirt.",
+      "solution": "② when ポイント：remember の目的語に間接疑問（when + S + V）。",
+      "choices": [
+        "when did",
+        "when",
+        "what time did",
+        "that when"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r2-verb1-08",
+      "round": 2,
+      "section": "verb1",
+      "number": 8,
+      "format": "fill",
+      "prompt": "日本語に合うように空所を補いなさい。 They say that store ______ ______.",
+      "solution": "sells everything ポイント：sell は目的語 everything をとる他動詞。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-09",
+      "round": 2,
+      "section": "verb1",
+      "number": 9,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 He ( ) smoking.",
+      "solution": "③ decided to stop ポイント：decide to do / stop doing。",
+      "choices": [
+        "decided stopping",
+        "decided stop",
+        "decided to stop",
+        "decided to stopping"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": "vq2-final-r2-verb1-10",
+      "round": 2,
+      "section": "verb1",
+      "number": 10,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 Our teacher ( to us / the rules of the game / explained ).",
+      "solution": "explained the rules of the game to us ポイント：explain + 物 + to 人。SVOO にはしない。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-11",
+      "round": 2,
+      "section": "verb1",
+      "number": 11,
+      "format": "correction",
+      "prompt": "次の英文の誤りを直しなさい。 Can you lend your notebook me for a while?",
+      "solution": "Can you lend me your notebook for a while? ポイント：lend + 人 + 物 の SVOO。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-12",
+      "round": 2,
+      "section": "verb1",
+      "number": 12,
+      "format": "fill",
+      "prompt": "空所を補いなさい。 Do you know ______ ______ the last train ______?",
+      "solution": "what time / leaves ポイント：what time + S + V の間接疑問。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-13",
+      "round": 2,
+      "section": "verb1",
+      "number": 13,
+      "format": "fill",
+      "prompt": "日本語に合うように 2 語を入れなさい。 彼女の本はよく売れた。 Her book ______ ______.",
+      "solution": "sold well ポイント：sell は「（物が）売れる」の自動詞としても使える。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-14",
+      "round": 2,
+      "section": "verb1",
+      "number": 14,
+      "format": "correction",
+      "prompt": "次の英文の誤りを直しなさい。 I didn't knew that he had moved.",
+      "solution": "I didn't know that he had moved. ポイント：know の目的語に that 節がくる。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-15",
+      "round": 2,
+      "section": "verb1",
+      "number": 15,
+      "format": "choice",
+      "prompt": "正しい英文を選びなさい。",
+      "solution": "② ポイント：enter は他動詞なので into は不要。",
+      "choices": [
+        "You can't enter into this building without permission.",
+        "You can't enter this building without permission.",
+        "You can't enter to this building without permission.",
+        "You can't enter at this building without permission."
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r2-verb1-16",
+      "round": 2,
+      "section": "verb1",
+      "number": 16,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 My father ( that / me / told ) I should eat more vegetables.",
+      "solution": "told me that ポイント：tell + 人 + that 節。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-17",
+      "round": 2,
+      "section": "verb1",
+      "number": 17,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 This song ( the summer festival / me / of / reminds ).",
+      "solution": "reminds me of the summer festival ポイント：remind + 人 + of 〜。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-18",
+      "round": 2,
+      "section": "verb1",
+      "number": 18,
+      "format": "fill",
+      "prompt": "日本語に合うように空所を補いなさい。 Do you ______ ______ hiking?",
+      "solution": "remember going ポイント：remember doing「〜したことを覚えている」。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-19",
+      "round": 2,
+      "section": "verb1",
+      "number": 19,
+      "format": "correction",
+      "prompt": "次の英文の誤りを直しなさい。 I think we should to reduce the amount of garbage.",
+      "solution": "I think we should reduce the amount of garbage. ポイント：think (that) S + V。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-20",
+      "round": 2,
+      "section": "verb1",
+      "number": 20,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 We ( ) tomatoes every year.",
+      "solution": "① grow ポイント：grow は目的語 tomatoes をとり「〜を育てる」の他動詞。",
+      "choices": [
+        "grow",
+        "grow up",
+        "are grown",
+        "growing"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r2-verb1-21",
+      "round": 2,
+      "section": "verb1",
+      "number": 21,
+      "format": "fill",
+      "prompt": "show を「人に物を見せる」の意味で使う。空所を語順どおり答えなさい。 show + ______ + ______",
+      "solution": "人 / 物ポイント：元問題はイラスト依存。文字データで確認できる show と SVOO の語法のみを出題。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-22",
+      "round": 2,
+      "section": "verb1",
+      "number": 22,
+      "format": "correction",
+      "prompt": "次の英文の誤りを直しなさい。 Our teacher taught us how study math.",
+      "solution": "Our teacher taught us how to study math. ポイント：teach + 人 + how to do。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-23",
+      "round": 2,
+      "section": "verb1",
+      "number": 23,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 In Japan, we don't notice ( means / how much / peace ) to us.",
+      "solution": "how much peace means ポイント：how much + S + V の間接疑問。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-24",
+      "round": 2,
+      "section": "verb1",
+      "number": 24,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 My grandmother is going to ( a new dress / make ).",
+      "solution": "make a new dress ポイント：make + 目的語。"
+    },
+    {
+      "id": "vq2-final-r2-verb1-25",
+      "round": 2,
+      "section": "verb1",
+      "number": 25,
+      "format": "choice",
+      "prompt": "元のイラスト問題の leave の使い方として正しい語順を選びなさい。",
+      "solution": "② leave + 目的語 + at home ポイント：元問題はイラスト依存。文字データで確認できる leave の他動詞用法のみを出題。",
+      "choices": [
+        "leave + at home + 目的語",
+        "leave + 目的語 + at home",
+        "leave to + 目的語 + at home",
+        "leave + be + 目的語"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r2-verb2-01",
+      "round": 2,
+      "section": "verb2",
+      "number": 1,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 Don't ( ).",
+      "solution": "① leave the door open ポイント：leave + O + C「O を C のままにしておく」。",
+      "choices": [
+        "leave the door open",
+        "leave open the door",
+        "leave the door to open",
+        "leave opening the door"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r2-verb2-02",
+      "round": 2,
+      "section": "verb2",
+      "number": 2,
+      "format": "correction",
+      "prompt": "次の英文の誤りを直しなさい。 It's getting hot and hotter.",
+      "solution": "It's getting hotter and hotter. ポイント：get + 比較級 / 比較級 and 比較級。"
+    },
+    {
+      "id": "vq2-final-r2-verb2-03",
+      "round": 2,
+      "section": "verb2",
+      "number": 3,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 ( difficult / found / it / I / to get a job ).",
+      "solution": "I found it difficult to get a job. ポイント：find + 形式目的語 it + C + 真目的語 to do。"
+    },
+    {
+      "id": "vq2-final-r2-verb2-04",
+      "round": 2,
+      "section": "verb2",
+      "number": 4,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 The boy ( ) because he is about to give a speech.",
+      "solution": "① looks nervous ポイント：SVC。looks / seems nervous。",
+      "choices": [
+        "looks nervous",
+        "looks nervously",
+        "is look nervous",
+        "keeps nervous"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r2-verb2-05",
+      "round": 2,
+      "section": "verb2",
+      "number": 5,
+      "format": "fill",
+      "prompt": "同じ内容になるように空所を補いなさい。 It seems that he's worried about something. = He ______ ______ ______ worried about something.",
+      "solution": "seems to be ポイント：It seems (that) ... / He seems (to be) ...。"
+    },
+    {
+      "id": "vq2-final-r2-verb2-06",
+      "round": 2,
+      "section": "verb2",
+      "number": 6,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 The medicine ( sick / me / made ).",
+      "solution": "made me sick ポイント：make + O + C。feel は省略して made me sick も文脈上可能だが、元解答は made me (feel) sick/ill。"
+    },
+    {
+      "id": "vq2-final-r2-verb2-07",
+      "round": 2,
+      "section": "verb2",
+      "number": 7,
+      "format": "correction",
+      "prompt": "次の英文の誤りを直しなさい。 The important thing is do your best.",
+      "solution": "The important thing is to do your best. ポイント：SVC。C に to 不定詞。"
+    },
+    {
+      "id": "vq2-final-r2-verb2-08",
+      "round": 2,
+      "section": "verb2",
+      "number": 8,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 My friends came to the airport to ( ).",
+      "solution": "② see me off ポイント：see + 人 + off「〜を見送る」。",
+      "choices": [
+        "see off me",
+        "see me off",
+        "see me to off",
+        "see off to me"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r2-verb2-09",
+      "round": 2,
+      "section": "verb2",
+      "number": 9,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 The problem is ( ).",
+      "solution": "① that we don't have enough money ポイント：SVC。C に that 節。",
+      "choices": [
+        "that we don't have enough money",
+        "we that don't have enough money",
+        "that don't we have enough money",
+        "to not have we enough money"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r2-verb2-10",
+      "round": 2,
+      "section": "verb2",
+      "number": 10,
+      "format": "fill",
+      "prompt": "空所を補いなさい。 We ______ him ______.",
+      "solution": "elected / leader ポイント：elect + O + C。役職の補語 leader は無冠詞。"
+    },
+    {
+      "id": "vq2-final-r2-verb2-11",
+      "round": 2,
+      "section": "verb2",
+      "number": 11,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 Please ( ).",
+      "solution": "① leave me alone ポイント：leave + O + C。",
+      "choices": [
+        "leave me alone",
+        "leave alone me",
+        "keep me alone",
+        "leave me lonely"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r2-verb2-12",
+      "round": 2,
+      "section": "verb2",
+      "number": 12,
+      "format": "correction",
+      "prompt": "次の英文の誤りを直しなさい。 His hobby is collect stamps.",
+      "solution": "His hobby is collecting stamps. ポイント：SVC。C に動名詞。stamp collecting も可。"
+    },
+    {
+      "id": "vq2-final-r2-verb2-13",
+      "round": 2,
+      "section": "verb2",
+      "number": 13,
+      "format": "correction",
+      "prompt": "次の英文の誤りを直しなさい。 My cousin is looking forward to get married to her fiancé.",
+      "solution": "My cousin is looking forward to getting married to her fiancé. ポイント：look forward to doing。get married to 〜。"
+    },
+    {
+      "id": "vq2-final-r2-verb2-14",
+      "round": 2,
+      "section": "verb2",
+      "number": 14,
+      "format": "fill",
+      "prompt": "日本語に合うように空所を補いなさい。 After ten years, he ______ a good ______.",
+      "solution": "became / doctor ポイント：SVC。変化を表す become。"
+    },
+    {
+      "id": "vq2-final-r2-verb2-15",
+      "round": 2,
+      "section": "verb2",
+      "number": 15,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 Some of my friends ( ).",
+      "solution": "② call me Sue ポイント：call + O + C（O=C）。",
+      "choices": [
+        "call Sue me",
+        "call me Sue",
+        "call me as Sue",
+        "call to me Sue"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": "vq2-final-r2-verb2-16",
+      "round": 2,
+      "section": "verb2",
+      "number": 16,
+      "format": "fill",
+      "prompt": "空所を補いなさい。 My plan for next year is ______ ______ abroad.",
+      "solution": "to study ポイント：SVC。C に to 不定詞。"
+    },
+    {
+      "id": "vq2-final-r2-verb2-17",
+      "round": 2,
+      "section": "verb2",
+      "number": 17,
+      "format": "fill",
+      "prompt": "同じ内容になるように空所を補いなさい。 It seems that he knows the truth. = He ______ ______ ______ the truth.",
+      "solution": "seems to know ポイント：It seems that S + V。= He seems to know ..."
+    },
+    {
+      "id": "vq2-final-r2-verb2-18",
+      "round": 2,
+      "section": "verb2",
+      "number": 18,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 My sister ( that / disappointed / was / it rained heavily ) during her excursion.",
+      "solution": "was disappointed that it rained heavily ポイント：be disappointed that S + V。"
+    },
+    {
+      "id": "vq2-final-r2-verb2-19",
+      "round": 2,
+      "section": "verb2",
+      "number": 19,
+      "format": "choice",
+      "prompt": "( )に最も適切なものを選びなさい。 She ( ) when she read the letter.",
+      "solution": "① looked sad ポイント：SVC。looked / seemed sad。",
+      "choices": [
+        "looked sad",
+        "looked sadly",
+        "became sadness",
+        "kept sadly"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": "vq2-final-r2-verb2-20",
+      "round": 2,
+      "section": "verb2",
+      "number": 20,
+      "format": "correction",
+      "prompt": "次の英文の誤りを直しなさい。 She always keeps clean her desk.",
+      "solution": "She always keeps her desk clean. ポイント：keep + O + C。neat / tidy も可。"
+    },
+    {
+      "id": "vq2-final-r2-verb2-21",
+      "round": 2,
+      "section": "verb2",
+      "number": 21,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 My dream ( a teacher / is / to be ).",
+      "solution": "is to be a teacher ポイント：SVC。C に to 不定詞。become も可。"
+    },
+    {
+      "id": "vq2-final-r2-verb2-22",
+      "round": 2,
+      "section": "verb2",
+      "number": 22,
+      "format": "order",
+      "prompt": "語句を並べかえて英文を完成させなさい。 ( easy / found / it / I / to get up early ) every day.",
+      "solution": "I found it easy to get up early every day. ポイント：find + it + C + to do。現在完了 I've found も可。"
+    },
+    {
+      "id": "vq2-final-r2-verb2-23",
+      "round": 2,
+      "section": "verb2",
+      "number": 23,
+      "format": "rewrite",
+      "prompt": "「今日は本当に暑い。君は帽子をかぶるべきだよ。」の意味になるように書き換えなさい。 You should put a hat on it.",
+      "solution": "You should put on a hat. / You should put a hat on. ポイント：put on + 名詞 / put + 名詞 + on。"
+    }
+  ]
+}

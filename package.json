@@ -10,7 +10,9 @@
     "preview:cloudflare": "npm run build && wrangler dev",
     "deploy:cloudflare": "npm run build && wrangler deploy",
     "clean": "rm -rf dist",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "test:final-check:model": "tsx scripts/final-check-model-regression.ts",
+    "test:final-check:ui": "tsx scripts/final-check-ui-regression.ts"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",

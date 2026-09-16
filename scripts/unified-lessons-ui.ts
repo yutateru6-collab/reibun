@@ -40,7 +40,7 @@ for(const [width,dark] of [[320,false],[390,true],[1280,false]] as const) {
   const dir=path.join(OUT,`${engine}-${width}`); fs.mkdirSync(dir,{recursive:true});
   try {
     await p.goto(BASE); await p.locator('[data-ui=workbook-launcher]').waitFor();
-    assert.match(await p.locator('[data-ui=workbook-launcher]').innerText(),/時制の練習問題/);
+    assert.match(await p.locator('[data-ui=workbook-launcher]').innerText(),/時制・完了形\s*強化練習/);
     assert.equal(await p.locator('[data-ui=exam-quiz-hub]').count(),0);
     await p.screenshot({path:path.join(dir,'home.png'),fullPage:true});
     await p.getByRole('button',{name:/基本例文.*マスター/s}).click();

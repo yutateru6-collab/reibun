@@ -23,6 +23,7 @@ jobs:
           npx tsx scripts/validate-content.ts
           npx tsx scripts/validate-vq-exercises.ts
           npx tsx scripts/workbook-model-regression.ts
+          npx tsx scripts/final-check-model-regression.ts
       - run: npm run build
       - name: Install browsers and Japanese fonts
         run: |
@@ -39,6 +40,8 @@ jobs:
           BROWSER: webkit
           QA_OUT: audit/workbook-webkit
         run: node scripts/workbook-ui-regression.mjs
+      - name: Final-check flow in Chromium and WebKit
+        run: npx tsx scripts/final-check-ui-regression.ts
       - name: Existing study modes regression
         run: npx tsx scripts/study-edge-regression.ts
       - name: Wait for this exact production build
@@ -52,7 +55,7 @@ jobs:
           for n in $(seq 1 36); do
             if curl -fsSL "$PUBLIC_URL/?workbook_check=${GITHUB_SHA}" -o /tmp/live.html && grep -Fq "$asset" /tmp/live.html; then
               curl -fsSL "$PUBLIC_URL$asset" -o /tmp/live.js
-              if grep -Fq 'tense-workbook-v1' /tmp/live.js && grep -Fq 'quiz-launcher' /tmp/live.js; then
+              if grep -Fq 'tense-workbook-v1' /tmp/live.js && grep -Fq 'quiz-launcher' /tmp/live.js && grep -Fq 'vq2-final-check-2026-v1' /tmp/live.js; then
                 echo "Confirmed exact deployed asset: $asset"
                 exit 0
               fi
@@ -67,6 +70,12 @@ jobs:
           APP_URL: https://reibun.itisnowornever271.workers.dev
           QA_OUT: audit/workbook-production
         run: node scripts/workbook-ui-regression.mjs
+      - name: Verify final check in production
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          APP_URL: https://reibun.itisnowornever271.workers.dev
+          QA_OUT: audit/final-check-production
+        run: npx tsx scripts/final-check-ui-regression.ts
       - uses: actions/upload-artifact@v4
         if: always()
         with:
