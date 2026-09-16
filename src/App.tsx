@@ -49,6 +49,15 @@ function canonicalQuizAnswer(answer: string): string {
     .trim();
 }
 
+function shuffledCopy<T>(items: readonly T[]): T[] {
+  const copy = [...items];
+  for (let i = copy.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 const GREETING_MESSAGES = [
   { main: "生きててエライ！", sub: "勉強しようとアプリを開いただけで、今日の徳は積まれました。" },
   { main: "伝説の勇者、現る。", sub: "睡魔という魔王を倒して、レベル上げを始めましょう。" },
@@ -401,7 +410,7 @@ export default function App() {
   const generateWordPool = (card: Card) => {
     // Split by spaces, keep punctuation attached for simplicity
     const words = canonicalQuizAnswer(card.back).split(' ').map((word, index) => ({ id: index, word }));
-    setWordPool(words.sort(() => Math.random() - 0.5));
+    setWordPool(shuffledCopy(words));
     setSelectedWords([]);
     setIsCorrect(null);
   };
@@ -412,7 +421,8 @@ export default function App() {
     if (!nextDeck || pool.length === 0) return;
     // Select the snapshot before setState: switching from cloze to order must not use the previous deck.
     if (selectedDeck) { setCurrentDeck(selectedDeck); setReviewFavoritesOnly(false); }
-    const cardsToUse = isShuffle ? [...pool].sort(() => Math.random() - 0.5) : [...pool];
+    // Quiz modes always randomize question order. The study-card shuffle toggle only controls browsing cards.
+    const cardsToUse = shuffledCopy<Card>(pool);
     
     setQuizCards(cardsToUse);
     setQuizIndex(0);
@@ -1029,7 +1039,7 @@ export default function App() {
               <div className="w-full">
                 <span className="inline-block text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 rounded-full mb-1">語順</span>
                 <h2 className="text-sm sm:text-base font-black text-slate-800 dark:text-slate-100 leading-tight">並べ替えクイズ</h2>
-                <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1">単語を並べて仕上げ</p>
+                <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1">単語も問題順も毎回シャッフル</p>
               </div>
             </button>
 
@@ -1043,7 +1053,7 @@ export default function App() {
               <div className="w-full">
                 <span className="inline-block text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 rounded-full mb-1">実力判定</span>
                 <h2 className="text-sm sm:text-base font-black text-slate-800 dark:text-slate-100 leading-tight">自己申告テスト</h2>
-                <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1">「まだ / わかった」で判定</p>
+                <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug mt-1">問題順を毎回シャッフルして判定</p>
               </div>
             </button>
 
@@ -1057,7 +1067,7 @@ export default function App() {
                     <h2 className="text-sm sm:text-base font-black text-slate-800 dark:text-slate-100">タイムアタック</h2>
                     <span className="text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 rounded-full">自動</span>
                   </div>
-                  <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug">秒数を決めて高速反復</p>
+                  <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-300 leading-snug">問題順を毎回シャッフルして高速反復</p>
                 </div>
               </div>
 

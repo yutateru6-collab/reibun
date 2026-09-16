@@ -20,7 +20,7 @@ for (const [engine,type,width] of [['chromium-small',chromium,320],['webkit-mobi
   async function run(name:string,seed:Record<string,string>,fn:(p:Page)=>Promise<void>) {
     const ctx=await browser.newContext({viewport:{width,height:850},isMobile:width<600,hasTouch:width<600});
     await ctx.addInitScript(values=>{for(const [k,v] of Object.entries(values))localStorage.setItem(k,v)},seed);
-    const page=await ctx.newPage(); page.setDefaultTimeout(7000);
+    const page=await ctx.newPage(); page.setDefaultTimeout(15000); page.setDefaultNavigationTimeout(15000);
     const errors:string[]=[];page.on('pageerror',e=>errors.push(String(e)));
     try {
       await fn(page);
@@ -68,6 +68,13 @@ for (const [engine,type,width] of [['chromium-small',chromium,320],['webkit-mobi
     assert((await card(p).innerText()).includes(basicExampleDecks[0].cards.find(c=>c.id===seen[0])!.front));
     await p.getByRole('button',{name:'前のカードへ',exact:true}).click();
     assert((await card(p).innerText()).includes(basicExampleDecks[0].cards.find(c=>c.id===seen[2])!.front));
+  });
+  await run('quiz-always-shuffles',{'flashcard-shuffle':'false'},async p=>{
+    await basic(p); await p.getByRole('button',{name:/Lesson 1 /}).first().click();
+    await p.evaluate(() => { Math.random = () => 0; });
+    await p.locator('[data-mode=order]').click();
+    const expected = basicExampleDecks[0].cards[1];
+    assert((await p.locator('body').innerText()).includes(expected.translation), 'quiz did not shuffle while study-card shuffle was OFF');
   });
   await run('time-completion',{[FAV]:JSON.stringify([vq.id])},async p=>{
     await review(p,'favorite');

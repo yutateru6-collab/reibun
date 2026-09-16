@@ -56,7 +56,8 @@ export default function HopeLessonMenu(props: Props) {
         </button>
       </div>
       {!lesson.cloze && <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300 mt-3">このLessonの元の穴埋め問題は未収録です。例文と並べ替えで練習できます。</p>}
-      <label className="min-h-11 flex items-center gap-2.5 py-3 mt-2 text-sm font-semibold cursor-pointer"><input className="w-5 h-5 accent-indigo-600" type="checkbox" checked={props.shuffle} onChange={e => props.onShuffle(e.target.checked)} />問題の順番をシャッフル</label>
+      <label className="min-h-11 flex items-center gap-2.5 py-3 mt-2 text-sm font-semibold cursor-pointer"><input className="w-5 h-5 accent-indigo-600" type="checkbox" checked={props.shuffle} onChange={e => props.onShuffle(e.target.checked)} />カード表示順をシャッフル</label>
+      <p className="-mt-1 mb-2 text-xs text-slate-500 dark:text-slate-400">※クイズはこの設定に関係なく、毎回問題順をシャッフルします。</p>
       <details className="mt-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" data-ui="hope-more-practice">
         <summary className="min-h-14 p-4 cursor-pointer font-bold focus-visible:outline-2 focus-visible:outline-indigo-500">その他の練習<span className="block text-xs font-normal text-slate-600 dark:text-slate-300 mt-1 ml-4">自己申告テスト・タイムアタック</span></summary>
         <div className="px-4 pb-4 border-t border-slate-200 dark:border-slate-700 pt-4 space-y-4">
