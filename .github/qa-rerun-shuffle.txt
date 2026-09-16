@@ -1,0 +1,2 @@
+Full GitHub Actions verification trigger after quiz-shuffle QA updates.
+2026-09-16
