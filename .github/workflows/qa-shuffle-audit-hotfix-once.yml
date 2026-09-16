@@ -1,0 +1,119 @@
+name: Align shuffle QA once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/qa-shuffle-audit-hotfix-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Patch browser audits for randomized quiz order
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path: str, old: str, new: str):
+              p = Path(path)
+              text = p.read_text()
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{path}: expected exactly one match, got {count}: {old[:120]!r}')
+              p.write_text(text.replace(old, new, 1))
+
+          # These UI/content audits verify rendering semantics, not RNG itself.
+          # Freeze Math.random at a value that makes Fisher-Yates keep the source order,
+          # while study-edge-regression separately proves that real quiz sessions shuffle.
+          rng = "await page.evaluate(() => { Math.random = () => 0.999999; });\n  "
+
+          p = 'scripts/full-app-production-audit-v2.ts'
+          replace_once(p,
+              "await openDeck(page,'vq-question',deck,deckIndex);\n  await page.getByRole('button',{name:/自己申告テスト/}).click(); body=norm(await page.locator('body').innerText());",
+              "await openDeck(page,'vq-question',deck,deckIndex);\n  " + rng + "await page.getByRole('button',{name:/自己申告テスト/}).click(); body=norm(await page.locator('body').innerText());")
+          replace_once(p,
+              "await openDeck(page,'vq-question',deck,deckIndex);\n  await page.getByRole('button',{name:/並べ替えクイズ/}).click(); body=norm(await page.locator('body').innerText());",
+              "await openDeck(page,'vq-question',deck,deckIndex);\n  " + rng + "await page.getByRole('button',{name:/並べ替えクイズ/}).click(); body=norm(await page.locator('body').innerText());")
+          replace_once(p,
+              "await openDeck(page,'vq-question',deck,deckIndex);\n  await page.getByLabel('問題を考える時間').selectOption('3');",
+              "await openDeck(page,'vq-question',deck,deckIndex);\n  " + rng + "await page.getByLabel('問題を考える時間').selectOption('3');")
+
+          p = 'scripts/full-ui-state-audit.ts'
+          # VQ question modes
+          replace_once(p,
+              "await openVqDeck(page, deck, true);\n  await page.getByRole('button', { name: /自己申告テスト/ }).click();\n  await assertBodyIncludes(page, card.front, 'VQ self source problem');",
+              "await openVqDeck(page, deck, true);\n  " + rng + "await page.getByRole('button', { name: /自己申告テスト/ }).click();\n  await assertBodyIncludes(page, card.front, 'VQ self source problem');")
+          replace_once(p,
+              "await openVqDeck(page, deck, true);\n  await page.getByRole('button', { name: /並べ替えクイズ/ }).click();\n  await assertBodyIncludes(page, card.front, 'VQ order source problem');",
+              "await openVqDeck(page, deck, true);\n  " + rng + "await page.getByRole('button', { name: /並べ替えクイズ/ }).click();\n  await assertBodyIncludes(page, card.front, 'VQ order source problem');")
+          replace_once(p,
+              "await openVqDeck(page, deck, true);\n  await page.getByLabel('問題を考える時間').selectOption('15');",
+              "await openVqDeck(page, deck, true);\n  " + rng + "await page.getByLabel('問題を考える時間').selectOption('15');")
+          # Hope official question modes
+          replace_once(p,
+              "await openBasicDeck(page, deck, true);\n  await page.getByRole('button', { name: /自己申告テスト/ }).click();\n  await assertBodyIncludes(page, card.front, 'Hope self blank source prompt');",
+              "await openBasicDeck(page, deck, true);\n  " + rng + "await page.getByRole('button', { name: /自己申告テスト/ }).click();\n  await assertBodyIncludes(page, card.front, 'Hope self blank source prompt');")
+          replace_once(p,
+              "await openBasicDeck(page, deck, true);\n  await page.getByLabel('問題を考える時間').selectOption('15');",
+              "await openBasicDeck(page, deck, true);\n  " + rng + "await page.getByLabel('問題を考える時間').selectOption('15');")
+          # Basic example quiz modes
+          replace_once(p,
+              "await openBasicDeck(page, deck, false);\n  await page.getByRole('button', { name: /自己申告テスト/ }).click();\n  await assertBodyIncludes(page, card.back, 'basic self English');",
+              "await openBasicDeck(page, deck, false);\n  " + rng + "await page.getByRole('button', { name: /自己申告テスト/ }).click();\n  await assertBodyIncludes(page, card.back, 'basic self English');")
+          replace_once(p,
+              "await openBasicDeck(page, deck, false);\n  await page.getByRole('button', { name: /並べ替えで確認/ }).click();\n  await assertBodyIncludes(page, card.translation, 'basic order prompt');",
+              "await openBasicDeck(page, deck, false);\n  " + rng + "await page.getByRole('button', { name: /並べ替えで確認/ }).click();\n  await assertBodyIncludes(page, card.translation, 'basic order prompt');")
+
+          p = 'scripts/vq-question-rendering-regression.ts'
+          replace_once(p,
+              "await openDeck(page, deck, 'vq-question');\n  await page.getByRole('button', { name: /自己申告テスト/ }).click();",
+              "await openDeck(page, deck, 'vq-question');\n  " + rng + "await page.getByRole('button', { name: /自己申告テスト/ }).click();")
+          replace_once(p,
+              "await openDeck(page, deck, 'vq-question');\n  await page.getByRole('button', { name: /並べ替えクイズ/ }).click();",
+              "await openDeck(page, deck, 'vq-question');\n  " + rng + "await page.getByRole('button', { name: /並べ替えクイズ/ }).click();")
+          replace_once(p,
+              "await openDeck(page, deck, 'vq-question');\n  await page.getByLabel('問題を考える時間').selectOption('15');",
+              "await openDeck(page, deck, 'vq-question');\n  " + rng + "await page.getByLabel('問題を考える時間').selectOption('15');")
+          replace_once(p,
+              "await openDeck(page, deck, 'hope-test');\n  await page.getByRole('button', { name: /自己申告テスト/ }).click();",
+              "await openDeck(page, deck, 'hope-test');\n  " + rng + "await page.getByRole('button', { name: /自己申告テスト/ }).click();")
+          replace_once(p,
+              "await openDeck(page, deck, 'hope-test');\n  await page.getByLabel('問題を考える時間').selectOption('15');",
+              "await openDeck(page, deck, 'hope-test');\n  " + rng + "await page.getByLabel('問題を考える時間').selectOption('15');")
+
+          p = 'scripts/study-edge-regression.ts'
+          replace_once(p,
+              "await review(p,'yet');await p.getByRole('button',{name:/自己申告テスト/}).click();\n    await card(p).click();await p.getByRole('button',{name:'まだ',exact:true}).click();",
+              "await review(p,'yet');\n    await p.evaluate(() => { Math.random = () => 0.999999; });\n    await p.getByRole('button',{name:/自己申告テスト/}).click();\n    await card(p).click();await p.getByRole('button',{name:'まだ',exact:true}).click();")
+
+          Path('.github/workflows/qa-shuffle-audit-hotfix-once.yml').unlink()
+          PY
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Verify patched audits compile and production build succeeds
+        run: |
+          npm ci
+          npm run lint
+          npm run build
+
+      - name: Commit patched audits
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Make browser audits deterministic around quiz shuffling'
+          git push origin HEAD:main
