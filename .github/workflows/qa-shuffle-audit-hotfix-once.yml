@@ -84,8 +84,8 @@ jobs:
               "await openDeck(page, deck, 'vq-question');\n  await page.getByLabel('問題を考える時間').selectOption('15');",
               "await openDeck(page, deck, 'vq-question');\n  " + rng + "await page.getByLabel('問題を考える時間').selectOption('15');")
           replace_once(p,
-              "await openDeck(page, deck, 'hope-test');\n  await page.getByRole('button', { name: /自己申告テスト/ }).click();",
-              "await openDeck(page, deck, 'hope-test');\n  " + rng + "await page.getByRole('button', { name: /自己申告テスト/ }).click();")
+              "await page.getByRole('button', { name: /穴埋めで確認/ }).waitFor();\n\n  await page.getByRole('button', { name: /自己申告テスト/ }).click();",
+              "await page.getByRole('button', { name: /穴埋めで確認/ }).waitFor();\n\n  " + rng + "await page.getByRole('button', { name: /自己申告テスト/ }).click();")
           replace_once(p,
               "await openDeck(page, deck, 'hope-test');\n  await page.getByLabel('問題を考える時間').selectOption('15');",
               "await openDeck(page, deck, 'hope-test');\n  " + rng + "await page.getByLabel('問題を考える時間').selectOption('15');")
