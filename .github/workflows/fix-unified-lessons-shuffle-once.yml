@@ -1,0 +1,79 @@
+name: Fix unified lessons shuffle QA once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-unified-lessons-shuffle-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Update unified lessons UI audit for randomized quiz order
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path('scripts/unified-lessons-ui.ts')
+          text = p.read_text()
+
+          old = "const norm=(text:string)=>text.replace(/[\\[\\]]/g,'').replace(/\\s+/g,' ').trim();\n"
+          new = old + "async function bodyIncludesAny(p:Page,texts:string[]) { const body=norm(await p.locator('body').innerText()); return texts.some(text=>body.includes(norm(text))); }\n"
+          if old not in text:
+              raise SystemExit('norm helper anchor not found')
+          text = text.replace(old, new, 1)
+
+          replacements = [
+            (
+              "      assert((await p.locator('body').innerText()).includes(lesson.examples.cards[0].translation));",
+              "      assert(await bodyIncludesAny(p,lesson.examples.cards.map(card=>card.translation)),'order mode must stay inside the selected Lesson after shuffle');"
+            ),
+            (
+              "    assert((await p.locator('body').innerText()).includes(HOPE_LESSONS[0].cloze!.cards[0].front));",
+              "    assert(await bodyIncludesAny(p,HOPE_LESSONS[0].cloze!.cards.map(card=>card.front)),'self-test must show a cloze prompt from the selected Lesson after shuffle');"
+            ),
+            (
+              "    assert((await p.locator('body').innerText()).includes(HOPE_LESSONS[0].cloze!.cards[0].front));",
+              "    assert(await bodyIncludesAny(p,HOPE_LESSONS[0].cloze!.cards.map(card=>card.front)),'time attack must show a cloze prompt from the selected Lesson after shuffle');"
+            ),
+          ]
+          for old_line, new_line in replacements:
+              if old_line not in text:
+                  raise SystemExit(f'expected assertion not found: {old_line}')
+              text = text.replace(old_line, new_line, 1)
+
+          p.write_text(text)
+          PY
+
+          rm .github/workflows/fix-unified-lessons-shuffle-once.yml
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Verify source checks and production build
+        run: |
+          npm ci
+          npm run lint
+          npx tsx scripts/validate-content.ts
+          npx tsx scripts/unified-lessons-model.ts
+          npm run build
+
+      - name: Commit the QA fix
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/unified-lessons-ui.ts .github/workflows/fix-unified-lessons-shuffle-once.yml
+          git commit -m 'Make unified lessons QA shuffle-aware'
+          git push origin HEAD:main
