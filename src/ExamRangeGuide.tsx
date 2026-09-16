@@ -192,7 +192,9 @@ export default function ExamRangeGuide() {
     questions: GrammarQuizQuestion[],
     options: { limit?: number; random?: boolean } = {},
   ) => {
-    const ordered = options.random ? shuffle(questions) : [...questions];
+    // Every quiz starts in a fresh random order. `random` is kept in the
+    // options type for compatibility with existing callers, but all sets now shuffle.
+    const ordered = shuffle(questions);
     const selected = typeof options.limit === 'number' ? ordered.slice(0, options.limit) : ordered;
     if (selected.length === 0) return;
 
@@ -228,6 +230,7 @@ export default function ExamRangeGuide() {
   };
 
   const restartQuiz = () => {
+    setQuizQuestions((questions) => shuffle(questions));
     setQuizIndex(0);
     setSelectedChoice(null);
     setQuizScore(0);
@@ -395,7 +398,7 @@ export default function ExamRangeGuide() {
                 <div className="space-y-4">
                   <div className="rounded-2xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/50 p-4">
                     <div className="text-xs font-black text-amber-700 dark:text-amber-300 mb-1">いちばん大事</div>
-                    <p className="text-base sm:text-lg font-black text-slate-900 dark:text-white">完了形は「どの時点を基準に見るか」で区別する。</p>
+                    <p className="text-base sm:text-lg font-black text-slate-900 dark:text-white">現在完了は「過去と今のつながり」を、継続・経験・結果の3つで整理する。</p>
                   </div>
 
                   <div className="grid grid-cols-1 gap-3">
@@ -416,7 +419,7 @@ export default function ExamRangeGuide() {
                   </div>
 
                   <div className="rounded-2xl border border-blue-200 dark:border-blue-900/50 bg-blue-50 dark:bg-blue-950/20 p-4 text-sm text-blue-950 dark:text-blue-100 leading-relaxed">
-                    <span className="font-black">未来完了の注意：</span> 開始点を「今」や「過去」に固定しない。未来のある時点を基準にして、「その時までにどうなっているか」を見る。
+                    <span className="font-black">継続のポイント：</span> 状態動詞は〈have / has + 過去分詞〉。動作動詞で「ずっと〜し続けている」を表すときは〈have / has been + ~ing〉をよく使う。
                   </div>
 
                   <button
