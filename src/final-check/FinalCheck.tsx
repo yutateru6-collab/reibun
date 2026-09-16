@@ -18,7 +18,9 @@ import {
   FINAL_CHECK_QUESTIONS,
   FINAL_CHECK_SECTIONS,
   availableFor,
+  displayFinalCheckSolution,
   makeFinalCheckSet,
+  prepareFinalCheckSession,
   readFinalCheckMistakes,
   saveFinalCheckMistakes,
   shuffleWith,
@@ -29,6 +31,7 @@ import {
   type FinalCheckSelection,
   type FinalCheckStrategy,
 } from './model';
+import { BALANCED_CHOICE_LAYOUT_VERSION } from '../lib/balanced-choice-layout';
 
 type View = 'setup' | 'practice' | 'result';
 
@@ -123,7 +126,7 @@ export default function FinalCheck() {
   };
 
   const resetSession = (nextQuestions: FinalCheckQuestion[]) => {
-    setQuestions(nextQuestions);
+    setQuestions(prepareFinalCheckSession(nextQuestions));
     setIndex(0);
     setGrades({});
     setResponses({});
@@ -186,6 +189,7 @@ export default function FinalCheck() {
     <div
       className="fixed inset-0 z-[130] bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100"
       data-ui="final-check-dialog"
+      data-answer-layout={BALANCED_CHOICE_LAYOUT_VERSION}
       role="dialog"
       aria-modal="true"
       aria-label="試験前 最終チェック"
@@ -345,7 +349,7 @@ export default function FinalCheck() {
 
                 {revealed[question.id] && <section className="mt-5 rounded-2xl border border-orange-200 dark:border-orange-900 bg-orange-50 dark:bg-orange-950/25 p-4 sm:p-5" data-ui="final-check-solution" aria-live="polite">
                   <h2 className="font-black text-orange-900 dark:text-orange-100">解答・解説</h2>
-                  <p className="mt-2 whitespace-pre-wrap leading-relaxed font-semibold text-slate-800 dark:text-slate-100">{question.solution}</p>
+                  <p className="mt-2 whitespace-pre-wrap leading-relaxed font-semibold text-slate-800 dark:text-slate-100">{displayFinalCheckSolution(question)}</p>
                   {!question.choices && <div className="mt-4">
                     <p className="text-xs text-slate-600 dark:text-slate-300 mb-2">記述問題は別解があるため、解答例と比較して自己採点してください。</p>
                     <div className="grid grid-cols-2 gap-2">

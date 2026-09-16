@@ -21,6 +21,10 @@ import {
   type GrammarQuizQuestion,
   type GrammarUnitId,
 } from './data/grammar_review';
+import {
+  BALANCED_CHOICE_LAYOUT_VERSION,
+  balanceFourChoicePositions,
+} from './lib/balanced-choice-layout';
 
 type GuideView = 'hub' | 'learn' | 'quiz' | 'perfect';
 type QuizFilter = 'all' | 'perfect' | 'tense' | 'verbs';
@@ -199,7 +203,7 @@ export default function ExamRangeGuide() {
     if (selected.length === 0) return;
 
     setQuizTitle(title);
-    setQuizQuestions(selected);
+    setQuizQuestions(balanceFourChoicePositions(selected));
     setQuizIndex(0);
     setSelectedChoice(null);
     setQuizScore(0);
@@ -230,7 +234,7 @@ export default function ExamRangeGuide() {
   };
 
   const restartQuiz = () => {
-    setQuizQuestions((questions) => shuffle(questions));
+    setQuizQuestions((questions) => balanceFourChoicePositions(shuffle(questions)));
     setQuizIndex(0);
     setSelectedChoice(null);
     setQuizScore(0);
@@ -368,6 +372,7 @@ export default function ExamRangeGuide() {
             aria-modal="true"
             aria-label="試験対策クイズ"
             data-ui="quiz-dialog"
+            data-answer-layout={BALANCED_CHOICE_LAYOUT_VERSION}
             className="h-[100dvh] sm:h-[calc(100dvh-2rem)] sm:max-h-[900px] w-full sm:max-w-3xl sm:mx-auto bg-slate-50 dark:bg-slate-900 sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col"
           >
             <header className="shrink-0 px-3 sm:px-5 py-3 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur">
@@ -537,6 +542,8 @@ export default function ExamRangeGuide() {
                                 type="button"
                                 key={`${quizQuestion.id}-${choiceIndex}`}
                                 disabled={answered}
+                                data-choice-index={choiceIndex}
+                                data-state={answered ? isCorrectChoice ? 'correct' : isSelected ? 'wrong' : 'other' : 'unanswered'}
                                 onClick={() => answerQuiz(choiceIndex)}
                                 className={`w-full min-h-12 rounded-xl border-2 px-3 py-3 text-left text-sm font-bold text-slate-800 dark:text-slate-100 transition-colors ${choiceClass}`}
                               >

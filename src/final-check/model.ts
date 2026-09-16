@@ -1,4 +1,5 @@
 import generated from './questions.generated.json';
+import { balanceFourChoicePositions } from '../lib/balanced-choice-layout';
 
 export const FINAL_CHECK_VERSION = 'vq2-final-check-2026-v1' as const;
 
@@ -157,6 +158,21 @@ export function makeFinalCheckSet(
     cursor += 1;
   }
   return shuffleWith(selected, rng);
+}
+
+export function prepareFinalCheckSession(
+  questions: readonly FinalCheckQuestion[],
+  rng: () => number = Math.random,
+): FinalCheckQuestion[] {
+  return balanceFourChoicePositions(questions, rng);
+}
+
+const CIRCLED_ANSWER_MARKER = /[①②③④]/;
+
+export function displayFinalCheckSolution(question: FinalCheckQuestion): string {
+  if (!question.choices || question.correctIndex === undefined) return question.solution;
+  const answerLabel = String.fromCharCode(65 + question.correctIndex);
+  return `正解：${answerLabel}\n${question.solution.replace(CIRCLED_ANSWER_MARKER, '').trimStart()}`;
 }
 
 export function readFinalCheckMistakes(): string[] {

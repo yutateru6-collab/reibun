@@ -24,6 +24,7 @@ jobs:
           npx tsx scripts/validate-vq-exercises.ts
           npx tsx scripts/workbook-model-regression.ts
           npx tsx scripts/final-check-model-regression.ts
+          npm run test:choice-layout
       - run: npm run build
       - name: Install browsers and Japanese fonts
         run: |

@@ -90,6 +90,7 @@ async function run(browserType: BrowserType, name: string) {
       ['vq2-final-r2-tense1-07', 'visiting'],
     ]);
     let renderedUnderlines = 0;
+    const balancedChoicePositions: number[] = [];
     for (let index = 0; index < 52; index += 1) {
       const card = page.locator('[data-ui="final-check-question"]');
       const id = await card.getAttribute('data-id');
@@ -101,9 +102,23 @@ async function run(browserType: BrowserType, name: string) {
       } else {
         assert.equal(await underline.count(), 0);
       }
+      const choiceButtons = card.locator('[data-ui="final-check-choices"] button');
+      if (await choiceButtons.count()) {
+        await choiceButtons.first().click();
+        const correctChoice = card.locator('[data-state="correct"]');
+        await correctChoice.waitFor();
+        balancedChoicePositions.push(Number(await correctChoice.getAttribute('data-choice-index')));
+        const solutionText = await card.locator('[data-ui="final-check-solution"]').innerText();
+        assert.match(solutionText, /正解：[A-D]/);
+        assert.doesNotMatch(solutionText, /[①②③④]/);
+      }
       if (index < 51) await card.getByRole('button', { name: '次の問題', exact: true }).click();
     }
     assert.equal(renderedUnderlines, 2);
+    const positionCounts = [0, 1, 2, 3].map(position => balancedChoicePositions.filter(value => value === position).length);
+    assert.equal(balancedChoicePositions.length, 14);
+    assert.ok(Math.max(...positionCounts) - Math.min(...positionCounts) <= 1, `choice positions not balanced: ${positionCounts}`);
+    assert.ok(balancedChoicePositions.every((position, index, values) => index < 2 || position !== values[index - 1] || position !== values[index - 2]), `three identical positions: ${balancedChoicePositions}`);
 
     await page.getByRole('button', { name: '設定画面へ戻る', exact: true }).click();
     await page.getByRole('button', { name: 'ホームへ戻る', exact: true }).click();

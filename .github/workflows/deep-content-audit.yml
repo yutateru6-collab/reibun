@@ -40,6 +40,9 @@ jobs:
       - name: Independently hash-check all 66 visible VQ exercises
         run: npx tsx scripts/validate-vq-exercises.ts
 
+      - name: Verify balanced choice layout without changing source content
+        run: npm run test:choice-layout
+
       - name: Type-check
         run: npm run lint
 

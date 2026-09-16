@@ -17,8 +17,18 @@ export async function runWorkbookChecks(p,OUT) {
  assert.equal(await p.locator('[data-ui="exam-quiz-hub"]').count(),0,'Quiz list must not appear on home');
  await p.screenshot({path:path.join(OUT,'home-mobile.png'),animations:'disabled'});
  await p.locator('[data-ui="quiz-launcher"]').click();
+ assert.equal(await p.locator('[data-ui="quiz-dialog"]').getAttribute('data-answer-layout'),'balanced-session-choice-layout-v1');
  await p.getByRole('button',{name:'3問クイック',exact:true}).click();
- for(let i=0;i<3;i++){await p.locator('[data-ui="quiz-dialog"] article button').first().click();await p.getByRole('button',{name:i===2?'結果を見る':'次の問題',exact:true}).click();}
+ const quickAnswerPositions=[];
+ for(let i=0;i<3;i++){
+  const choices=p.locator('[data-ui="quiz-dialog"] article button[data-choice-index]');
+  await choices.first().click();
+  const correct=p.locator('[data-ui="quiz-dialog"] article button[data-state="correct"]');
+  await correct.waitFor();
+  quickAnswerPositions.push(Number(await correct.getAttribute('data-choice-index')));
+  await p.getByRole('button',{name:i===2?'結果を見る':'次の問題',exact:true}).click();
+ }
+ assert.equal(new Set(quickAnswerPositions).size,3,`Quick quiz answer positions are not balanced: ${quickAnswerPositions}`);
  await p.getByRole('button',{name:'一覧へ戻る',exact:true}).click();
  await p.getByRole('button',{name:'ホームへ戻る',exact:true}).click();
  assert.equal(await p.locator('[data-ui="exam-quiz-hub"]').count(),0);
