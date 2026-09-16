@@ -14,6 +14,7 @@ const favorites=[4001,4201,3301], yet=[4002,4202];
 const history=makeWorksheet(QUESTION_BANK,{unit:'both',format:'all',counts:{original:3,transformed:1,application:1},shuffle:true,shuffleChoices:true,grouping:'sections'},123);
 const historyJSON=JSON.stringify([history]);
 const norm=(text:string)=>text.replace(/[\[\]]/g,'').replace(/\s+/g,' ').trim();
+async function bodyIncludesAny(p:Page,texts:string[]) { const body=norm(await p.locator('body').innerText()); return texts.some(text=>body.includes(norm(text))); }
 async function widthOK(p:Page) {
   const [viewport,width]=await p.evaluate(()=>[innerWidth,document.documentElement.scrollWidth]);
   assert(width<=viewport+2,`horizontal overflow ${width}/${viewport}`);
@@ -79,7 +80,7 @@ for(const [width,dark] of [[320,false],[390,true],[1280,false]] as const) {
       }
       await p.locator('[data-mode=order]').click();
       // Starting order after cloze must use the full sentence in the same Lesson, not a stale test deck.
-      assert((await p.locator('body').innerText()).includes(lesson.examples.cards[0].translation));
+      assert(await bodyIncludesAny(p,lesson.examples.cards.map(card=>card.translation)),'order mode must stay inside the selected Lesson after shuffle');
       await menu(p);
       await p.getByRole('button',{name:'教材一覧へ戻る',exact:true}).click();
     }
@@ -100,14 +101,14 @@ for(const [width,dark] of [[320,false],[390,true],[1280,false]] as const) {
     await p.locator('[data-ui=hope-more-practice] summary').click();
     await p.getByLabel('その他の練習の出題内容').selectOption('cloze');
     await p.getByRole('button',{name:/自己申告テスト/}).click();
-    assert((await p.locator('body').innerText()).includes(HOPE_LESSONS[0].cloze!.cards[0].front));
+    assert(await bodyIncludesAny(p,HOPE_LESSONS[0].cloze!.cards.map(card=>card.front)),'self-test must show a cloze prompt from the selected Lesson after shuffle');
     await menu(p);
     await p.locator('[data-ui=hope-more-practice] summary').click();
     await p.getByLabel('その他の練習の出題内容').selectOption('cloze');
     await p.getByLabel('問題を考える時間').selectOption('3');
     await p.getByLabel('答えを表示する時間').selectOption('1');
     await p.getByRole('button',{name:'タイムアタック開始',exact:true}).click();
-    assert((await p.locator('body').innerText()).includes(HOPE_LESSONS[0].cloze!.cards[0].front));
+    assert(await bodyIncludesAny(p,HOPE_LESSONS[0].cloze!.cards.map(card=>card.front)),'time attack must show a cloze prompt from the selected Lesson after shuffle');
     await menu(p);
     await p.getByRole('button',{name:'ホームへ戻る',exact:true}).click();
     assert.deepEqual(await p.evaluate(k=>JSON.parse(localStorage.getItem(k)!),FAV),favorites);
