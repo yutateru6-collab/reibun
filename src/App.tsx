@@ -898,9 +898,12 @@ export default function App() {
             </div>
           </section>
 
-          <div className="mb-5">
-            <h2 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white">Hope 基本例文</h2>
-            <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">Lessonを選んで、例文・穴埋め・並べ替えを練習できます。</p>
+          <div className="mb-5" data-ui="hope-section-header">
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white">Hope 基本例文</h2>
+              <span className="inline-flex rounded-full bg-sky-700 px-3 py-1 text-xs font-black text-white">2-3用</span>
+            </div>
+            <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">2-3の暗唱例文。Lessonを選んで、例文・穴埋め・並べ替えを練習できます。</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4" data-ui="hope-lesson-list">
             {HOPE_LESSONS.map((lesson) => (

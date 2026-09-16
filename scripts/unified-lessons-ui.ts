@@ -48,6 +48,7 @@ for(const [width,dark] of [[320,false],[390,true],[1280,false]] as const) {
     assert.match(await p.locator('[data-ui=class29-previous-range]').innerText(),/2-9 前回の暗唱範囲/);
     assert.match(await p.locator('[data-ui=class29-previous-range]').innerText(),/比較・関係詞・仮定法/);
     assert.match(await p.locator('[data-previous-range=class29-previous-all]').innerText(),/58文.*毎回シャッフル/s);
+    assert.match(await p.locator('[data-ui=hope-section-header]').innerText(),/Hope 基本例文.*2-3用.*2-3の暗唱例文/s);
     assert.equal(await p.locator('[data-ui=hope-lesson-list] > button').count(),12);
     assert.equal(await p.getByRole('button',{name:/公式穴埋め（54）|例文（110）/}).count(),0);
     await p.screenshot({path:path.join(dir,'lesson-list.png'),fullPage:true});
