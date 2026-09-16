@@ -80,7 +80,8 @@
         "過去よりさらに前だから",
         "完了した結果を表すから"
       ],
-      "correctIndex": 1
+      "correctIndex": 1,
+      "underlinedText": "works"
     },
     {
       "id": "vq2-final-r1-tense1-06",
@@ -1229,7 +1230,8 @@
       "number": 7,
       "format": "correction",
       "prompt": "「オバマ氏は広島を訪問した初めての現職アメリカ大統領でした。」 Mr. Obama was the first sitting U.S. president visiting Hiroshima. 下線部にあたる visiting を元問題と同じ形に直しなさい。",
-      "solution": "to visit the first + 名詞 + to do の形。"
+      "solution": "to visit the first + 名詞 + to do の形。",
+      "underlinedText": "visiting"
     },
     {
       "id": "vq2-final-r2-tense1-08",

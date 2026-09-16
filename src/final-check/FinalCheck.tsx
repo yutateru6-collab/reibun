@@ -67,6 +67,14 @@ function sectionResult(
   return { total: scoped.length, correct, incorrect, ungraded: scoped.length - correct - incorrect };
 }
 
+function PromptText({ question }: { question: FinalCheckQuestion }) {
+  if (!question.underlinedText) return <>{question.prompt}</>;
+  const index = question.prompt.indexOf(question.underlinedText);
+  const before = question.prompt.slice(0, index);
+  const after = question.prompt.slice(index + question.underlinedText.length);
+  return <>{before}<u data-ui="final-check-underlined" className="font-black decoration-[3px] decoration-orange-600 underline-offset-[5px] dark:decoration-orange-400">{question.underlinedText}</u>{after}</>;
+}
+
 export default function FinalCheck() {
   const [target, setTarget] = useState<HTMLElement | null>(null);
   const [open, setOpen] = useState(false);
@@ -290,7 +298,7 @@ export default function FinalCheck() {
                   <span className="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">第{question.round}ラウンド No.{question.number}</span>
                 </div>
 
-                <div className="whitespace-pre-wrap text-lg sm:text-xl leading-relaxed font-semibold text-slate-900 dark:text-white" data-ui="final-check-prompt">{question.prompt}</div>
+                <div className="whitespace-pre-wrap text-lg sm:text-xl leading-relaxed font-semibold text-slate-900 dark:text-white" data-ui="final-check-prompt"><PromptText question={question} /></div>
 
                 {question.choices ? <div className="mt-6 grid gap-2.5" data-ui="final-check-choices">
                   {question.choices.map((choice, choiceIndex) => {

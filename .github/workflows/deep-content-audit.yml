@@ -28,8 +28,11 @@ jobs:
       - name: Validate all source-derived content
         run: npx tsx scripts/validate-content.ts
 
-      - name: Verify attached Hope example bank fully replaced legacy content
+      - name: Verify attached Hope example bank remains source-faithful
         run: npx tsx scripts/validate-example-bank-replacement.ts
+
+      - name: Verify 2-9 previous memorization range
+        run: npx tsx scripts/class29-previous-range-regression.ts
 
       - name: Verify all 110 Hope mini explanations
         run: npx tsx scripts/validate-hope-mini-explanations.ts
@@ -46,7 +49,7 @@ jobs:
       - name: Verify build output
         run: test -f dist/index.html
 
-      - name: Verify legacy memorization text is absent from production bundle
+      - name: Verify excluded legacy Test 1 content is absent from production bundle
         run: |
           set -euo pipefail
           if grep -R -F -q 'Who plays the hero?' dist; then

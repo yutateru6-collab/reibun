@@ -82,6 +82,30 @@ async function run(browserType: BrowserType, name: string) {
     }
 
     await page.getByRole('button', { name: '設定画面へ戻る', exact: true }).click();
+    await page.locator('[data-range="tense1"]').click();
+    await page.locator('[data-count="52"]').click();
+    await page.getByRole('button', { name: '52問で最終チェックを始める', exact: true }).click();
+    const underlineTargets = new Map([
+      ['vq2-final-r1-tense1-05', 'works'],
+      ['vq2-final-r2-tense1-07', 'visiting'],
+    ]);
+    let renderedUnderlines = 0;
+    for (let index = 0; index < 52; index += 1) {
+      const card = page.locator('[data-ui="final-check-question"]');
+      const id = await card.getAttribute('data-id');
+      const expected = id ? underlineTargets.get(id) : undefined;
+      const underline = card.locator('[data-ui="final-check-underlined"]');
+      if (expected) {
+        assert.equal(await underline.innerText(), expected);
+        renderedUnderlines += 1;
+      } else {
+        assert.equal(await underline.count(), 0);
+      }
+      if (index < 51) await card.getByRole('button', { name: '次の問題', exact: true }).click();
+    }
+    assert.equal(renderedUnderlines, 2);
+
+    await page.getByRole('button', { name: '設定画面へ戻る', exact: true }).click();
     await page.getByRole('button', { name: 'ホームへ戻る', exact: true }).click();
     assert.equal(await page.locator('#root').evaluate(root => (root as HTMLElement).inert), false);
     await page.getByRole('button', { name: 'テーマ切り替え', exact: true }).click();

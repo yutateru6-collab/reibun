@@ -59,6 +59,18 @@ for (const question of FINAL_CHECK_QUESTIONS) {
   }
 }
 
+const underlinedQuestions = FINAL_CHECK_QUESTIONS.filter(question => question.underlinedText);
+assert.deepEqual(
+  underlinedQuestions.map(question => [question.id, question.underlinedText]),
+  [
+    ['vq2-final-r1-tense1-05', 'works'],
+    ['vq2-final-r2-tense1-07', 'visiting'],
+  ],
+);
+for (const question of underlinedQuestions) {
+  assert.ok(question.prompt.indexOf(question.underlinedText!) < question.prompt.indexOf('下線部'), `${question.id}: target must occur before its instruction`);
+}
+
 for (let seed = 0; seed < 100; seed += 1) {
   for (const count of [10, 20, 30, 50, 100, 200]) {
     const set = makeFinalCheckSet({ range: 'all', strategy: 'balanced', count }, seeded(seed));

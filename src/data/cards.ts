@@ -38,6 +38,7 @@ import {
   vq3_1_QuestionsCards,
   vq3_2_QuestionsCards,
 } from './vision_quest_exam_2026';
+import { class29PreviousDecks } from './class29_previous_examples';
 
 export interface Deck {
   id: string;
@@ -61,8 +62,8 @@ const withHopeOfficialTestMiniExplanations = (cards: Card[]): Card[] =>
     comment: hopeMiniExplanations[card.id - 200] ?? card.comment,
   }));
 
-// 暗唱例文は、今回添付された Hope Example Bank 110文だけを正式データとして使用する。
-// 追加前に入っていた旧 Test 1〜10 の暗唱例文データは削除済み。
+// Hopeの暗唱例文は、添付された Example Bank 110文を正式データとして使用する。
+// 2-9の前回範囲（旧 Test 8〜10）は、別データのまま専用入口から練習できる。
 // 表示用の comment は、暗記のフックになる「ミニ解説」に差し替える。
 export const basicExampleDecks: Deck[] = [
   { id: 'hope-lesson1', title: 'Lesson 1', description: 'Example Bank p.8', cards: withHopeMiniExplanations(hopeLesson1Cards) },
@@ -79,7 +80,7 @@ export const basicExampleDecks: Deck[] = [
   { id: 'hope-lesson12', title: 'Lesson 12', description: 'Example Bank p.62', cards: withHopeMiniExplanations(hopeLesson12Cards) },
 ];
 
-// こちらは今回添付された Hope Test 1〜6 の公式穴埋め。旧暗唱例文とは別データ。
+// こちらは今回添付された Hope Test 1〜6 の公式穴埋め。2-9前回範囲とは別データ。
 // 出題文は公式穴埋めを維持しつつ、答え確認時の comment は対応するミニ解説を表示する。
 export const basicTestDecks: Deck[] = [
   { id: 'hope-test1', title: 'Test 1', description: '適切な主語を用いる', cards: withHopeOfficialTestMiniExplanations(hopeTest1Cards) },
@@ -139,6 +140,7 @@ export const visionQuestQuestionDecks: Deck[] = [
 export const decks: Deck[] = [
   ...basicExampleDecks,
   ...basicTestDecks,
+  ...class29PreviousDecks,
   ...visionQuestSentenceBaseDecks,
   ...visionQuestQuestionBaseDecks,
 ];

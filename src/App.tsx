@@ -4,6 +4,7 @@ import { highlightAnswers } from './lib/highlight-answers';
 import { readBoolean, readIds, saveSetting } from './lib/settings';
 import { useStudyCardFocus } from './lib/use-study-card-focus';
 import { CONTENT_VERSION } from './data/exam_source_ledger';
+import { class29PreviousAllDeck, class29PreviousDecks } from './data/class29_previous_examples';
 import { HOPE_LESSONS, getHopeLessonForDeck, HOPE_JAPANESE_FIRST_KEY } from './hope/lessons';
 import HopeLessonMenu from './hope/LessonMenu';
 import HopeStudyCard from './hope/StudyCard';
@@ -13,6 +14,7 @@ type AppMode = 'top' | 'vision_quest' | 'home' | 'menu' | 'standard' | 'memorize
 
 const FAVORITES_STORAGE_KEY = `flashcard-favorites:${CONTENT_VERSION}`;
 const YET_STORAGE_KEY = `flashcard-yet-list:${CONTENT_VERSION}`;
+const CLASS29_RANGE_OPTIONS = [class29PreviousAllDeck, ...class29PreviousDecks];
 
 const HOPE_CARD_IDS = new Set([...basicExampleDecks, ...basicTestDecks].flatMap(deck => deck.cards.map(card => card.id)));
 const isHopeCard = (card?: Card) => Boolean(card && HOPE_CARD_IDS.has(card.id));
@@ -867,7 +869,39 @@ export default function App() {
             </button>
           </header>
 
-          <p className="mb-5 text-sm text-slate-600 dark:text-slate-300">Lessonを選んで、例文・穴埋め・並べ替えを練習できます。</p>
+          <section className="mb-9 rounded-3xl border-2 border-violet-200 dark:border-violet-900/70 bg-violet-50/70 dark:bg-violet-950/20 p-4 sm:p-6" data-ui="class29-previous-range">
+            <div className="mb-4">
+              <span className="inline-flex rounded-full bg-violet-700 px-3 py-1 text-xs font-black text-white">2-9 前回の暗唱範囲</span>
+              <h2 className="mt-2 text-xl sm:text-2xl font-black text-slate-900 dark:text-white">比較・関係詞・仮定法</h2>
+              <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">分野別でも、3分野まとめてシャッフルでも練習できます。</p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {CLASS29_RANGE_OPTIONS.map((deck, deckIndex) => (
+                <button
+                  type="button"
+                  key={deck.id}
+                  data-previous-range={deck.id}
+                  onClick={() => {
+                    setCurrentDeck(deck);
+                    setReviewFavoritesOnly(false);
+                    setAppMode('menu');
+                  }}
+                  className={`group rounded-2xl border-2 bg-white dark:bg-slate-800 p-4 text-left shadow-sm transition-colors hover:border-violet-500 focus-visible:outline-2 focus-visible:outline-violet-500 ${deckIndex === 0 ? 'sm:col-span-2 border-violet-400 dark:border-violet-700' : 'border-violet-100 dark:border-violet-900/60'}`}
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white">{deckIndex === 0 ? '3分野まとめ' : deck.title}</h3>
+                    <ChevronRight size={21} className="shrink-0 text-violet-700 dark:text-violet-300" />
+                  </div>
+                  <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300">{deck.cards.length}文{deckIndex === 0 ? '・クイズは毎回シャッフル' : `・${deck.description}`}</p>
+                </button>
+              ))}
+            </div>
+          </section>
+
+          <div className="mb-5">
+            <h2 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white">Hope 基本例文</h2>
+            <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">Lessonを選んで、例文・穴埋め・並べ替えを練習できます。</p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4" data-ui="hope-lesson-list">
             {HOPE_LESSONS.map((lesson) => (
               <button

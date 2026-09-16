@@ -45,10 +45,11 @@ for (const marker of forbiddenLegacyMarkers) {
 }
 
 console.log(JSON.stringify({
-  replacementVerification: 'passed',
+  hopeSourceIntegrity: 'passed',
   activeMemorizationDecks: basicExampleDecks.length,
   activeMemorizationCards: total,
   idRange: `${activeIds[0]}-${activeIds[activeIds.length - 1]}`,
   sourceDataMatchedExactly: true,
-  legacyExampleBankPresent: false,
+  excludedLegacyTests1To7Present: false,
+  class29PreviousRangeValidatedSeparately: true,
 }, null, 2));

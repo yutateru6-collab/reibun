@@ -28,6 +28,7 @@ SECTION_LABELS = {value: key for key, value in SECTION_IDS.items()}
 EXPECTED_PER_ROUND = {"tense1": 26, "tense2": 26, "verb1": 25, "verb2": 23}
 CIRCLED = {"①": 0, "②": 1, "③": 2, "④": 3}
 JAPANESE_CHAR = r"[\u3040-\u30ff\u3400-\u9fff]"
+UNDERLINED_TEXT = re.compile(r"下線部(?:にあたる)?\s*([A-Za-z][A-Za-z'-]*)")
 
 
 def digest(path: Path) -> str:
@@ -114,6 +115,17 @@ def classify(prompt: str, choices: list[str] | None) -> str:
     return "written"
 
 
+def underlined_text(prompt: str) -> str | None:
+    """Recover the target named by the source when DOCX underline styling is absent."""
+    match = UNDERLINED_TEXT.search(prompt)
+    if not match:
+        return None
+    target = match.group(1)
+    if prompt.find(target) == match.start(1):
+        raise ValueError(f"Underlined target is only named in the instruction: {target}")
+    return target
+
+
 def build(question_path: Path, answer_path: Path) -> dict[str, object]:
     questions, question_notes = parse_document(question_path, answers=False)
     answers, answer_notes = parse_document(answer_path, answers=True)
@@ -148,6 +160,9 @@ def build(question_path: Path, answer_path: Path) -> dict[str, object]:
         if choices:
             row["choices"] = choices
             row["correctIndex"] = correct_index
+        target = underlined_text(prompt)
+        if target:
+            row["underlinedText"] = target
         rows.append(row)
 
     counts = Counter((row["round"], row["section"]) for row in rows)

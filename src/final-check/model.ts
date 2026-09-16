@@ -32,6 +32,7 @@ export interface FinalCheckQuestion {
   format: FinalCheckFormat;
   prompt: string;
   solution: string;
+  underlinedText?: string;
   choices?: string[];
   correctIndex?: number;
 }
@@ -67,6 +68,12 @@ function parseQuestion(value: unknown): FinalCheckQuestion {
 
   const choices = item.choices;
   const correctIndex = item.correctIndex;
+  const underlinedText = item.underlinedText;
+  if (underlinedText !== undefined) {
+    if (typeof underlinedText !== 'string' || !underlinedText || !item.prompt.includes(underlinedText)) {
+      throw new Error(`下線対象が不正です: ${item.id}`);
+    }
+  }
   if (choices !== undefined) {
     if (!Array.isArray(choices) || choices.length < 2 || choices.some(choice => typeof choice !== 'string')) {
       throw new Error(`選択肢が不正です: ${item.id}`);
@@ -86,6 +93,7 @@ function parseQuestion(value: unknown): FinalCheckQuestion {
     format: item.format,
     prompt: item.prompt,
     solution: item.solution,
+    underlinedText: underlinedText as string | undefined,
     choices: choices as string[] | undefined,
     correctIndex: correctIndex as number | undefined,
   };
