@@ -69,6 +69,7 @@ for (const [engine,type,width] of [['chromium-small',chromium,320],['webkit-mobi
     await p.getByRole('button',{name:'前のカードへ',exact:true}).click();
     assert((await card(p).innerText()).includes(basicExampleDecks[0].cards.find(c=>c.id===seen[2])!.front));
   });
+  // Quiz order must be randomized independently of the ordinary study-card shuffle preference.
   await run('quiz-always-shuffles',{'flashcard-shuffle':'false'},async p=>{
     await basic(p); await p.getByRole('button',{name:/Lesson 1 /}).first().click();
     await p.evaluate(() => { Math.random = () => 0; });
