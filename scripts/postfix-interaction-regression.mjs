@@ -106,7 +106,7 @@ async function auditEngine(engine, browserType) {
   });
 
   await run(engine, 'self-assessment mini does not submit or advance', async()=>{
-    const context=await newContext(); const page=await context.newPage(); await lesson1(page); await page.getByRole('button',{name:/自己申告テスト/}).click(); await cardToBack(page);
+    const context=await newContext(); const page=await context.newPage(); await lesson1(page); await page.getByRole('button',{name:/自己申告テスト/}).click(); await (await firstStudyCard(page)).click();
     const mini=page.getByRole('button',{name:/💡 ミニ解説/}); await mini.waitFor(); const before=await counter(page); await simulateResume(context,page); await mini.click(); await page.waitForTimeout(700);
     assert(await counter(page)===before,'self mini advanced'); assert(await page.getByRole('button',{name:/まだ/}).isVisible(),'まだ disappeared'); assert(await page.getByRole('button',{name:/わかった/}).isVisible(),'わかった disappeared');
     await page.getByRole('button',{name:/わかった/}).click(); await page.waitForTimeout(250); assert(await counter(page)==='2 / 9','self answer did not advance once'); await context.close();
@@ -136,9 +136,10 @@ async function auditEngine(engine, browserType) {
 
   await run(engine, 'word-order delayed callback is cancelled after leaving mode', async()=>{
     const context=await newContext(); const page=await context.newPage(); await lesson1(page); await page.locator('[data-mode=order]').click();
-    const words=['There','are','many','books','on','the','president’s','life.'];
-    for(const word of words){ const re=new RegExp(`^${word.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}$`); await page.locator('button.border-2').filter({hasText:re}).first().click(); }
-    await page.getByRole('button',{name:/解答する/}).click(); await page.getByText(/正解/).waitFor(); await page.getByRole('button',{name:'学習モード選択へ戻る'}).click(); await page.getByText('同じ例文を、練習方法を変えて').waitFor();
+    const pool=page.locator('div.flex.flex-wrap.gap-2.justify-center button.border-2:not(:disabled)');
+    const wordCount=await pool.count(); assert(wordCount>1,'word pool was empty');
+    for(let index=0;index<wordCount;index+=1) await pool.first().click();
+    await page.getByRole('button',{name:/解答する/}).click(); await page.getByText(/正解！|正解は：|残念/).first().waitFor(); await page.getByRole('button',{name:'学習モード選択へ戻る'}).click(); await page.getByText('同じ例文を、練習方法を変えて').waitFor();
     await page.waitForTimeout(2400); assert(await page.getByText('同じ例文を、練習方法を変えて').isVisible(),'delayed order callback navigated after leaving mode'); await context.close();
   });
 
