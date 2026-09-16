@@ -1,0 +1,65 @@
+name: Verify unified shuffle fix once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/verify-unified-shuffle-fix-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install and validate
+        run: |
+          npm ci
+          npm run lint
+          npx tsx scripts/validate-content.ts
+          npx tsx scripts/unified-lessons-model.ts
+          npm run build
+
+      - name: Install browsers and Japanese fonts
+        run: |
+          npx playwright install --with-deps chromium webkit
+          sudo apt-get install -y fonts-noto-cjk
+
+      - name: Start production preview
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/reibun-preview.log 2>&1 &
+          for n in $(seq 1 30); do curl -fsS http://127.0.0.1:4173 >/dev/null && exit 0 || sleep 1; done
+          cat /tmp/reibun-preview.log
+          exit 1
+
+      - name: Verify Chromium randomized lesson modes
+        env:
+          BROWSER: chromium
+          QA_OUT: audit/unified-lessons-verify
+        run: npx tsx scripts/unified-lessons-ui.ts
+
+      - name: Verify WebKit randomized lesson modes
+        env:
+          BROWSER: webkit
+          QA_OUT: audit/unified-lessons-verify
+        run: npx tsx scripts/unified-lessons-ui.ts
+
+      - name: Remove one-time workflow after success
+        shell: bash
+        run: |
+          rm .github/workflows/verify-unified-shuffle-fix-once.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .github/workflows/verify-unified-shuffle-fix-once.yml
+          git commit -m 'Remove one-time unified shuffle verification workflow'
+          git push origin HEAD:main
