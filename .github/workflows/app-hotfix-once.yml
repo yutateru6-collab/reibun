@@ -53,7 +53,7 @@ jobs:
           replace_once(
               'src/App.tsx',
               "const cardsToUse = isShuffle ? [...pool].sort(() => Math.random() - 0.5) : [...pool];",
-              "// Quiz modes always randomize question order. The study-card shuffle toggle only controls browsing cards.\n    const cardsToUse = shuffledCopy(pool);",
+              "// Quiz modes always randomize question order. The study-card shuffle toggle only controls browsing cards.\n    const cardsToUse = shuffledCopy<Card>(pool);",
           )
 
           # Make the behavior visible instead of hiding it behind a setting.
