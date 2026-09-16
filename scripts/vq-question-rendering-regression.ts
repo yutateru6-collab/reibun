@@ -110,6 +110,7 @@ async function auditVqQuestion(page: Page, engine: string) {
   assert(normalize(await cardEl.innerText()).includes(normalize(card.back)), `${engine}/VQ standard back: completed answer missing`);
 
   await openDeck(page, deck, 'vq-question');
+  await page.evaluate(() => { Math.random = () => 0.999999; });
   await page.getByRole('button', { name: /自己申告テスト/ }).click();
   cardEl = await firstCard(page);
   assertActualQuestion(await cardEl.innerText(), card, `${engine}/VQ self-test front`);
@@ -117,10 +118,12 @@ async function auditVqQuestion(page: Page, engine: string) {
   assert(normalize(await (await firstCard(page)).innerText()).includes(normalize(card.back)), `${engine}/VQ self-test back: answer missing`);
 
   await openDeck(page, deck, 'vq-question');
+  await page.evaluate(() => { Math.random = () => 0.999999; });
   await page.getByRole('button', { name: /並べ替えクイズ/ }).click();
   assertActualQuestion(await page.locator('body').innerText(), card, `${engine}/VQ word-order prompt`);
 
   await openDeck(page, deck, 'vq-question');
+  await page.evaluate(() => { Math.random = () => 0.999999; });
   await page.getByLabel('問題を考える時間').selectOption('15');
   await page.getByLabel('答えを表示する時間').selectOption('5');
   await page.getByRole('button', { name: /タイムアタック開始/ }).click();
@@ -135,6 +138,7 @@ async function auditHopeOfficialQuestion(page: Page, engine: string) {
   await openDeck(page, deck, 'hope-test');
   await page.getByRole('button', { name: /穴埋めで確認/ }).waitFor();
 
+  await page.evaluate(() => { Math.random = () => 0.999999; });
   await page.getByRole('button', { name: /自己申告テスト/ }).click();
   const cardEl = await firstCard(page);
   const rendered = normalize(await cardEl.innerText());
@@ -142,6 +146,7 @@ async function auditHopeOfficialQuestion(page: Page, engine: string) {
   assert(rendered.includes(normalize(card.translation)), `${engine}/Hope self-test: Japanese prompt missing`);
 
   await openDeck(page, deck, 'hope-test');
+  await page.evaluate(() => { Math.random = () => 0.999999; });
   await page.getByLabel('問題を考える時間').selectOption('15');
   await page.getByLabel('答えを表示する時間').selectOption('5');
   await page.getByRole('button', { name: /タイムアタック開始/ }).click();

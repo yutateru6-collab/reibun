@@ -123,6 +123,7 @@ async function auditVqQuestionStates(page: Page) {
 
   // Self-test source problem -> answer.
   await openVqDeck(page, deck, true);
+  await page.evaluate(() => { Math.random = () => 0.999999; });
   await page.getByRole('button', { name: /自己申告テスト/ }).click();
   await assertBodyIncludes(page, card.front, 'VQ self source problem');
   await (await firstClickableCard(page)).click();
@@ -130,12 +131,14 @@ async function auditVqQuestionStates(page: Page) {
 
   // Order prompt includes source context.
   await openVqDeck(page, deck, true);
+  await page.evaluate(() => { Math.random = () => 0.999999; });
   await page.getByRole('button', { name: /並べ替えクイズ/ }).click();
   await assertBodyIncludes(page, card.front, 'VQ order source problem');
   await assertNoOverflow(page, 'VQ order');
 
   // Time attack source problem.
   await openVqDeck(page, deck, true);
+  await page.evaluate(() => { Math.random = () => 0.999999; });
   await page.getByLabel('問題を考える時間').selectOption('15');
   await page.getByLabel('答えを表示する時間').selectOption('5');
   await page.getByRole('button', { name: /タイムアタック開始/ }).click();
@@ -155,6 +158,7 @@ async function auditHopeOfficialQuestionStates(page: Page) {
   await assertBodyIncludes(page, card.back, 'Hope standard answer');
 
   await openBasicDeck(page, deck, true);
+  await page.evaluate(() => { Math.random = () => 0.999999; });
   await page.getByRole('button', { name: /自己申告テスト/ }).click();
   await assertBodyIncludes(page, card.front, 'Hope self blank source prompt');
   await assertBodyIncludes(page, card.translation, 'Hope self Japanese source prompt');
@@ -162,6 +166,7 @@ async function auditHopeOfficialQuestionStates(page: Page) {
   await assertBodyIncludes(page, card.back, 'Hope self answer');
 
   await openBasicDeck(page, deck, true);
+  await page.evaluate(() => { Math.random = () => 0.999999; });
   await page.getByLabel('問題を考える時間').selectOption('15');
   await page.getByLabel('答えを表示する時間').selectOption('5');
   await page.getByRole('button', { name: /タイムアタック開始/ }).click();
@@ -187,12 +192,14 @@ async function auditBasicExampleModes(page: Page) {
   await assertBodyIncludes(page, card.back, 'basic memorize English');
 
   await openBasicDeck(page, deck, false);
+  await page.evaluate(() => { Math.random = () => 0.999999; });
   await page.getByRole('button', { name: /自己申告テスト/ }).click();
   await assertBodyIncludes(page, card.back, 'basic self English');
   await (await firstClickableCard(page)).click();
   await assertBodyIncludes(page, card.translation, 'basic self Japanese');
 
   await openBasicDeck(page, deck, false);
+  await page.evaluate(() => { Math.random = () => 0.999999; });
   await page.getByRole('button', { name: /並べ替えで確認/ }).click();
   await assertBodyIncludes(page, card.translation, 'basic order prompt');
 }

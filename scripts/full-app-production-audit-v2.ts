@@ -129,16 +129,19 @@ async function auditVqQuestionModes(page:Page, deck:Deck, deckIndex:number) {
 
   // Self test: source problem must be the question, not answer-to-Japanese mode.
   await openDeck(page,'vq-question',deck,deckIndex);
+  await page.evaluate(() => { Math.random = () => 0.999999; });
   await page.getByRole('button',{name:/自己申告テスト/}).click(); body=norm(await page.locator('body').innerText());
   if (!body.includes(norm(card.front))) add('critical',`${scope}/self/front`,'self-test does not present the source problem',{sourceFront:card.front,rendered:body.slice(0,1000)});
 
   // Word order prompt must not be only the generic task label.
   await openDeck(page,'vq-question',deck,deckIndex);
+  await page.evaluate(() => { Math.random = () => 0.999999; });
   await page.getByRole('button',{name:/並べ替えクイズ/}).click(); body=norm(await page.locator('body').innerText());
   if (!body.includes(norm(card.front))) add('major',`${scope}/order/front`,'word-order mode lacks the source problem/context',{sourceFront:card.front,rendered:body.slice(0,1000)});
 
   // Time attack must present the actual problem.
   await openDeck(page,'vq-question',deck,deckIndex);
+  await page.evaluate(() => { Math.random = () => 0.999999; });
   await page.getByLabel('問題を考える時間').selectOption('3');
   await page.getByLabel('答えを表示する時間').selectOption('3');
   await page.getByRole('button',{name:/タイムアタック開始/}).click(); body=norm(await page.locator('body').innerText());

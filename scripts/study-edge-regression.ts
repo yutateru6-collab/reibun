@@ -85,7 +85,9 @@ for (const [engine,type,width] of [['chromium-small',chromium,320],['webkit-mobi
     assert(!(await p.locator('body').innerText()).includes('正答率'));
   });
   await run('mistake-review',{[YET]:JSON.stringify([hope.id,vq.id])},async p=>{
-    await review(p,'yet');await p.getByRole('button',{name:/自己申告テスト/}).click();
+    await review(p,'yet');
+    await p.evaluate(() => { Math.random = () => 0.999999; });
+    await p.getByRole('button',{name:/自己申告テスト/}).click();
     await card(p).click();await p.getByRole('button',{name:'まだ',exact:true}).click();
     await card(p).click();await p.getByRole('button',{name:'わかった',exact:true}).click();
     await p.getByText('50%').waitFor();
