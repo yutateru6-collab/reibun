@@ -16,7 +16,7 @@ export default function TermRoot({children}:{children:ReactNode}) {
   useEffect(()=>{const f=()=>setLegacy(Boolean(window.location.hash));window.addEventListener('hashchange',f);return()=>window.removeEventListener('hashchange',f);},[]);
   const previous=()=>{window.location.hash='previous';setLegacy(true);};
   const current=()=>{window.location.hash='';setLegacy(false);};
-  if(legacy)return <><div className="border-b border-slate-300 bg-white/95 dark:bg-slate-900 dark:text-white p-3 flex flex-wrap items-center justify-between gap-2"><span className="text-sm font-bold">以前の範囲・全教材（中間試験対策）</span><button className={btn} onClick={current}>今回の試験範囲へ</button></div>{children}</>;
+  if(legacy)return <><div className="border-b border-slate-300 bg-white/95 dark:bg-slate-900 dark:text-white p-3 flex flex-wrap items-center justify-between gap-2"><span className="text-sm font-bold">以前の範囲・全教材（中間試験対策）</span><button className={btn} onClick={current}>クラス選択へ</button></div>{children}</>;
   return <CurrentTerm onPrevious={previous}/>;
 }
 

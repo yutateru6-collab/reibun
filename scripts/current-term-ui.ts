@@ -90,7 +90,7 @@ try {
   const saved=await page.evaluate(({f,y,p,h})=>({f:JSON.parse(localStorage.getItem(f)!),y:JSON.parse(localStorage.getItem(y)!),p:JSON.parse(localStorage.getItem(p)!),h:JSON.parse(localStorage.getItem(h)!),legacy:localStorage.getItem('legacy-progress-sentinel')}),{f:FAVORITES_KEY,y:YET_KEY,p:PROGRESS_KEY,h:HISTORY_KEY});
   assert.deepEqual(saved.f,[1,4001,4039]);assert.ok(saved.y.includes(3)&&saved.y.includes(4010));assert.equal(saved.p['sentinel-old'].correct,2);assert.equal(saved.legacy,'keep');assert.ok(saved.h.length>=12);
   await page.getByRole('button',{name:'以前の範囲・全教材',exact:true}).click();await page.getByText('以前の範囲・全教材（中間試験対策）',{exact:true}).waitFor();
-  await page.getByRole('button',{name:'今回の試験範囲へ',exact:true}).click();await page.locator(`[data-current-term="${RELEASE}"]`).waitFor();
+  await page.getByRole('button',{name:'クラス選択へ',exact:true}).click();await page.locator(`[data-current-term="${RELEASE}"]`).waitFor();
   assert.deepEqual(errors,[]);await context.close();
  }
  await fs.writeFile(`${out}/report.json`,JSON.stringify({base,passed:true,results},null,2));
