@@ -1,5 +1,7 @@
+import HopeStudyCard from '../hope/StudyCard';
+import { useStudyCardFocus } from '../lib/use-study-card-focus';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { ArrowLeft, BookOpen, Check, ChevronRight, Moon, Star, Sun } from 'lucide-react';
+import { ArrowLeft, BookOpen, Check, ChevronRight, Moon, Star, Sun, GraduationCap, FilePenLine, Shuffle, ClipboardCheck } from 'lucide-react';
 import { TOPICS, type Topic } from './grammar';
 import { CLASSES, RELEASE, FAVORITES_KEY, NEW_FAVORITES_KEY, PROGRESS_KEY, HISTORY_KEY, YET_KEY,
   classItems, unitTitle, canonical, cloze, checkCloze, checkOrder, orderTokens, shuffled, finalSample,
@@ -34,6 +36,7 @@ function CurrentTerm({onPrevious}:{onPrevious:()=>void}) {
   const [tokens,setTokens]=useState<{id:number;text:string}[]>([]);
   const [chosen,setChosen]=useState<number[]>([]);
   const [revealed,setRevealed]=useState(false);
+  const [commentOpen,setCommentOpen]=useState(false);
   const [verdict,setVerdict]=useState<boolean|null>(null);
   const [selfChecked,setSelfChecked]=useState(false);
   const [attempts,setAttempts]=useState<Attempt[]>([]);
@@ -51,12 +54,13 @@ function CurrentTerm({onPrevious}:{onPrevious:()=>void}) {
   const selected=all.filter(item=>unit==='all'||unit===item.unit||(unit==='favorites'&&favorite(item))||(unit==='wrong'&&progress[item.id]?.lastCorrect===false));
   const q=questions[index];
   const current=q?.item;
+  const studyRef=useStudyCardFocus(screen==='session'&&mode==='cards',`${screen}:${mode}:${current?.id}:${index}`);
   const unitName=unit==='all'?'全範囲':unit==='favorites'?'お気に入り':unit==='wrong'?'間違えた問題':unitTitle(unit);
   const save=(key:string,value:unknown)=>{if(!writeStored(key,value))setStorageWarning(true);};
   useEffect(()=>{document.documentElement.classList.toggle('dark',dark);writeStored('flashcard-dark-mode',dark);},[dark]);
   useEffect(()=>{heading.current?.focus();window.scrollTo(0,0);},[screen]);
   function resetQuestion(item:Item) {
-    setInput('');setRevealed(false);setVerdict(null);setChosen([]);setSelfChecked(false);
+    setInput('');setRevealed(false);setVerdict(null);setChosen([]);setSelfChecked(false);setCommentOpen(false);
     setTokens(shuffled(orderTokens(item).map((text,id)=>({id,text}))));
   }
   function start(items=selected,chosenMode:Mode=mode) {
@@ -86,8 +90,8 @@ function CurrentTerm({onPrevious}:{onPrevious:()=>void}) {
     if(screen==='session'){setExitConfirm(true);return;}
     setScreen(screen==='range'?'classes':screen==='menu'?'range':'menu');
   }
-  return <div className="min-h-[100dvh] bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 px-4 py-5 sm:py-8" data-current-term={RELEASE}>
-    <div className="mx-auto max-w-4xl">
+  return <div ref={studyRef} className="min-h-[100dvh] bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 px-4 py-5 sm:py-8" data-current-term={RELEASE}>
+    <div className={`mx-auto ${screen==='classes'||screen==='range'?'max-w-4xl':'max-w-2xl'}`}>
       <header className="flex items-center gap-3 mb-7">
         {screen!=='classes'&&<button aria-label="戻る" className={btn+' !px-3'} onClick={back}><ArrowLeft size={20}/></button>}
         <div className="flex-1 min-w-0"><p className="text-xs text-indigo-700 dark:text-indigo-300 font-semibold mb-1">{screen==='classes'?'九国生徒用':`${config.title} ・ 今回の試験範囲`}</p><h1 ref={heading} tabIndex={-1} className="text-xl sm:text-2xl font-bold outline-none break-words">{title}</h1></div>
@@ -96,7 +100,7 @@ function CurrentTerm({onPrevious}:{onPrevious:()=>void}) {
       {storageWarning&&<p role="alert" className="mb-4 rounded-lg bg-amber-100 text-amber-900 p-3">このブラウザでは記録を保存できません。画面を閉じると今回の記録が失われる場合があります。</p>}
       {screen==='classes'&&<>
         <p className="mb-5 text-slate-600 dark:text-slate-300">クラスを選んでください。</p>
-        <div className="grid sm:grid-cols-2 gap-4">{(Object.keys(CLASSES) as ClassId[]).map(c=><button key={c} onClick={()=>{setClassId(c);setUnit('all');setScreen('range');}} className={panel+' text-left hover:border-indigo-500 focus-visible:outline-2 focus-visible:outline-indigo-500'}><BookOpen className="text-indigo-600 mb-4" size={28}/><h2 className="text-2xl font-bold mb-2">{CLASSES[c].title}</h2><p className="text-sm leading-7 text-slate-600 dark:text-slate-300">{CLASSES[c].range}</p><span className="flex items-center mt-5 text-sm text-indigo-700 dark:text-indigo-300 font-bold">今回の試験範囲 <ChevronRight size={18}/></span></button>)}</div>
+        <div className="grid grid-cols-2 gap-3 sm:gap-5">{(Object.keys(CLASSES) as ClassId[]).map(c=><button key={c} onClick={()=>{setClassId(c);setUnit('all');setScreen('range');}} className={panel+' !p-4 sm:!p-7 min-h-[180px] flex flex-col items-center justify-center text-center !border-2 hover:border-indigo-500 hover:shadow-lg transition-all focus-visible:outline-2 focus-visible:outline-indigo-500'}><span className={`p-3 rounded-2xl mb-3 ${c==='2-3'?'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300':'bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300'}`}><GraduationCap size={28}/></span><h2 className="text-xl sm:text-2xl font-black mb-2">{CLASSES[c].title}</h2><p className="text-sm leading-7 text-slate-600 dark:text-slate-300">{CLASSES[c].range}</p><span className="flex items-center mt-5 text-sm text-indigo-700 dark:text-indigo-300 font-bold">今回の試験範囲 <ChevronRight size={18}/></span></button>)}</div>
         <button className={btn+' mt-6'} onClick={onPrevious}>以前の範囲・全教材</button>
         <p className="text-xs text-slate-500 dark:text-slate-400 mt-4">学習記録はこの端末・ブラウザに保存されます。</p>
       </>}
@@ -113,11 +117,11 @@ function CurrentTerm({onPrevious}:{onPrevious:()=>void}) {
       {screen==='menu'&&<>
         {TOPICS[unit as Topic]&&<section className={panel+' mb-5'}><h2 className="font-bold mb-2">確認ポイント</h2><p className="leading-8">{TOPICS[unit as Topic].summary}</p></section>}
         <p className="text-sm mb-4 text-slate-600 dark:text-slate-300">{selected.length}文を学習します。{unit.startsWith('hope-')?'暗唱の英文・和訳は原資料のままです。':''}</p>
-        <div className="grid sm:grid-cols-2 gap-3">{([['cards','例文を覚える','英語・日本語を切り替えて確認'],['cloze','穴埋めで確認','空欄に入る語句を入力'],['order','並べ替えで確認','語句を選んで英文を組み立てる'],['final','試験前の最終チェック','穴埋めと並べ替えを出題']] as const).map(([m,label,desc])=><button key={m} aria-pressed={mode===m} className={panel+` !p-4 text-left ${mode===m?'!border-indigo-600 ring-1 ring-indigo-600':''}`} onClick={()=>setMode(m)}><span className="font-bold">{label}</span><span className="block text-sm text-slate-600 dark:text-slate-300 mt-1">{desc}</span></button>)}</div>
+        <div className="space-y-3">{([['cards','例文を覚える','英語・日本語を切り替えて確認'],['cloze','穴埋めで確認','空欄に入る語句を入力'],['order','並べ替えで確認','語句を選んで英文を組み立てる'],['final','試験前の最終チェック','穴埋めと並べ替えを出題']] as const).map(([m,label,desc])=><button key={m} disabled={!selected.length} className={panel+` block w-full !p-4 text-left ${mode===m?'!border-indigo-600 ring-1 ring-indigo-600':''}`} onClick={()=>m==='final'?setMode(m):start(selected,m)}><span className={`flex items-center gap-4 ${m==='cards'?'text-blue-700 dark:text-blue-300':m==='cloze'?'text-emerald-700 dark:text-emerald-300':m==='order'?'text-amber-700 dark:text-amber-300':'text-purple-700 dark:text-purple-300'}`}><span className="p-3 rounded-2xl bg-slate-100 dark:bg-slate-900">{m==='cards'?<BookOpen size={27}/>:m==='cloze'?<FilePenLine size={27}/>:m==='order'?<Shuffle size={27}/>:<ClipboardCheck size={27}/>}</span><span className="flex-1"><span className="block text-lg font-black text-slate-900 dark:text-slate-100">{label}</span><span className="block text-sm font-normal text-slate-600 dark:text-slate-300 mt-1">{desc}</span></span><ChevronRight size={20}/></span></button>)}</div>
         <div className={panel+' mt-5 space-y-4'}>
           {mode==='final'?<label className="flex items-center gap-3">問題数<select aria-label="問題数" value={Math.min(amount,selected.length||1)} onChange={e=>setAmount(Number(e.target.value))} className="min-h-11 rounded-lg border border-slate-300 bg-white dark:bg-slate-900 px-3">{selected.length>10&&<option value={10}>10問</option>}{selected.length>20&&<option value={20}>20問</option>}<option value={selected.length||1}>すべて（{selected.length}問）</option></select></label>:<label className="flex gap-3 items-center min-h-11"><input type="checkbox" checked={random} onChange={e=>setRandom(e.target.checked)} className="size-5"/>順番をシャッフル</label>}
           {mode==='cards'&&<label className="flex gap-3 items-center min-h-11"><input type="checkbox" checked={direction} onChange={e=>setDirection(e.target.checked)} className="size-5"/>日本語から確認する</label>}
-          <button disabled={!selected.length} className={primary+' w-full'} onClick={()=>start()}>学習を始める</button>
+          {mode==='final'&&<button disabled={!selected.length} className={primary+' w-full'} onClick={()=>start()}>学習を始める</button>}
           {!selected.length&&<p role="status" className="text-sm">対象の問題はありません。</p>}
         </div>
       </>}
@@ -125,12 +129,13 @@ function CurrentTerm({onPrevious}:{onPrevious:()=>void}) {
         {exitConfirm&&<div role="alert" className={panel+' mb-4'}><p className="mb-3">途中で学習を終了しますか。確定済みの解答の記録は残ります。</p><div className="flex gap-2"><button className={btn} onClick={()=>setExitConfirm(false)}>続ける</button><button className={btn} onClick={()=>{setExitConfirm(false);setScreen('menu');}}>学習を終了</button></div></div>}
         <div className="flex items-center gap-3 mb-3"><p className="flex-1 text-sm text-slate-600 dark:text-slate-300">{index+1} / {questions.length}　{mode==='final'?(q.kind==='cloze'?'穴埋め':'並べ替え'):''}</p><button className={btn+' !px-3'} aria-label={favorite(current)?'お気に入り解除':'お気に入り登録'} aria-pressed={favorite(current)} onClick={()=>toggleFavorite(current)}><Star size={20} fill={favorite(current)?'currentColor':'none'}/></button></div>
         <progress aria-label="進み具合" value={index+1} max={questions.length} className="w-full h-2 mb-5 accent-indigo-600"/>
-        <article className={panel} data-item-id={current.id}>
+        <article className={mode==='cards'?'':panel} data-item-id={current.id}>
           <div className="text-xs font-semibold text-indigo-700 dark:text-indigo-300 mb-3">{current.source==='recitation'?'暗唱例文・原資料':'文法練習・新作'}{mode!=='cards'&&current.source==='recitation'?'（形式変更）':''}</div>
           <h2 className="font-bold mb-5">{current.label}<span className="block text-xs font-normal mt-1 text-slate-500 dark:text-slate-400">{unitTitle(current.unit)}</span></h2>
           {mode==='cards'?<>
-            <button className="block w-full text-left rounded-xl focus-visible:outline-2 focus-visible:outline-indigo-500" aria-label="カードをめくる" onClick={()=>setRevealed(!revealed)}><p className="text-xl sm:text-2xl leading-relaxed break-words" data-testid="card-text">{direction?current.ja:current.en}</p><div className="min-h-20 mt-5 text-emerald-700 dark:text-emerald-300 leading-8">{revealed?<p data-testid="card-answer">{direction?current.en:current.ja}</p>:<span className="text-sm text-slate-500 dark:text-slate-400">タップして{direction?'英文':'和訳'}を見る</span>}</div></button>
-            <button className={btn+' mt-3'} onClick={()=>{setDirection(!direction);setRevealed(false);}}>{direction?'英語から確認する':'日本語から確認する'}</button>
+            <div className="flex gap-2 mb-5" role="group" aria-label="例文の表示方向">{[false,true].map(japanese=><button key={String(japanese)} aria-pressed={direction===japanese} className={(direction===japanese?primary:btn)+' flex-1'} onClick={()=>{setDirection(japanese);setRevealed(false);setCommentOpen(false);}}>{japanese?'日本語から見る':'英語から見る'}</button>)}</div>
+            <div data-ui="study-card-focus"><HopeStudyCard card={{id:current.originalId||100000+index,front:current.en,back:current.en,translation:current.ja,comment:current.explanation,hint:''}} cloze={false} japaneseFirst={direction} revealed={revealed} commentOpen={commentOpen} onFlip={()=>{setRevealed(!revealed);setCommentOpen(false);}} onComment={()=>setCommentOpen(!commentOpen)}/></div>
+            <div className="flex items-center justify-between gap-4 mt-5"><button aria-label="前のカードへ" className={btn+' !rounded-full !p-4'} onClick={()=>{const n=(index-1+questions.length)%questions.length;resetQuestion(questions[n].item);setIndex(n);}}><ArrowLeft size={24}/></button><button aria-label="次のカードへ" className={primary+' !rounded-full !p-4'} onClick={()=>{const n=(index+1)%questions.length;resetQuestion(questions[n].item);setIndex(n);}}><ChevronRight size={24}/></button></div>
           </>:<>
             <p className="leading-8 mb-5">{current.ja}</p>
             {q.kind==='cloze'?<form onSubmit={e=>{e.preventDefault();if(verdict===null){setVerdict(checkCloze(current,input));setRevealed(true);}}}>
@@ -145,13 +150,13 @@ function CurrentTerm({onPrevious}:{onPrevious:()=>void}) {
               {verdict===null&&<div className="flex flex-wrap gap-2 mt-5"><button className={primary} disabled={chosen.length!==tokens.length} onClick={()=>{setVerdict(checkOrder(current,chosen.map(id=>tokens.find(t=>t.id===id)!.text)));setRevealed(true);}}>答え合わせ</button><button className={btn} onClick={()=>setChosen([])}>並べ直す</button><button className={btn} onClick={()=>{setVerdict(false);setRevealed(true);}}>解答を見る</button></div>}
             </>}
           </>}
-          {revealed&&<div className="mt-6 pt-5 border-t border-slate-200 dark:border-slate-600" aria-live="polite">
+          {revealed&&mode!=='cards'&&<div className="mt-6 pt-5 border-t border-slate-200 dark:border-slate-600" aria-live="polite">
             {mode!=='cards'&&<><p className={`font-bold mb-3 ${verdict?'text-emerald-700 dark:text-emerald-300':'text-amber-700 dark:text-amber-300'}`}>{verdict?(selfChecked?'別解として自己確認済み':'正解'):'解答を確認'}</p><p className="text-lg leading-8 break-words" data-testid="model-answer">{canonical(current.en)}</p>{q.kind==='cloze'&&<p className="text-sm mt-3 leading-7">空欄：{acceptedAnswers(current).map(x=>x||'（省略）').join(' ／ ')}</p>}</>}
             <p className="text-sm leading-7 mt-3">{current.explanation}</p>
             {mode!=='cards'&&!verdict&&<div className="mt-4"><p className="text-xs leading-6 text-slate-600 dark:text-slate-300">登録解答と違う別解も考えられます。文法・意味・指定語句を確認し、正しい場合は自己確認として記録できます。</p><button className={btn+' mt-2'} onClick={()=>{setVerdict(true);setSelfChecked(true);}}>別解として正解にする（自己確認）</button></div>}
           </div>}
         </article>
-        <div className="mt-5">{mode==='cards'?<div className="flex gap-3"><button className={btn+' flex-1'} disabled={!revealed} onClick={()=>record(false,true)}>もう一度</button><button className={primary+' flex-1'} disabled={!revealed} onClick={()=>record(true,true)}>確認できた</button></div>:<button disabled={verdict===null} className={primary+' w-full'} onClick={()=>record(verdict===true,selfChecked)}>{index+1===questions.length?'結果を見る':'次の問題へ'}</button>}</div>
+        <div className="mt-5">{mode==='cards'?<div className="flex gap-3 mt-6"><button className={btn+' flex-1'} disabled={!revealed} onClick={()=>record(false,true)}>もう一度</button><button className={primary+' flex-1'} disabled={!revealed} onClick={()=>record(true,true)}>確認できた</button></div>:<button disabled={verdict===null} className={primary+' w-full'} onClick={()=>record(verdict===true,selfChecked)}>{index+1===questions.length?'結果を見る':'次の問題へ'}</button>}</div>
       </>}
       {screen==='result'&&<>
         <section className={panel}><div className="flex items-center gap-3"><Check className="text-indigo-600"/><h2 className="font-bold text-lg">{mode==='cards'?'確認できた文':'正解した問題'}</h2></div><p className="text-4xl font-bold mt-5 mb-3">{attempts.filter(x=>x.correct).length}<span className="text-lg text-slate-500"> / {attempts.length}</span></p><p className="text-sm text-slate-600 dark:text-slate-300">{attempts.filter(x=>x.selfChecked&&x.correct).length}件は自己確認を含みます。</p>
