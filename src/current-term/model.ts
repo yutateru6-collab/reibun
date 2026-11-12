@@ -87,7 +87,13 @@ export function finalSample(items:Item[],count:number):Item[]{
   return shuffled(out);
 }
 export function readStored<T>(key:string,fallback:T):T {
-  try {const raw=localStorage.getItem(key);return raw?JSON.parse(raw):fallback;}catch{return fallback;}
+  try {
+    const raw=localStorage.getItem(key); if(!raw)return fallback;
+    const parsed=JSON.parse(raw);
+    if(Array.isArray(fallback))return Array.isArray(parsed)?parsed as T:fallback;
+    if(fallback!==null&&typeof fallback==='object')return parsed!==null&&typeof parsed==='object'&&!Array.isArray(parsed)?parsed:fallback;
+    return typeof parsed===typeof fallback?parsed:fallback;
+  }catch{return fallback;}
 }
 export function writeStored(key:string,value:unknown):boolean {
   try{localStorage.setItem(key,JSON.stringify(value));return true;}catch{return false;}

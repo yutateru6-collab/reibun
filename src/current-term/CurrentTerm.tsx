@@ -16,7 +16,7 @@ export default function TermRoot({children}:{children:ReactNode}) {
   useEffect(()=>{const f=()=>setLegacy(Boolean(window.location.hash));window.addEventListener('hashchange',f);return()=>window.removeEventListener('hashchange',f);},[]);
   const previous=()=>{window.location.hash='previous';setLegacy(true);};
   const current=()=>{window.location.hash='';setLegacy(false);};
-  if(legacy)return <><div className="sticky top-0 z-50 border-b border-slate-300 bg-white/95 dark:bg-slate-900 dark:text-white p-3 flex flex-wrap items-center justify-between gap-2"><span className="text-sm font-bold">以前の範囲・全教材（中間試験対策）</span><button className={btn} onClick={current}>今回の試験範囲へ</button></div>{children}</>;
+  if(legacy)return <><div className="border-b border-slate-300 bg-white/95 dark:bg-slate-900 dark:text-white p-3 flex flex-wrap items-center justify-between gap-2"><span className="text-sm font-bold">以前の範囲・全教材（中間試験対策）</span><button className={btn} onClick={current}>今回の試験範囲へ</button></div>{children}</>;
   return <CurrentTerm onPrevious={previous}/>;
 }
 
@@ -55,16 +55,15 @@ function CurrentTerm({onPrevious}:{onPrevious:()=>void}) {
   const save=(key:string,value:unknown)=>{if(!writeStored(key,value))setStorageWarning(true);};
   useEffect(()=>{document.documentElement.classList.toggle('dark',dark);writeStored('flashcard-dark-mode',dark);},[dark]);
   useEffect(()=>{heading.current?.focus();window.scrollTo(0,0);},[screen]);
-  useEffect(()=>{
-    if(screen!=='session'||!current)return;
+  function resetQuestion(item:Item) {
     setInput('');setRevealed(false);setVerdict(null);setChosen([]);setSelfChecked(false);
-    setTokens(shuffled(orderTokens(current).map((text,id)=>({id,text}))));
-  },[screen,index,current?.id]);
+    setTokens(shuffled(orderTokens(item).map((text,id)=>({id,text}))));
+  }
   function start(items=selected,chosenMode:Mode=mode) {
     if(!items.length)return;
     const picked=chosenMode==='final'?finalSample(items,amount):(random?shuffled(items):items);
     setQuestions(picked.map((item,i)=>({item,kind:chosenMode==='order'?'order':chosenMode==='final'&&i%2===1?'order':'cloze'})));
-    setMode(chosenMode);setIndex(0);setAttempts([]);setScreen('session');setExitConfirm(false);
+    resetQuestion(picked[0]);setMode(chosenMode);setIndex(0);setAttempts([]);setScreen('session');setExitConfirm(false);
   }
   function record(correct:boolean,manual=false) {
     const entry={id:current.id,correct,kind:q.kind,selfChecked:manual};
@@ -72,7 +71,7 @@ function CurrentTerm({onPrevious}:{onPrevious:()=>void}) {
     setProgress(nextProgress);save(PROGRESS_KEY,nextProgress);
     if(!correct&&current.originalId){const yet=readStored<number[]>(YET_KEY,[]);if(!yet.includes(current.originalId))save(YET_KEY,[...yet,current.originalId]);}
     const next=[...attempts,entry];setAttempts(next);
-    if(index+1<questions.length)setIndex(index+1);
+    if(index+1<questions.length){resetQuestion(questions[index+1].item);setIndex(index+1);}
     else {
       const h=[{classId,date:new Date().toISOString(),correct:next.filter(a=>a.correct).length,total:next.length,mode},...history].slice(0,30);
       setHistory(h);save(HISTORY_KEY,h);setScreen('result');
@@ -116,7 +115,7 @@ function CurrentTerm({onPrevious}:{onPrevious:()=>void}) {
         <p className="text-sm mb-4 text-slate-600 dark:text-slate-300">{selected.length}文を学習します。{unit.startsWith('hope-')?'暗唱の英文・和訳は原資料のままです。':''}</p>
         <div className="grid sm:grid-cols-2 gap-3">{([['cards','例文を覚える','英語・日本語を切り替えて確認'],['cloze','穴埋めで確認','空欄に入る語句を入力'],['order','並べ替えで確認','語句を選んで英文を組み立てる'],['final','試験前の最終チェック','穴埋めと並べ替えを出題']] as const).map(([m,label,desc])=><button key={m} aria-pressed={mode===m} className={panel+` !p-4 text-left ${mode===m?'!border-indigo-600 ring-1 ring-indigo-600':''}`} onClick={()=>setMode(m)}><span className="font-bold">{label}</span><span className="block text-sm text-slate-600 dark:text-slate-300 mt-1">{desc}</span></button>)}</div>
         <div className={panel+' mt-5 space-y-4'}>
-          {mode==='final'?<label className="flex items-center gap-3">問題数<select aria-label="問題数" value={amount} onChange={e=>setAmount(Number(e.target.value))} className="min-h-11 rounded-lg border border-slate-300 bg-white dark:bg-slate-900 px-3"><option value={10}>10問</option><option value={20}>20問</option><option value={selected.length||1}>すべて（{selected.length}問）</option></select></label>:<label className="flex gap-3 items-center min-h-11"><input type="checkbox" checked={random} onChange={e=>setRandom(e.target.checked)} className="size-5"/>順番をシャッフル</label>}
+          {mode==='final'?<label className="flex items-center gap-3">問題数<select aria-label="問題数" value={Math.min(amount,selected.length||1)} onChange={e=>setAmount(Number(e.target.value))} className="min-h-11 rounded-lg border border-slate-300 bg-white dark:bg-slate-900 px-3">{selected.length>10&&<option value={10}>10問</option>}{selected.length>20&&<option value={20}>20問</option>}<option value={selected.length||1}>すべて（{selected.length}問）</option></select></label>:<label className="flex gap-3 items-center min-h-11"><input type="checkbox" checked={random} onChange={e=>setRandom(e.target.checked)} className="size-5"/>順番をシャッフル</label>}
           {mode==='cards'&&<label className="flex gap-3 items-center min-h-11"><input type="checkbox" checked={direction} onChange={e=>setDirection(e.target.checked)} className="size-5"/>日本語から確認する</label>}
           <button disabled={!selected.length} className={primary+' w-full'} onClick={()=>start()}>学習を始める</button>
           {!selected.length&&<p role="status" className="text-sm">対象の問題はありません。</p>}
