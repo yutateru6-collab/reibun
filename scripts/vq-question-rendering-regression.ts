@@ -1,3 +1,4 @@
+import { previousUrl } from './previous-url.mjs';
 import { openHopeMenuFromList } from './hope-ui-helpers.mjs';
 import fs from 'node:fs';
 import { chromium, webkit, type BrowserType, type Page } from 'playwright';
@@ -55,7 +56,7 @@ async function titleIsNotEllipsized(page: Page, label: string) {
 }
 
 async function openVqHome(page: Page) {
-  await page.goto(BASE, { waitUntil: 'networkidle' });
+  await page.goto(previousUrl(BASE), { waitUntil: 'networkidle' });
   await page.getByRole('button', { name: /VISION QUEST/ }).click();
   await page.getByRole('button', { name: '例文', exact: true }).waitFor();
 }
@@ -65,7 +66,7 @@ async function openDeck(page: Page, deck: Deck, kind: 'vq-question' | 'hope-test
     await openVqHome(page);
     await page.getByRole('button', { name: '問題', exact: true }).click();
   } else {
-    await page.goto(BASE, { waitUntil: 'networkidle' });
+    await page.goto(previousUrl(BASE), { waitUntil: 'networkidle' });
     await page.getByRole('button', { name: /基本例文.*マスター/s }).click();
     await openHopeMenuFromList(page,deck.id);
     return;

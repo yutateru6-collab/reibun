@@ -1,3 +1,4 @@
+import { previousUrl } from './previous-url.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -33,7 +34,7 @@ async function run(browserType: BrowserType, name: string) {
   fs.mkdirSync(out, { recursive: true });
 
   try {
-    await page.goto(BASE, { waitUntil: 'networkidle' });
+    await page.goto(previousUrl(BASE), { waitUntil: 'networkidle' });
     await page.locator('[data-ui="final-check-launcher"]').waitFor();
     assert.match(await page.locator('[data-ui="final-check-launcher"]').innerText(), /試験前\s*最終チェック/);
     assert.match(await page.locator('[data-ui="workbook-launcher"]').innerText(), /時制・完了形\s*強化練習/);

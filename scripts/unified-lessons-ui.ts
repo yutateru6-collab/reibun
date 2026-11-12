@@ -1,3 +1,4 @@
+import { previousUrl } from './previous-url.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -39,7 +40,7 @@ for(const [width,dark] of [[320,false],[390,true],[1280,false]] as const) {
   const errors:string[]=[];p.on('pageerror',e=>errors.push(e.message));
   const dir=path.join(OUT,`${engine}-${width}`); fs.mkdirSync(dir,{recursive:true});
   try {
-    await p.goto(BASE); await p.locator('[data-ui=workbook-launcher]').waitFor();
+    await p.goto(previousUrl(BASE)); await p.locator('[data-ui=workbook-launcher]').waitFor();
     assert.match(await p.locator('[data-ui=workbook-launcher]').innerText(),/時制・完了形\s*強化練習/);
     assert.equal(await p.locator('[data-ui=exam-quiz-hub]').count(),0);
     await p.screenshot({path:path.join(dir,'home.png'),fullPage:true});

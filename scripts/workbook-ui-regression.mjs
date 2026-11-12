@@ -1,3 +1,4 @@
+import { previousUrl } from './previous-url.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -103,7 +104,7 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1]
  const browser=await (process.env.BROWSER==='webkit'?webkit:chromium).launch({headless:true});
  const p=await browser.newPage({viewport:{width:393,height:852}});p.setDefaultTimeout(15000);
  const errors=[];p.on('pageerror',e=>errors.push(e.message));
- await p.goto(process.env.APP_URL||'http://127.0.0.1:4173',{waitUntil:'networkidle'});
+ await p.goto(previousUrl(process.env.APP_URL||'http://127.0.0.1:4173'),{waitUntil:'networkidle'});
  try {
    await runWorkbookChecks(p,process.env.QA_OUT||'audit/workbook');
    const saved=await p.evaluate(key=>JSON.parse(localStorage.getItem(key))[0],KEY);
