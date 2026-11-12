@@ -1,3 +1,4 @@
+import { previousUrl } from './previous-url.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { chromium, webkit } from 'playwright';
@@ -24,7 +25,7 @@ async function attach(context, direct = false) {
   page = await context.newPage();
   page.setDefaultTimeout(12000);
   page.on('pageerror', e => errors.push(e.message));
-  await page.goto(direct ? `${base}/#knowledge` : base, { waitUntil: 'networkidle' });
+  await page.goto(direct ? `${base}/#knowledge` : previousUrl(base), { waitUntil: 'networkidle' });
   if (!direct) await page.locator('[data-ui="knowledge-launcher"]').click();
   await dlg().waitFor();
   assert.equal(await dlg().getAttribute('data-design'), 'grammar-three-track-v4');

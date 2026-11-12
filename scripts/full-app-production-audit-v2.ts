@@ -1,3 +1,4 @@
+import { previousUrl } from './previous-url.mjs';
 import { openHopeMenuFromList, firstStudyCard } from './hope-ui-helpers.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -31,7 +32,7 @@ async function run(scope: string, fn: () => Promise<void>) {
   try { await fn(); passes.push(scope); console.log(`PASS ${scope}`); }
   catch (e) { const message = String((e as Error)?.stack || e); failures.push(scope); add('major', scope, message); }
 }
-async function fresh(page: Page) { await page.goto(BASE, { waitUntil: 'networkidle', timeout: 45000 }); }
+async function fresh(page: Page) { await page.goto(previousUrl(BASE), { waitUntil: 'networkidle', timeout: 45000 }); }
 async function noHorizontalOverflow(page: Page, scope: string) {
   const m = await page.evaluate(() => ({ w: innerWidth, doc: document.documentElement.scrollWidth, body: document.body.scrollWidth }));
   if (Math.max(m.doc, m.body) > m.w + 2) add('major', scope, 'horizontal overflow', m);

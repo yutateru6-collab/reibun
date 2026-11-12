@@ -5,6 +5,7 @@ import ExamRangeGuide from './ExamRangeGuide.tsx';
 import Workbook from './workbook/Workbook';
 import SimpleGrammarCheckV3 from './knowledge/SimpleGrammarCheckV3';
 import FinalCheck from './final-check/FinalCheck';
+import TermRoot from './current-term/CurrentTerm';
 import './index.css';
 
 // The v2 rollout briefly forced ordinary study cards into random order.
@@ -24,10 +25,12 @@ try {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <TermRoot>
     <App />
     <ExamRangeGuide />
     <FinalCheck />
     <Workbook />
     <SimpleGrammarCheckV3 />
+    </TermRoot>
   </StrictMode>,
 );

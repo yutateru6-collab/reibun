@@ -1,3 +1,4 @@
+import { previousUrl } from './previous-url.mjs';
 import { openHopeMenuFromList, firstStudyCard } from './hope-ui-helpers.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -22,7 +23,7 @@ async function test(scope: string, fn: () => Promise<void>) {
 }
 async function fresh(page: Page, clear = false) {
   if (clear) await page.context().clearCookies();
-  await page.goto(BASE, { waitUntil: 'networkidle', timeout: 45000 });
+  await page.goto(previousUrl(BASE), { waitUntil: 'networkidle', timeout: 45000 });
   if (clear) await page.evaluate(() => localStorage.clear());
   if (clear) await page.reload({ waitUntil: 'networkidle' });
 }

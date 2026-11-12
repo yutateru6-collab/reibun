@@ -1,3 +1,4 @@
+import { previousUrl } from './previous-url.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -44,7 +45,7 @@ async function checkFocus(page: Page, label: string) {
   reports.push({ label, ...state });
 }
 async function openLesson(page: Page, number: number, mode = 'learn') {
-  await page.goto(BASE);
+  await page.goto(previousUrl(BASE));
   await page.getByRole('button', { name: /基本例文.*マスター/s }).click();
   await page.locator(`[data-ui="hope-lesson-list"] [data-lesson="hope-lesson${number}"]`).click();
   await page.locator(`[data-mode="${mode}"]`).click();

@@ -1,3 +1,4 @@
+import { previousUrl } from './previous-url.mjs';
 import { openHopeMenuFromList, firstStudyCard } from './hope-ui-helpers.mjs';
 import fs from 'node:fs';
 import { chromium, webkit } from 'playwright';
@@ -16,12 +17,12 @@ async function counter(page) {
   return '';
 }
 async function lesson1(page) {
-  await page.goto(BASE, { waitUntil: 'networkidle' });
+  await page.goto(previousUrl(BASE), { waitUntil: 'networkidle' });
   await page.getByRole('button', { name: /基本例文.*マスター/s }).click();
   await openHopeMenuFromList(page,'hope-lesson1');
 }
 async function hopeTest1(page) {
-  await page.goto(BASE, { waitUntil: 'networkidle' });
+  await page.goto(previousUrl(BASE), { waitUntil: 'networkidle' });
   await page.getByRole('button', { name: /基本例文.*マスター/s }).click();
   await openHopeMenuFromList(page,'hope-test1');
 }
@@ -122,7 +123,7 @@ async function auditEngine(engine, browserType) {
   });
 
   await run(engine, 'VQ point accordion never flips or advances', async()=>{
-    const context=await newContext(); const page=await context.newPage(); await page.goto(BASE,{waitUntil:'networkidle'}); await page.getByRole('button',{name:/VISION QUEST/}).click();
+    const context=await newContext(); const page=await context.newPage(); await page.goto(previousUrl(BASE),{waitUntil:'networkidle'}); await page.getByRole('button',{name:/VISION QUEST/}).click();
     await page.getByRole('button',{name:/今回の試験範囲/}).first().click(); await page.getByRole('button',{name:/単語カード/}).click();
     const card=page.locator('div.cursor-pointer').filter({hasText:/タップして完成文を見る/}).first(); await card.click(); const point=page.getByRole('button',{name:/💡 ぽいんと/}); await point.waitFor(); const before=await counter(page);
     await simulateResume(context,page); await point.click(); await page.waitForTimeout(600); assert(await counter(page)===before,'VQ point advanced'); assert(await page.getByText(/タップで折りたたむ/).isVisible(),'VQ point did not open'); await context.close();
