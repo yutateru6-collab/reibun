@@ -31,7 +31,7 @@ async function answer(page:Page,items:Item[],wrong=false){
 }
 try {
  for(const viewport of [{width:390,height:844},{width:1440,height:1000}]){
-  const context=await browser.newContext({viewport});const page=await context.newPage();const errors:string[]=[];
+  const context=await browser.newContext({viewport,isMobile:viewport.width<600,hasTouch:viewport.width<600,locale:'ja-JP'});const page=await context.newPage();const errors:string[]=[];
   page.on('pageerror',e=>errors.push(String(e)));
   await page.goto(base);
   await page.locator(`[data-current-term="${RELEASE}"]`).waitFor();
