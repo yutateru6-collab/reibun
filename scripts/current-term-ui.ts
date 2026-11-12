@@ -51,12 +51,18 @@ try {
     await noOverflow(page);await page.screenshot({path:`${out}/${viewport.width}-${c}-range.png`,fullPage:true});
     // Original card text, translation, both directions and existing bookmark.
     await page.getByRole('button',{name:c==='2-9'?/暗唱① 主語/:/暗唱⑤ 形容詞/}).click();
-    await page.getByRole('button',{name:'学習を始める',exact:true}).click();
-    const first=items[0];assert.equal(await page.getByTestId('card-text').innerText(),first.en);
+    await noOverflow(page);await page.screenshot({path:`${out}/${viewport.width}-${c}-menu.png`,fullPage:true});
+    await page.getByRole('button',{name:/例文を覚える/}).click();
+    const first=items[0];assert.equal(await page.locator('[data-ui=hope-card-main]').innerText(),first.en);
     await page.getByRole('button',{name:'お気に入り解除',exact:true}).waitFor();
-    await page.getByRole('button',{name:'カードをめくる',exact:true}).click();assert.equal(await page.getByTestId('card-answer').innerText(),first.ja);
-    await page.getByRole('button',{name:'日本語から確認する',exact:true}).click();assert.equal(await page.getByTestId('card-text').innerText(),first.ja);
-    await page.getByRole('button',{name:'カードをめくる',exact:true}).click();assert.equal(await page.getByTestId('card-answer').innerText(),first.en);
+    await noOverflow(page);await page.screenshot({path:`${out}/${viewport.width}-${c}-card.png`,fullPage:true});
+    await page.getByRole('button',{name:/タップして(日本語訳|英文)を見る/}).click();assert.equal(await page.locator('[data-ui=hope-card-main]').innerText(),first.ja);
+    await page.getByRole('button',{name:'日本語から見る',exact:true}).click();assert.equal(await page.locator('[data-ui=hope-card-main]').innerText(),first.ja);
+    await page.getByRole('button',{name:/タップして(日本語訳|英文)を見る/}).click();assert.equal(await page.locator('[data-ui=hope-card-main]').innerText(),first.en);
+    await page.getByRole('button',{name:'ミニ解説を見る',exact:true}).click();await page.getByText(first.explanation,{exact:true}).waitFor();
+    await page.getByRole('button',{name:'次のカードへ',exact:true}).click();await page.getByRole('button',{name:'前のカードへ',exact:true}).click();
+    assert.equal(await page.locator('[data-ui=hope-card-main]').innerText(),first.ja);
+    await page.getByRole('button',{name:/タップして英文を見る/}).click();
     await page.getByRole('button',{name:'確認できた',exact:true}).click();
     await page.getByRole('button',{name:'戻る',exact:true}).click();await page.getByRole('button',{name:'学習を終了',exact:true}).click();
     // Complete every original recitation cloze and preserve all source answers.
@@ -64,7 +70,7 @@ try {
       await classHome(page,c);
       const number=Number(unit.split('-')[1]);const symbol=['','①','②','③','④','⑤','⑥','⑦','⑧'][number];
       await page.getByRole('button',{name:new RegExp(`暗唱${symbol} `)}).click();
-      await page.getByRole('button',{name:/穴埋めで確認/}).click();await page.getByRole('button',{name:'学習を始める',exact:true}).click();
+      await page.getByRole('button',{name:/穴埋めで確認/}).click();
       const count=items.filter(x=>x.unit===unit).length;
       for(let i=0;i<count;i++){await answer(page,items);await page.getByRole('button',{name:i===count-1?'結果を見る':'次の問題へ',exact:true}).click();}
       await page.getByRole('heading',{name:'学習結果',exact:true}).waitFor();
