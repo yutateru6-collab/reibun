@@ -6,10 +6,10 @@ const base=process.env.APP_URL||'http://127.0.0.1:4173/';
 const browserName=process.env.BROWSER||'chromium';
 const out=process.env.QA_OUT||`audit/current-term-${browserName}`;
 await fs.mkdir(out,{recursive:true});
-const browser=await (browserName==='webkit'?webkit:chromium).launch();
+const browser=await (browserName==='webkit'?webkit:chromium).launch(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{});
 const results:object[]=[];
 async function noOverflow(page:Page){assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'horizontal overflow');}
-async function classHome(page:Page,c:ClassId){await page.goto(base);await page.getByRole('button',{name:c==='2-9'?/2年9組/:/2年3組/}).click();}
+async function classHome(page:Page,c:ClassId){await page.goto(base);await page.getByRole('button',{name:c==='2-9'?/2年9組/:/2年3組/}).click();await page.getByRole('button',{name:'範囲から選ぶ',exact:true}).click();await page.getByText('その他の練習・学習記録',{exact:true}).click();}
 async function answer(page:Page,items:Item[],wrong=false){
   const article=page.locator('article[data-item-id]');
   const id=await article.getAttribute('data-item-id');
@@ -52,7 +52,7 @@ try {
     // Original card text, translation, both directions and existing bookmark.
     await page.getByRole('button',{name:c==='2-9'?/暗唱① 主語/:/暗唱⑤ 形容詞/}).click();
     await noOverflow(page);await page.screenshot({path:`${out}/${viewport.width}-${c}-menu.png`,fullPage:true});
-    await page.getByRole('button',{name:/例文を覚える/}).click();
+    await page.getByText('練習方法を自分で選ぶ・設定',{exact:true}).click();await page.getByRole('button',{name:/例文を覚える/}).click();
     const first=items[0];assert.equal(await page.locator('[data-ui=hope-card-main]').innerText(),first.en);
     await page.getByRole('button',{name:'お気に入り解除',exact:true}).waitFor();
     await noOverflow(page);await page.screenshot({path:`${out}/${viewport.width}-${c}-card.png`,fullPage:true});
@@ -70,7 +70,7 @@ try {
       await classHome(page,c);
       const number=Number(unit.split('-')[1]);const symbol=['','①','②','③','④','⑤','⑥','⑦','⑧'][number];
       await page.getByRole('button',{name:new RegExp(`暗唱${symbol} `)}).click();
-      await page.getByRole('button',{name:/穴埋めで確認/}).click();
+      await page.getByText('練習方法を自分で選ぶ・設定',{exact:true}).click();await page.getByRole('button',{name:/穴埋めで確認/}).click();
       const count=items.filter(x=>x.unit===unit).length;
       for(let i=0;i<count;i++){await answer(page,items);await page.getByRole('button',{name:i===count-1?'結果を見る':'次の問題へ',exact:true}).click();}
       await page.getByRole('heading',{name:'学習結果',exact:true}).waitFor();
@@ -89,8 +89,8 @@ try {
     assert.match(await page.locator('section').innerText(),/9\s*\/\s*10/);
     await noOverflow(page);await page.screenshot({path:`${out}/${viewport.width}-${c}-result.png`,fullPage:true});
     await page.getByRole('button',{name:'間違えた問題を解き直す',exact:true}).click();await answer(page,items);await page.getByRole('button',{name:'結果を見る',exact:true}).click();
-    await page.getByRole('button',{name:'今回の試験範囲に戻る',exact:true}).click();await page.getByRole('heading',{name:'最近の学習記録'}).waitFor();
-    await page.reload();await page.getByRole('button',{name:c==='2-9'?/2年9組/:/2年3組/}).click();await page.getByRole('heading',{name:'最近の学習記録'}).waitFor();
+    await page.getByRole('button',{name:'今回の試験範囲に戻る',exact:true}).click();await page.getByText('その他の練習・学習記録',{exact:true}).click();await page.getByRole('heading',{name:'最近の学習記録'}).waitFor();
+    await page.reload();await page.getByRole('button',{name:c==='2-9'?/2年9組/:/2年3組/}).click();await page.getByText('その他の練習・学習記録',{exact:true}).click();await page.getByRole('heading',{name:'最近の学習記録'}).waitFor();
     results.push({browser:browserName,viewport,class:c,originalCloze:items.filter(x=>x.source==='recitation').length,final:10,retry:1,units:new Set(items.map(x=>x.unit)).size});
   }
   const saved=await page.evaluate(({f,y,p,h})=>({f:JSON.parse(localStorage.getItem(f)!),y:JSON.parse(localStorage.getItem(y)!),p:JSON.parse(localStorage.getItem(p)!),h:JSON.parse(localStorage.getItem(h)!),legacy:localStorage.getItem('legacy-progress-sentinel')}),{f:FAVORITES_KEY,y:YET_KEY,p:PROGRESS_KEY,h:HISTORY_KEY});
