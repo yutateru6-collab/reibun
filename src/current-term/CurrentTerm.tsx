@@ -58,7 +58,7 @@ function CurrentTerm({onPrevious}:{onPrevious:()=>void}) {
   const selected=all.filter(item=>unit==='all'||unit===item.unit||(unit==='favorites'&&favorite(item))||(unit==='wrong'&&progress[item.id]?.lastCorrect===false));
   const q=questions[index];
   const current=q?.item;
-  const studyRef=useStudyCardFocus(screen==='session'&&mode==='cards',`${screen}:${mode}:${current?.id}:${index}`);
+  const studyRef=useStudyCardFocus(screen==='session'&&mode==='cards'&&guided===null,`${screen}:${mode}:${current?.id}:${index}`);
   const unitName=unit==='all'?'全範囲':unit==='favorites'?'お気に入り':unit==='wrong'?'間違えた問題':unitTitle(unit);
   const save=(key:string,value:unknown)=>{if(!writeStored(key,value))setStorageWarning(true);};
   useEffect(()=>{document.documentElement.classList.toggle('dark',dark);writeStored('flashcard-dark-mode',dark);},[dark]);
@@ -104,7 +104,7 @@ function CurrentTerm({onPrevious}:{onPrevious:()=>void}) {
     if(item.originalId){const next=favorite(item)?favorites.filter(x=>x!==item.originalId):[...favorites,item.originalId];setFavorites(next);save(FAVORITES_KEY,next);}
     else {const next=favorite(item)?newFavorites.filter(x=>x!==item.id):[...newFavorites,item.id];setNewFavorites(next);save(NEW_FAVORITES_KEY,next);}
   }
-  const title=screen==='classes'?'例文マスター':screen==='range'?config.title:screen==='menu'?unitName:screen==='result'?'学習結果':mode==='cards'?'例文を覚える':mode==='final'?'試験前の最終チェック':mode==='cloze'?'穴埋めで確認':'並べ替えで確認';
+  const title=screen==='classes'?'例文マスター':screen==='range'?config.title:screen==='menu'?unitName:screen==='result'?'学習結果':guided!==null?steps[guided]:mode==='cards'?'例文を覚える':mode==='final'?'試験前の最終チェック':mode==='cloze'?'穴埋めで確認':'並べ替えで確認';
   function back(){
     if(screen==='session'){setExitConfirm(true);return;}
     setScreen(screen==='range'?'classes':screen==='menu'?'range':'menu');
@@ -131,7 +131,7 @@ function CurrentTerm({onPrevious}:{onPrevious:()=>void}) {
             setUnit('all');
             const recitations=all.filter(x=>x.source==='recitation');
             const pending=recitations.filter(x=>!progress[x.id]?.lastCorrect);
-            beginGuided(pending.length?pending:recitations);
+            beginGuided(pending.length?pending:[...recitations].sort((a,b)=>(progress[a.id]?.attempts||0)-(progress[b.id]?.attempts||0)));
           }}>今日の練習を始める</button>
           <p className="text-xs leading-6 mt-2 text-slate-600 dark:text-slate-300">まだ確認できていない暗唱例文から最大5文。終わったら次の練習へ案内します。</p>
           <div className="grid sm:grid-cols-2 gap-3 mt-4">
