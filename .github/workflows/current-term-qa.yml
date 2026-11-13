@@ -38,6 +38,12 @@ jobs:
         env:
           BROWSER: webkit
         run: node --import tsx scripts/current-term-ui.ts
+      - name: Guided flow, mobile widths and saved progress
+        run: node --import tsx scripts/guided-learning-ui.ts
+      - name: Guided flow in WebKit
+        env:
+          BROWSER: webkit
+        run: node --import tsx scripts/guided-learning-ui.ts
       - name: Wait for exact existing Worker build
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
